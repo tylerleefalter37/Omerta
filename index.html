@@ -1,0 +1,2469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Empire of Chicago: 1926</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Rye, Playfair Display & Courier Prime -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,600&family=Rye&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            noir: {
+              950: '#0c0c0c',
+              900: '#141414',
+              850: '#1c1c1c',
+              800: '#262626',
+              700: '#383838',
+              600: '#4e4e4e',
+              500: '#6e6e6e',
+              300: '#a3a3a3',
+              100: '#f5f5f5',
+              newsprint: '#ede7d8',
+              aged: '#d8cfbe',
+              ink: '#111111',
+              blood: '#8f1d1d',
+              bloodlight: '#b91c1c',
+              emerald: '#10b981',
+              silver: '#c0c0c0'
+            }
+          },
+          fontFamily: {
+            title: ['Rye', 'serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Courier Prime"', 'Courier', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* iOS Viewport, Native Scroll & Safe Areas */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    input, textarea, select {
+      user-select: text;
+    }
+    html, body {
+      background-color: #0c0c0c;
+      color: #f5f5f5;
+      font-family: 'Courier Prime', Courier, monospace;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Crisp Monochrome Vintage Newsprint Aesthetic */
+    .newsprint-panel {
+      background-color: #ede7d8;
+      color: #111111;
+      border: 2px solid #262626;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.9), inset 0 0 35px rgba(0, 0, 0, 0.05);
+    }
+    .newsprint-card {
+      background-color: #f4efe2;
+      border: 1px solid #c5bb9f;
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+    }
+    .stamp-badge {
+      border: 2px solid #8f1d1d;
+      color: #8f1d1d;
+      transform: rotate(-2deg);
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      display: inline-block;
+      padding: 2px 6px;
+    }
+
+    /* iOS Native Touch Scrolling with generous bottom padding for bottom nav clearance */
+    .ios-scroll-pane {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(140px + env(safe-area-inset-bottom, 24px));
+    }
+    .safe-top {
+      padding-top: max(8px, env(safe-area-inset-top));
+    }
+    .safe-bottom {
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #141414;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #383838;
+      border-radius: 3px;
+    }
+
+    @keyframes heat-flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; filter: drop-shadow(0 0 8px #b91c1c); }
+    }
+    .pulse-heat {
+      animation: heat-flash 2.2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <!-- TOP STATUS BAR: THE CAPO'S LEDGER & STATUS BAROMETER -->
+  <header class="sticky top-0 z-40 bg-noir-900 border-b border-noir-700 shadow-2xl px-3 py-2 safe-top">
+    <div class="max-w-5xl mx-auto flex flex-col gap-1.5">
+      <!-- Title Bar & Fast Action Toggles -->
+      <div class="flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2">
+          <span class="font-title text-noir-100 text-sm sm:text-base tracking-widest uppercase">Empire of Chicago</span>
+          <span class="bg-noir-800 text-noir-300 px-2 py-0.5 rounded text-[11px] border border-noir-700" id="stat-date">Week 1 - Oct 1926</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-sound" onclick="toggleAudio()" class="px-2 py-0.5 bg-noir-850 border border-noir-700 rounded text-[10px] text-noir-300 hover:text-white transition">
+            Audio: <span id="sound-label" class="text-noir-emerald font-bold">ON</span>
+          </button>
+          <button onclick="switchTab('god')" class="px-2.5 py-0.5 bg-noir-800 border border-noir-blood text-noir-100 rounded text-[10px] font-bold tracking-wider hover:bg-noir-blood transition">
+            ⚡ GOD MODE
+          </button>
+        </div>
+      </div>
+
+      <!-- Financial & Strategic Vitals Grid -->
+      <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5 text-[11px]">
+        <!-- Dirty Cash -->
+        <div class="bg-noir-850 p-1.5 rounded border border-noir-700/80 flex flex-col">
+          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Dirty Cash</span>
+          <span class="font-bold text-noir-100 font-mono text-xs" id="stat-dirty">$15,000</span>
+        </div>
+        <!-- Clean Bank -->
+        <div class="bg-noir-850 p-1.5 rounded border border-noir-700/80 flex flex-col">
+          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Clean Bank</span>
+          <span class="font-bold text-noir-emerald font-mono text-xs" id="stat-clean">$6,000</span>
+        </div>
+        <!-- Booze Barrels -->
+        <div class="bg-noir-850 p-1.5 rounded border border-noir-700/80 flex flex-col">
+          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Booze Barrels</span>
+          <span class="font-bold text-noir-300 font-mono text-xs" id="stat-booze">120 bbl</span>
+        </div>
+        <!-- Police Heat -->
+        <div class="bg-noir-850 p-1.5 rounded border border-noir-700/80 flex flex-col">
+          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Police Heat</span>
+          <div class="flex items-center gap-1.5">
+            <span class="font-bold text-noir-bloodlight font-mono text-xs" id="stat-heat-num">15%</span>
+            <div class="w-full bg-noir-950 h-1.5 rounded overflow-hidden border border-noir-700">
+              <div id="stat-heat-bar" class="bg-noir-emerald h-full transition-all duration-300" style="width: 15%;"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Mob Roster -->
+        <div class="hidden sm:flex bg-noir-850 p-1.5 rounded border border-noir-700/80 flex-col">
+          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Made Men</span>
+          <span class="font-bold text-noir-100 font-mono text-xs" id="stat-crew-count">5 Hoods</span>
+        </div>
+        <!-- City Influence -->
+        <div class="hidden sm:flex bg-noir-850 p-1.5 rounded border border-noir-700/80 flex-col">
+          <span class="text-noir-500 text-[9px] uppercase tracking-wider">City Control</span>
+          <span class="font-bold text-noir-100 font-mono text-xs" id="stat-control">24%</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN SCROLLABLE VIEWPORT FOR ALL TABS -->
+  <main class="max-w-5xl w-full mx-auto p-3 flex-1 ios-scroll-pane">
+
+    <!-- ============================================================== -->
+    <!-- TAB 1: GAZETTE & WEEKLY LEDGER                                  -->
+    <!-- ============================================================== -->
+    <section id="tab-ledger" class="space-y-4">
+      <!-- Big Advance Button -->
+      <div class="bg-noir-900 border-2 border-noir-600 p-3 rounded shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-center sm:text-left">
+          <h2 class="font-title text-noir-100 text-base sm:text-lg tracking-wider">THE COOK COUNTY COMMAND COUNCIL</h2>
+          <p class="text-xs text-noir-500">Formulate weekly directives, balance the books, and advance the calendar.</p>
+        </div>
+        <button onclick="advanceWeek()" class="w-full sm:w-auto px-6 py-3 bg-noir-100 text-noir-ink font-title font-bold text-xs sm:text-sm tracking-widest rounded shadow-lg hover:bg-noir-aged active:scale-95 transition flex items-center justify-center gap-2 border border-noir-300">
+          <span>ADVANCE WEEK (EXECUTE ORDERS)</span> ➔
+        </button>
+      </div>
+
+      <!-- Chicago Daily Gazette Newsprint Sheet -->
+      <div class="newsprint-panel p-4 sm:p-6 rounded-sm relative transform -rotate-0.5 transition-transform duration-300">
+        <div class="border-b-4 border-noir-ink pb-2 mb-3 text-center">
+          <div class="flex justify-between items-center text-[10px] sm:text-xs font-serif font-bold uppercase tracking-widest text-noir-ink border-b border-noir-ink mb-1 pb-0.5">
+            <span id="news-date">Chicago, Illinois • Week 1, 1926</span>
+            <span>PRICE: TWO CENTS</span>
+            <span class="hidden sm:inline">LATE FINAL EDITION</span>
+          </div>
+          <h1 class="font-serif font-black text-2xl sm:text-4xl text-noir-ink tracking-tight uppercase">The Chicago Daily Gazette</h1>
+          <p class="text-[10px] sm:text-xs italic font-serif text-noir-ink">"Fearless Reporting on Cook County Underworld & Civic Affairs"</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="md:col-span-2 space-y-2 border-b md:border-b-0 md:border-r border-noir-ink/40 pr-0 md:pr-4">
+            <div class="stamp-badge text-[10px] mb-1" id="news-stamp">CRIME BEAT WIRE</div>
+            <h3 class="font-serif font-bold text-lg sm:text-xl text-noir-ink leading-tight" id="news-headline">
+              PROHIBITION AGENTS STYMIED AS UNDERWORLD DISTILLERIES FEED LOOP SPEAKEASIES
+            </h3>
+            <p class="text-xs text-noir-ink/90 font-serif leading-relaxed text-justify" id="news-body">
+              Federal Treasury agents and Cook County deputies were met with stony silence along the South Side industrial docks late Tuesday night. While rumors of massive clandestine moonshine stills operating behind steam laundry facades persist, municipal authorities insist order reigns supreme. Rival mobs are quietly maneuvering for prime storefront corners.
+            </p>
+            <div class="bg-noir-ink/5 p-2.5 rounded border border-noir-ink/30 mt-2">
+              <span class="text-[10px] font-bold uppercase tracking-wider block text-noir-ink mb-1">Underworld Intelligence Dispatch:</span>
+              <ul class="text-[11px] list-disc list-inside space-y-1 text-noir-ink/90" id="weekly-dispatches">
+                <li>Underground speakeasies report sold-out barrooms; booze inventory depleted.</li>
+                <li>Lieutenant detectives on the 4th Precinct beat pocketed protection gratuities.</li>
+                <li>The Moretti Family was sighted scouting empty storefronts in Little Italy.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Weekly Ledger Balance Sheet -->
+          <div class="space-y-3 font-mono text-xs">
+            <h4 class="font-serif font-bold text-sm text-noir-ink uppercase border-b border-noir-ink pb-1">Weekly Financial Audit</h4>
+            <div class="space-y-1 text-noir-ink">
+              <div class="flex justify-between">
+                <span>Rackets Dirty Gross:</span>
+                <span class="font-bold text-emerald-800" id="rep-income">+$4,200</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Speakeasies Booze Gross:</span>
+                <span class="font-bold text-emerald-800" id="rep-booze-rev">+$2,800</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Soldier Payroll:</span>
+                <span class="font-bold text-noir-blood" id="rep-salaries">-$1,350</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Legal Retainers / Bribes:</span>
+                <span class="font-bold text-noir-blood" id="rep-bribes">-$600</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Clean Funds Laundered:</span>
+                <span class="font-bold text-emerald-900" id="rep-laundered">+$1,500</span>
+              </div>
+              <div class="border-t-2 border-noir-ink pt-1 flex justify-between font-bold text-sm">
+                <span>Net Dirty Cash Shift:</span>
+                <span id="rep-net" class="text-emerald-900">+$4,050</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded bg-noir-aged/70 border border-noir-ink/40 text-[11px] space-y-1">
+              <div class="font-bold uppercase text-noir-blood flex items-center gap-1">
+                <span>⚠</span> <span id="fbi-threat-level">Federal Bureau Alert: Routine Watch</span>
+              </div>
+              <p class="text-noir-ink/80 text-[10px]" id="fbi-threat-desc">Special agents in Washington are preoccupied. Keep your public gunfights muted to prevent federal indictments.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Command Center Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- Active Hood Directives -->
+        <div class="bg-noir-900 border border-noir-700 p-3 rounded shadow space-y-2">
+          <div class="flex justify-between items-center border-b border-noir-700 pb-1.5">
+            <h3 class="font-title text-noir-100 text-xs sm:text-sm">CREW WEEKLY DIRECTIVES</h3>
+            <span class="text-[10px] text-noir-500">Active: <span id="orders-assigned-count">0</span> / <span id="orders-total-count">5</span></span>
+          </div>
+          <div id="quick-orders-list" class="space-y-1.5 max-h-48 overflow-y-auto text-xs pr-1"></div>
+          <button onclick="switchTab('crew')" class="w-full py-1.5 bg-noir-850 text-noir-300 text-xs border border-noir-700 rounded hover:text-white transition">
+            Assign Directives & Equip Crew ➔
+          </button>
+        </div>
+
+        <!-- Supply & Laundering Balance -->
+        <div class="bg-noir-900 border border-noir-700 p-3 rounded shadow space-y-2">
+          <div class="flex justify-between items-center border-b border-noir-700 pb-1.5">
+            <h3 class="font-title text-noir-100 text-xs sm:text-sm">SUPPLY CHAIN & LAUNDERING PIPELINE</h3>
+            <span class="text-[10px] text-noir-300">Commercial Pipeline</span>
+          </div>
+          <div class="text-xs space-y-2">
+            <div class="flex items-center justify-between bg-noir-850 p-2 rounded border border-noir-800">
+              <div>
+                <div class="font-bold text-noir-100">1. Stills & Breweries</div>
+                <div class="text-[10px] text-noir-500" id="supply-dist-count">2 Production Stills</div>
+              </div>
+              <span class="text-noir-emerald font-bold" id="supply-dist-prod">+60 bbl/wk</span>
+            </div>
+            <div class="flex items-center justify-between bg-noir-850 p-2 rounded border border-noir-800">
+              <div>
+                <div class="font-bold text-noir-100">2. Speakeasies & Clubs</div>
+                <div class="text-[10px] text-noir-500" id="supply-speak-count">2 Speakeasies Open</div>
+              </div>
+              <span class="text-noir-300 font-bold" id="supply-speak-drain">-50 bbl/wk</span>
+            </div>
+            <div class="flex items-center justify-between bg-noir-850 p-2 rounded border border-noir-800">
+              <div>
+                <div class="font-bold text-noir-100">3. Commercial Fronts</div>
+                <div class="text-[10px] text-noir-500" id="supply-front-count">1 Dry Cleaner Active</div>
+              </div>
+              <span class="text-noir-emerald font-bold" id="supply-launder-rate">$2,000 capacity/wk</span>
+            </div>
+          </div>
+          <button onclick="switchTab('businesses')" class="w-full py-1.5 bg-noir-850 text-noir-300 text-xs border border-noir-700 rounded hover:text-white transition">
+            Expand Rackets & Clean Fronts ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 2: CREW & ARMORY                                           -->
+    <!-- ============================================================== -->
+    <section id="tab-crew" class="space-y-4 hidden">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-noir-900 p-3 rounded border border-noir-700">
+        <div>
+          <h2 class="font-title text-noir-100 text-base sm:text-lg">ORGANIZATION ROSTER & MUSCLE</h2>
+          <p class="text-xs text-noir-500">Assign tactical orders, supply black market weaponry, and bail captured lieutenants.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="openRecruitModal()" class="px-3 py-1.5 bg-noir-100 text-noir-ink font-bold text-xs rounded hover:bg-noir-aged transition">
+            + Recruit Soldiers
+          </button>
+          <button onclick="openArmoryStoreModal()" class="px-3 py-1.5 bg-noir-850 border border-noir-600 text-noir-100 font-bold text-xs rounded hover:border-noir-300 transition">
+            🔫 Black Market Armory
+          </button>
+        </div>
+      </div>
+
+      <div id="crew-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 3: BUSINESSES, RACKETS & CLEAN FRONTS                     -->
+    <!-- ============================================================== -->
+    <section id="tab-businesses" class="space-y-4 hidden">
+      <div class="bg-noir-900 p-3 rounded border border-noir-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+        <div>
+          <h2 class="font-title text-noir-100 text-base sm:text-lg">CHICAGO DISTRICTS: RACKETS & COMMERCIAL FRONTS</h2>
+          <p class="text-xs text-noir-500">Acquire city plots, construct illicit rackets, open clean laundering fronts, and fortify defenses.</p>
+        </div>
+        <div class="text-xs bg-noir-850 px-3 py-1.5 rounded border border-noir-700">
+          Plots Controlled: <span class="font-bold text-noir-100" id="districts-slots-owned">6</span> / 25
+        </div>
+      </div>
+
+      <!-- District Selector Tabs -->
+      <div class="flex overflow-x-auto gap-1 pb-1 border-b border-noir-700" id="district-tabs"></div>
+
+      <!-- Active District Detailed Grid -->
+      <div id="district-detail-container" class="space-y-3"></div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 4: POLITICS, CORRUPTION & JUDICIARY                        -->
+    <!-- ============================================================== -->
+    <section id="tab-politics" class="space-y-4 hidden">
+      <div class="bg-noir-900 p-3 rounded border border-noir-700">
+        <h2 class="font-title text-noir-100 text-base sm:text-lg">CITY HALL, POLICE CORRUPTION & THE COURTS</h2>
+        <p class="text-xs text-noir-500">A capo without a judge is like a gunman without bullets. Grease police precincts and retain defense attorneys using clean bank funds.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Police Precincts & Heat Suppression -->
+        <div class="bg-noir-900 border border-noir-700 p-4 rounded space-y-3">
+          <div class="flex justify-between items-center border-b border-noir-700 pb-2">
+            <h3 class="font-title text-noir-100 text-xs sm:text-sm">CHICAGO POLICE DEPARTMENT</h3>
+            <span class="stamp-badge text-[10px]" id="pol-threat-badge">PATROL MODERATE</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between text-noir-300">
+              <span>Beat Patrolmen:</span>
+              <span class="font-bold text-noir-100" id="pol-cop-status">2 Precincts Greased</span>
+            </div>
+            <div class="flex justify-between text-noir-300">
+              <span>Police Commissioner:</span>
+              <span class="font-bold text-noir-bloodlight" id="pol-chief-status">Hostile (0% Payoff)</span>
+            </div>
+            <div class="flex justify-between text-noir-300">
+              <span>Cook County Magistrate:</span>
+              <span class="font-bold text-noir-emerald" id="pol-judge-status">Judge Callahan on Retainer</span>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-noir-700">
+            <div class="flex items-center justify-between gap-2 bg-noir-850 p-2 rounded border border-noir-800">
+              <div>
+                <div class="font-bold text-xs text-noir-100">Bribe Street Beat Cops</div>
+                <div class="text-[10px] text-noir-500">-15% Police Heat immediately</div>
+              </div>
+              <button onclick="bribePolice('beat')" class="px-3 py-1 bg-noir-100 text-noir-ink font-bold text-xs rounded hover:bg-noir-aged transition">
+                Pay $800 Clean
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 bg-noir-850 p-2 rounded border border-noir-800">
+              <div>
+                <div class="font-bold text-xs text-noir-100">Pay Off Police Commissioner</div>
+                <div class="text-[10px] text-noir-500">-40% Heat + Immune to Raids (3 Wks)</div>
+              </div>
+              <button onclick="bribePolice('chief')" class="px-3 py-1 bg-noir-100 text-noir-ink font-bold text-xs rounded hover:bg-noir-aged transition">
+                Pay $3,500 Clean
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 bg-noir-850 p-2 rounded border border-noir-800">
+              <div>
+                <div class="font-bold text-xs text-noir-100">Retain Mob Judge</div>
+                <div class="text-[10px] text-noir-500">Instantly drop charges for arrested hoods</div>
+              </div>
+              <button onclick="bribePolice('judge')" class="px-3 py-1 bg-noir-100 text-noir-ink font-bold text-xs rounded hover:bg-noir-aged transition">
+                Pay $5,000 Clean
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Federal Bureau of Investigation & Legal Defense -->
+        <div class="bg-noir-900 border border-noir-700 p-4 rounded space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center border-b border-noir-700 pb-2">
+              <h3 class="font-title text-noir-bloodlight text-xs sm:text-sm">FEDERAL CRACKDOWN & IRS AUDIT</h3>
+              <span class="text-[10px] bg-noir-950 text-noir-bloodlight px-1.5 py-0.5 rounded border border-noir-blood">PROHIBITION BUREAU</span>
+            </div>
+            <p class="text-xs text-noir-300 mt-2 leading-relaxed">
+              When Police Heat tops <strong class="text-noir-bloodlight">70%</strong>, or unlaundered Dirty Cash exceeds your clean capacity, Federal Special Agents and IRS investigators stage sweeping padlock raids. Federal warrants cannot be bought off with pocket change—only high-priced legal defense teams can dismiss grand jury indictments.
+            </p>
+            
+            <div class="mt-4 bg-noir-850 p-3 rounded border border-noir-800 space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span>Retained Legal Firm:</span>
+                <span class="font-bold text-noir-100" id="lawyer-tier">Silver Tongue Retainer</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Court Dismissal Probability:</span>
+                <span class="font-bold text-noir-emerald" id="lawyer-rate">70% Dismissal Chance</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-noir-700">
+            <button onclick="upgradeLawyer()" class="w-full py-2 bg-noir-800 border border-noir-500 text-noir-100 font-bold text-xs rounded hover:bg-noir-700 transition">
+              Upgrade Legal Firm ($6,000 Clean Cash)
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 5: MOB WARS & RIVALRY                                      -->
+    <!-- ============================================================== -->
+    <section id="tab-war" class="space-y-4 hidden">
+      <div class="bg-noir-900 p-3 rounded border border-noir-700">
+        <h2 class="font-title text-noir-100 text-base sm:text-lg">RIVAL FACTIONS & TERRITORIAL CLASHES</h2>
+        <p class="text-xs text-noir-500">Three rival organizations contest Cook County. Monitor their combat power, broker fragile truces, or dispatch hit squads to crush their leadership.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="rivals-container"></div>
+
+      <!-- Tactical War Room Actions -->
+      <div class="bg-noir-900 border border-noir-700 p-4 rounded space-y-3">
+        <h3 class="font-title text-noir-100 text-xs sm:text-sm border-b border-noir-700 pb-2">UNDERWORLD TACTICAL WAR ROOM</h3>
+        <p class="text-xs text-noir-300">
+          Direct strategic strikes against rival organizations. Soldiers with high Aim and Muscle dominate gunfights.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+          <button onclick="prepRivalAction('driveby')" class="p-2.5 bg-noir-850 border border-noir-700 hover:border-noir-blood rounded text-left space-y-1 transition">
+            <div class="font-bold text-noir-bloodlight">🚗 Drive-By Ambush</div>
+            <div class="text-[10px] text-noir-500">Target rival street patrols to reduce their combat strength.</div>
+          </button>
+          <button onclick="prepRivalAction('raid_speakeasy')" class="p-2.5 bg-noir-850 border border-noir-700 hover:border-noir-emerald rounded text-left space-y-1 transition">
+            <div class="font-bold text-noir-emerald">💥 Raid Competitor Speakeasy</div>
+            <div class="text-[10px] text-noir-500">Heist up to $3,500 cash and hijack stockpiled booze barrels.</div>
+          </button>
+          <button onclick="prepRivalAction('assassinate')" class="p-2.5 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left space-y-1 transition">
+            <div class="font-bold text-noir-100">🎯 Contract on Rival Boss</div>
+            <div class="text-[10px] text-noir-500">High-risk contract. Eliminating a boss collapses their entire outfit.</div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 6: THE CAPO'S COMPENDIUM & FIELD MANUAL                    -->
+    <!-- ============================================================== -->
+    <section id="tab-manual" class="space-y-5 hidden">
+      <div class="newsprint-panel p-4 sm:p-7 rounded shadow-2xl space-y-6">
+        <!-- Title Banner -->
+        <div class="border-b-4 border-noir-ink pb-3 text-center">
+          <div class="stamp-badge text-xs mb-1">CLASSIFIED MOB STRATEGY MANUAL • 1926</div>
+          <h2 class="font-serif font-black text-2xl sm:text-3xl text-noir-ink uppercase tracking-tight">THE CAPO'S COMPREHENSIVE COMPENDIUM</h2>
+          <p class="text-xs italic font-serif text-noir-ink">Tactical Operations, Racket Mathematics, Commercial Laundering & Survival in Cook County</p>
+        </div>
+
+        <!-- Section 1: Core Mechanics -->
+        <div class="space-y-2 border-b border-noir-ink/30 pb-4">
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">1. The Dual Currency Economy: Dirty Cash vs. Clean Bank Vault</h3>
+          <p class="text-xs text-noir-ink leading-relaxed text-justify">
+            In 1926 Chicago, money is split into two distinct tiers: <strong>Dirty Street Cash</strong> and <strong>Clean Bank Balance</strong>.
+          </p>
+          <ul class="list-disc list-inside text-xs text-noir-ink space-y-1 pl-1">
+            <li><strong>Dirty Street Cash:</strong> Yielded directly from underground rackets (Speakeasies, Gambling Dens, Brothels, Protection Shakedowns). Used for street soldiers' weekly upkeep, black-market Tommy Guns, alleyway mob surgeries, and constructing raw illicit operations.</li>
+            <li><strong>Clean Bank Balance:</strong> Deposited in legitimate civic banking institutions. Required for municipal bribes, retaining Cook County Judges, buying the Police Commissioner, retaining appellate defense lawyers, and purchasing legitimate commercial property fronts.</li>
+            <li><strong>The IRS Audit Hazard:</strong> If your Dirty Cash reserves skyrocket while your laundering network remains weak, the Federal Internal Revenue Bureau will flag your outfit, resulting in immediate confiscation warrants and coordinated padlocking of premises.</li>
+          </ul>
+        </div>
+
+        <!-- Section 2: Deep Dive into Illicit Rackets -->
+        <div class="space-y-2 border-b border-noir-ink/30 pb-4">
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">2. Illicit Rackets Breakdown & Performance Data</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-[11px] border border-noir-ink/40 font-mono">
+              <thead class="bg-noir-ink text-noir-newsprint font-bold">
+                <tr>
+                  <th class="p-1.5 border border-noir-ink/30">Racket Type</th>
+                  <th class="p-1.5 border border-noir-ink/30">Cost (Dirty)</th>
+                  <th class="p-1.5 border border-noir-ink/30">Booze Consumed</th>
+                  <th class="p-1.5 border border-noir-ink/30">Booze Produced</th>
+                  <th class="p-1.5 border border-noir-ink/30">Weekly Gross</th>
+                  <th class="p-1.5 border border-noir-ink/30">Heat / Wk</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-noir-ink/20 text-noir-ink">
+                <tr>
+                  <td class="p-1.5 font-bold">Protection Shakedown</td>
+                  <td class="p-1.5">$1,500</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+$850</td>
+                  <td class="p-1.5 text-noir-blood font-bold">+3%</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Moonshine Still</td>
+                  <td class="p-1.5">$2,800</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+35 bbl</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+$250</td>
+                  <td class="p-1.5 text-noir-blood font-bold">+5%</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Industrial Brewery</td>
+                  <td class="p-1.5">$5,500</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+80 bbl</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+$400</td>
+                  <td class="p-1.5 text-noir-blood font-bold">+9%</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Hidden Speakeasy</td>
+                  <td class="p-1.5">$4,200</td>
+                  <td class="p-1.5 text-noir-blood font-bold">25 bbl</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+$2,800</td>
+                  <td class="p-1.5 text-noir-blood font-bold">+7%</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Gambling Den</td>
+                  <td class="p-1.5">$7,500</td>
+                  <td class="p-1.5 text-noir-blood font-bold">12 bbl</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+$4,200</td>
+                  <td class="p-1.5 text-noir-blood font-bold">+11%</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Brothel & Dope Den</td>
+                  <td class="p-1.5">$6,000</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+$3,300</td>
+                  <td class="p-1.5 text-noir-blood font-bold">+12%</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Hijacking Ring</td>
+                  <td class="p-1.5">$3,800</td>
+                  <td class="p-1.5">0</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+15 bbl</td>
+                  <td class="p-1.5 text-emerald-900 font-bold">+$1,900</td>
+                  <td class="p-1.5 text-noir-blood font-bold">+10%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[11px] text-noir-ink/80 italic mt-1">
+            Note: If a Speakeasy does not receive its required 25 barrels of booze each week, revenue plummets by 65% as thirsty patrons refuse watered cocktails.
+          </p>
+        </div>
+
+        <!-- Section 3: Commercial Clean Fronts & The Laundering Engine -->
+        <div class="space-y-2 border-b border-noir-ink/30 pb-4">
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">3. Commercial Fronts & Laundering Math</h3>
+          <p class="text-xs text-noir-ink leading-relaxed text-justify">
+            Every clean front operates as a legitimate business that funnels dirty paper money through official invoices. However, laundering is subject to an operational haircut (the "Laundering Tax" of 20% to 30% overhead). 
+          </p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-[11px] border border-noir-ink/40 font-mono">
+              <thead class="bg-noir-ink text-noir-newsprint font-bold">
+                <tr>
+                  <th class="p-1.5 border border-noir-ink/30">Commercial Front</th>
+                  <th class="p-1.5 border border-noir-ink/30">Acquisition Cost</th>
+                  <th class="p-1.5 border border-noir-ink/30">Max Laundered / Wk</th>
+                  <th class="p-1.5 border border-noir-ink/30">Clean Efficiency</th>
+                  <th class="p-1.5 border border-noir-ink/30">Heat Suppression</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-noir-ink/20 text-noir-ink">
+                <tr>
+                  <td class="p-1.5 font-bold">Steam Dry Cleaners</td>
+                  <td class="p-1.5">$2k Dirty + $3.5k Clean</td>
+                  <td class="p-1.5 font-bold">$2,000 / wk</td>
+                  <td class="p-1.5">75% ($1,500 Clean)</td>
+                  <td class="p-1.5 text-emerald-900">-2% Heat</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Floral Boutique</td>
+                  <td class="p-1.5">$1.5k Dirty + $2.8k Clean</td>
+                  <td class="p-1.5 font-bold">$1,400 / wk</td>
+                  <td class="p-1.5">80% ($1,120 Clean)</td>
+                  <td class="p-1.5 text-emerald-900">-3% Heat</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Funeral Home & Mortuary</td>
+                  <td class="p-1.5">$3k Dirty + $5.5k Clean</td>
+                  <td class="p-1.5 font-bold">$3,800 / wk</td>
+                  <td class="p-1.5">82% ($3,116 Clean)</td>
+                  <td class="p-1.5 text-emerald-900">-4% Heat</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Meat Packing Plant</td>
+                  <td class="p-1.5">$4.5k Dirty + $8k Clean</td>
+                  <td class="p-1.5 font-bold">$6,000 / wk</td>
+                  <td class="p-1.5">78% ($4,680 Clean)</td>
+                  <td class="p-1.5 text-emerald-900">-2% Heat</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">Import/Export Harbor Docks</td>
+                  <td class="p-1.5">$6k Dirty + $11k Clean</td>
+                  <td class="p-1.5 font-bold">$9,500 / wk</td>
+                  <td class="p-1.5">85% ($8,075 Clean)</td>
+                  <td class="p-1.5 text-emerald-900">-5% Heat</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[11px] text-noir-ink/80 leading-relaxed mt-1">
+            <strong>The Golden Rule of Laundering:</strong> Always maintain your weekly laundering capacity at least 120% higher than your crew salaries and judicial bribes, so your legitimate bank balance accumulates steady capital reserves.
+          </p>
+        </div>
+
+        <!-- Section 4: Fortifications & Defense Upgrades -->
+        <div class="space-y-2 border-b border-noir-ink/30 pb-4">
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">4. Fortifications, Bouncers & Armed Guards</h3>
+          <p class="text-xs text-noir-ink leading-relaxed text-justify">
+            Unfortified rackets are sitting ducks for rival raids and rogue police precinct shakedowns. Upgrading a plot unlocks defensive tiers:
+          </p>
+          <ul class="list-disc list-inside text-xs text-noir-ink space-y-1 pl-1">
+            <li><strong>Level 1 (Standard):</strong> Unreinforced doors. Standard vulnerability to raids and vandalism.</li>
+            <li><strong>Level 2 (Reinforced Steel Doors & Bouncers):</strong> Costs $2,500. Increases income/capacity by 40% and adds +35% defense against rival incursions.</li>
+            <li><strong>Level 3 (Armed Guard Bunker & Tripwire Alarms):</strong> Costs $4,500. Increases income/capacity by 80% and reduces police raid arrest probabilities by half.</li>
+          </ul>
+        </div>
+
+        <!-- Section 5: Tactical Masterclasses -->
+        <div class="space-y-3">
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">5. Tactical Masterclasses & Odds & Ends Strategies</h3>
+          
+          <div class="bg-noir-ink/5 p-3 rounded border border-noir-ink/30 space-y-1">
+            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy A: The North Shore Bootleg Blitz</h4>
+            <p class="text-[11px] text-noir-ink/90 leading-relaxed">
+              In the opening 4 weeks, refrain from initiating gang wars. Secure industrial slots in the Docks to build two Moonshine Stills, then establish two Speakeasies in Little Italy. This creates a sustainable $5,000+ weekly dirty revenue stream that funds arms purchases without raising police heat.
+            </p>
+          </div>
+
+          <div class="bg-noir-ink/5 p-3 rounded border border-noir-ink/30 space-y-1">
+            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy B: The Judicial Umbrella Protocol</h4>
+            <p class="text-[11px] text-noir-ink/90 leading-relaxed">
+              Prioritize acquiring your first Dry Cleaner in Week 3. Accumulate $5,000 in clean bank balance and immediately place Judge Callahan on retainer. Once secured, any soldiers arrested during surprise police sweeps will have their indictments dismissed without costing bail money.
+            </p>
+          </div>
+
+          <div class="bg-noir-ink/5 p-3 rounded border border-noir-ink/30 space-y-1">
+            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy C: Decapitation Strike Over Turf Wars</h4>
+            <p class="text-[11px] text-noir-ink/90 leading-relaxed">
+              Do not waste time fighting rival outfits street-by-street. Equip two made men with Tommy Guns and Armored Sedans. Dispatch them on an assassination contract against the rival Boss. Eliminating the Boss dissolves their entire faction instantly, leaving all their unfortified rackets ripe for annexation.
+            </p>
+          </div>
+        </div>
+
+        <div class="text-center pt-2 border-t border-noir-ink text-[10px] uppercase font-bold text-noir-ink/60">
+          END OF DOCUMENT • KEEP SECURE UNDER OMERTÀ
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 7: GOD MODE (OMNIPOTENT TESTING SUITE)                     -->
+    <!-- ============================================================== -->
+    <section id="tab-god" class="space-y-4 hidden">
+      <div class="bg-noir-900 border-2 border-noir-blood p-4 rounded shadow-2xl">
+        <div class="flex items-center justify-between border-b border-noir-blood/50 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">⚡</span>
+            <h2 class="font-title text-noir-100 text-sm sm:text-base tracking-wider uppercase">CAPO GOD MODE TESTING CONSOLE</h2>
+          </div>
+          <span class="bg-noir-950 text-noir-bloodlight text-[10px] px-2 py-0.5 rounded border border-noir-blood font-bold uppercase">Dev Sandbox Active</span>
+        </div>
+        <p class="text-xs text-noir-300 mt-2">
+          Instant testing sandbox for verifying all game loops, economic models, combat formulas, and city-wide domination.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 mt-4 text-xs font-mono">
+          <button onclick="cheatAddCash('dirty', 100000)" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
+            <div class="font-bold text-noir-100">+ $100,000 Dirty Cash</div>
+            <div class="text-[10px] text-noir-500">Inject black market cash reserves.</div>
+          </button>
+
+          <button onclick="cheatAddCash('clean', 50000)" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-emerald rounded text-left transition">
+            <div class="font-bold text-noir-emerald">+ $50,000 Clean Bank</div>
+            <div class="text-[10px] text-noir-500">Credit verified civic bank balance.</div>
+          </button>
+
+          <button onclick="cheatAddBooze(500)" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-300 rounded text-left transition">
+            <div class="font-bold text-noir-300">+ 500 Booze Barrels</div>
+            <div class="text-[10px] text-noir-500">Replenish moonshine inventory.</div>
+          </button>
+
+          <button onclick="cheatZeroHeat()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
+            <div class="font-bold text-noir-100">🧹 Erase Police Heat (0%)</div>
+            <div class="text-[10px] text-noir-500">Purge police records and warrants.</div>
+          </button>
+
+          <button onclick="cheatMaxCrew()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
+            <div class="font-bold text-noir-100">⭐ Max All Gangster Stats (99)</div>
+            <div class="text-[10px] text-noir-500">Muscle, Aim, Stealth, Brains = 99.</div>
+          </button>
+
+          <button onclick="cheatArsenal()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-blood rounded text-left transition">
+            <div class="font-bold text-noir-bloodlight">🔫 Supply Tommy Guns & Sedans</div>
+            <div class="text-[10px] text-noir-500">Equip entire crew with heavy firepower.</div>
+          </button>
+
+          <button onclick="cheatAnnexAll()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
+            <div class="font-bold text-noir-100">👑 Annex All 25 City Plots</div>
+            <div class="text-[10px] text-noir-500">Fill all districts with Level 3 rackets.</div>
+          </button>
+
+          <button onclick="cheatKillRivalBoss()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-blood rounded text-left transition">
+            <div class="font-bold text-noir-bloodlight">💀 Assassinate Rival Boss</div>
+            <div class="text-[10px] text-noir-500">Instant kill next living rival capo.</div>
+          </button>
+
+          <button onclick="cheatBailAndHeal()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-emerald rounded text-left transition">
+            <div class="font-bold text-noir-emerald">🏥 Spring Jails & Heal Crew</div>
+            <div class="text-[10px] text-noir-500">Release inmates & heal to 100% HP.</div>
+          </button>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-noir-700 flex items-center justify-between">
+          <div>
+            <div class="font-bold text-sm text-noir-100">Capo Invulnerability:</div>
+            <div class="text-[10px] text-noir-500">Crew cannot perish in skirmishes; rackets cannot be seized.</div>
+          </div>
+          <button id="btn-god-invincible" onclick="toggleInvincibility()" class="px-4 py-2 bg-noir-800 border border-noir-600 text-noir-300 font-bold text-xs rounded transition">
+            DISABLED
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- MODALS CONTAINER                                               -->
+  <!-- ============================================================== -->
+
+  <!-- Modal 1: Issue Orders -->
+  <div id="modal-order" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
+    <div class="newsprint-panel w-full max-w-md p-4 rounded max-h-[85vh] overflow-y-auto space-y-3">
+      <div class="flex justify-between items-center border-b border-noir-ink pb-2">
+        <div>
+          <h3 class="font-serif font-black text-lg text-noir-ink" id="order-modal-title">Assign Orders</h3>
+          <p class="text-[11px] text-noir-ink/70">Select weekly directive for upcoming calendar advance.</p>
+        </div>
+        <button onclick="closeModal('modal-order')" class="text-noir-ink font-bold text-lg px-2">✕</button>
+      </div>
+      <div class="space-y-1.5 text-xs font-mono" id="order-options-list"></div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Recruit Soldiers -->
+  <div id="modal-recruit" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
+    <div class="newsprint-panel w-full max-w-lg p-4 rounded max-h-[85vh] overflow-y-auto space-y-3">
+      <div class="flex justify-between items-center border-b border-noir-ink pb-2">
+        <div>
+          <h3 class="font-serif font-black text-lg text-noir-ink">Windy City Recruits & Muscle</h3>
+          <p class="text-[11px] text-noir-ink/70">Induct street soldiers, wheelmen, and seasoned enforcers.</p>
+        </div>
+        <button onclick="closeModal('modal-recruit')" class="text-noir-ink font-bold text-lg px-2">✕</button>
+      </div>
+      <div class="space-y-2 text-xs" id="recruit-candidates-list"></div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Black Market Armory -->
+  <div id="modal-armory" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
+    <div class="newsprint-panel w-full max-w-lg p-4 rounded max-h-[85vh] overflow-y-auto space-y-3">
+      <div class="flex justify-between items-center border-b border-noir-ink pb-2">
+        <div>
+          <h3 class="font-serif font-black text-lg text-noir-ink">Underground Munitions & Motor Depot</h3>
+          <p class="text-[11px] text-noir-ink/70">Equip your soldiers with firearms and getaway vehicles.</p>
+        </div>
+        <button onclick="closeModal('modal-armory')" class="text-noir-ink font-bold text-lg px-2">✕</button>
+      </div>
+      <div class="space-y-2 text-xs" id="armory-items-list"></div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Construct Business (Racket or Clean Front) -->
+  <div id="modal-build" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
+    <div class="newsprint-panel w-full max-w-md p-4 rounded max-h-[85vh] overflow-y-auto space-y-3">
+      <div class="flex justify-between items-center border-b border-noir-ink pb-2">
+        <div>
+          <h3 class="font-serif font-black text-lg text-noir-ink">Establish Business Plot</h3>
+          <p class="text-[11px] text-noir-ink/70" id="build-modal-subtitle">Select Racket or Clean Front</p>
+        </div>
+        <button onclick="closeModal('modal-build')" class="text-noir-ink font-bold text-lg px-2">✕</button>
+      </div>
+
+      <!-- Toggle: Illicit Rackets vs Clean Fronts -->
+      <div class="flex border border-noir-ink rounded overflow-hidden text-xs">
+        <button onclick="renderBuildOptions('racket')" id="btn-toggle-rackets" class="flex-1 py-1.5 font-bold bg-noir-ink text-noir-newsprint transition">
+          Illicit Rackets
+        </button>
+        <button onclick="renderBuildOptions('front')" id="btn-toggle-fronts" class="flex-1 py-1.5 font-bold bg-noir-newsprint text-noir-ink transition">
+          Commercial Fronts
+        </button>
+      </div>
+
+      <div class="space-y-2 text-xs" id="build-options-container"></div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Notice Alert -->
+  <div id="modal-alert" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
+    <div class="newsprint-panel w-full max-w-sm p-4 rounded space-y-3 border-2 border-noir-ink text-center">
+      <div class="stamp-badge text-xs" id="alert-stamp">UNDERWORLD NOTICE</div>
+      <h3 class="font-serif font-black text-lg text-noir-ink" id="alert-title">Notice</h3>
+      <p class="text-xs text-noir-ink/90 font-serif leading-relaxed" id="alert-body">Message</p>
+      <div class="pt-2">
+        <button onclick="closeModal('modal-alert')" class="w-full py-2 bg-noir-ink text-noir-newsprint font-bold text-xs uppercase tracking-wider rounded">
+          Understood, Capo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIXED BOTTOM NAVIGATION BAR DESIGNED FOR IOS THUMB REACH -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-noir-950/95 backdrop-blur-md border-t border-noir-700 px-1 py-1 safe-bottom shadow-2xl">
+    <div class="max-w-5xl mx-auto flex justify-around items-center text-[10px] sm:text-xs">
+      
+      <button onclick="switchTab('ledger')" id="nav-ledger" class="flex flex-col items-center py-1 px-2 rounded text-noir-100 font-bold transition">
+        <span class="text-base sm:text-lg">📰</span>
+        <span>Gazette</span>
+      </button>
+
+      <button onclick="switchTab('crew')" id="nav-crew" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+        <span class="text-base sm:text-lg">👥</span>
+        <span>Crew</span>
+      </button>
+
+      <button onclick="switchTab('businesses')" id="nav-businesses" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+        <span class="text-base sm:text-lg">🏢</span>
+        <span>Rackets</span>
+      </button>
+
+      <button onclick="switchTab('politics')" id="nav-politics" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+        <span class="text-base sm:text-lg">⚖️</span>
+        <span>Law</span>
+      </button>
+
+      <button onclick="switchTab('war')" id="nav-war" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+        <span class="text-base sm:text-lg">⚔️</span>
+        <span>Wars</span>
+      </button>
+
+      <button onclick="switchTab('manual')" id="nav-manual" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+        <span class="text-base sm:text-lg">📖</span>
+        <span>Manual</span>
+      </button>
+
+      <button onclick="switchTab('god')" id="nav-god" class="flex flex-col items-center py-1 px-2 rounded text-noir-bloodlight hover:text-white transition font-bold">
+        <span class="text-base sm:text-lg">⚡</span>
+        <span>God</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ============================================================== -->
+  <!-- JAVASCRIPT: ENGINE, ECONOMIC LOGIC, SOUND & STATE               -->
+  <!-- ============================================================== -->
+  <script>
+    /* ============================================================
+       1. SYNTHESIZED AUDIO (Web Audio API - No External Assets)
+       ============================================================ */
+    let audioCtx = null;
+    let audioEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioCtx = new AudioClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      const lbl = document.getElementById('sound-label');
+      if (audioEnabled) {
+        lbl.textContent = 'ON';
+        lbl.className = 'text-noir-emerald font-bold';
+        playSound('cash');
+      } else {
+        lbl.textContent = 'OFF';
+        lbl.className = 'text-noir-500 font-bold';
+      }
+    }
+
+    function playSound(type) {
+      if (!audioEnabled) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+
+      if (type === 'typewriter') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(550, now);
+        osc.frequency.exponentialRampToValueAtTime(100, now + 0.04);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } else if (type === 'cash') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(950, now);
+        osc.frequency.setValueAtTime(1300, now + 0.08);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.5);
+      } else if (type === 'gun') {
+        for (let i = 0; i < 4; i++) {
+          const t = now + (i * 0.07);
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(130, t);
+          osc.frequency.exponentialRampToValueAtTime(35, t + 0.05);
+          gain.gain.setValueAtTime(0.25, t);
+          gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t);
+          osc.stop(t + 0.06);
+        }
+      } else if (type === 'stamp') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.12);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.13);
+      }
+    }
+
+    /* ============================================================
+       2. GAME DATA DICTIONARIES (Districts, Rackets, Fronts, Gear)
+       ============================================================ */
+    const DISTRICTS_DATA = [
+      { id: 'downtown', name: 'Downtown Loop', description: 'Financial nerve center, high-rolling card dens, and premiere jazz speakeasies.', multiplier: 1.3, maxSlots: 5 },
+      { id: 'little_italy', name: 'Little Italy', description: 'Traditional enclave, loyal shopkeepers, and fortified neighborhood stills.', multiplier: 1.0, maxSlots: 5 },
+      { id: 'docks', name: 'South Side Docks', description: 'Lake Michigan freighter piers, industrial mash cookers, and cargo warehouses.', multiplier: 1.15, maxSlots: 5 },
+      { id: 'north_shore', name: 'North Shore', description: 'Affluent avenues, wealthy bootleg clientele, and sprawling commercial laundering fronts.', multiplier: 1.4, maxSlots: 5 },
+      { id: 'cicero', name: 'Cicero District', description: 'Industrial railroad town, secluded roadhouses, and heavy enforcement headquarters.', multiplier: 0.95, maxSlots: 5 }
+    ];
+
+    // Illicit Dirty Rackets
+    const RACKET_TYPES = {
+      empty: { name: 'Vacant Plot', category: 'none', costDirty: 0, costClean: 0, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 0, efficiency: 0, heatGen: 0, desc: 'Empty storefront ready for acquisition.' },
+      protection: { name: 'Protection Shakedown', category: 'racket', costDirty: 1500, costClean: 0, boozeCost: 0, boozeYield: 0, dirtyYield: 850, launderLimit: 0, efficiency: 0, heatGen: 3, desc: 'Collect mandatory weekly tribute from local shopkeepers and street corners.' },
+      distillery: { name: 'Moonshine Still', category: 'racket', costDirty: 2800, costClean: 0, boozeCost: 0, boozeYield: 35, dirtyYield: 250, launderLimit: 0, efficiency: 0, heatGen: 5, desc: 'Copper boilers distilling corn mash into illicit high-proof moonshine barrels.' },
+      brewery: { name: 'Industrial Brewery', category: 'racket', costDirty: 5500, costClean: 0, boozeCost: 0, boozeYield: 80, dirtyYield: 400, launderLimit: 0, efficiency: 0, heatGen: 9, desc: 'Full-scale industrial plant brewing massive batches of bootleg beer.' },
+      speakeasy: { name: 'Hidden Speakeasy', category: 'racket', costDirty: 4200, costClean: 0, boozeCost: 25, boozeYield: 0, dirtyYield: 2800, launderLimit: 0, efficiency: 0, heatGen: 7, desc: 'Underground cocktail bar serving thirsty patrons. Requires regular booze barrels.' },
+      gambling: { name: 'Underground Gambling Den', category: 'racket', costDirty: 7500, costClean: 0, boozeCost: 12, boozeYield: 0, dirtyYield: 4200, launderLimit: 0, efficiency: 0, heatGen: 11, desc: 'Craps, roulette tables, and illicit high-stakes poker matches for wealthy punters.' },
+      brothel: { name: 'Brothel & Dope Den', category: 'racket', costDirty: 6000, costClean: 0, boozeCost: 0, boozeYield: 0, dirtyYield: 3300, launderLimit: 0, efficiency: 0, heatGen: 12, desc: 'Discreet back-alley parlor operating lucrative vice services.' },
+      hijacking: { name: 'Freight Hijacking Ring', category: 'racket', costDirty: 3800, costClean: 0, boozeCost: 0, boozeYield: 15, dirtyYield: 1900, launderLimit: 0, efficiency: 0, heatGen: 10, desc: 'Squad intercepting rival delivery trucks and freight trains.' }
+    };
+
+    // Commercial Clean Fronts
+    const FRONT_TYPES = {
+      dry_cleaners: { name: 'Steam Dry Cleaners', category: 'front', costDirty: 2000, costClean: 3500, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 2000, efficiency: 0.75, heatGen: -2, desc: 'Steam pressing parlor laundering cash invoices at 75% clean efficiency.' },
+      florist: { name: 'Floral Boutique', category: 'front', costDirty: 1500, costClean: 2800, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 1400, efficiency: 0.80, heatGen: -3, desc: 'Quaint flower shop handling clean corporate deliveries and funerals.' },
+      funeral_home: { name: 'Funeral Mortuary', category: 'front', costDirty: 3000, costClean: 5500, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 3800, efficiency: 0.82, heatGen: -4, desc: 'Somber mortuary providing flawless paper invoices and secret coffin transport.' },
+      meat_packing: { name: 'Meat Packing Plant', category: 'front', costDirty: 4500, costClean: 8000, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 6000, efficiency: 0.78, heatGen: -2, desc: 'Massive stockyard commercial front capable of masking large dirty cash volumes.' },
+      harbor_docks: { name: 'Import/Export Shipping Docks', category: 'front', costDirty: 6000, costClean: 11000, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 9500, efficiency: 0.85, heatGen: -5, desc: 'Premier shipping docks with international billings and unmatched 85% clean recovery.' }
+    };
+
+    // Unified lookup
+    const ALL_BUSINESS_TYPES = { ...RACKET_TYPES, ...FRONT_TYPES };
+
+    const ARMORY_ITEMS = [
+      { id: 'revolver', name: '.38 Police Special Revolver', type: 'weapon', aimBonus: 8, muscleBonus: 3, price: 250, desc: 'Reliable six-shot pocket iron.' },
+      { id: 'shotgun', name: 'Sawed-Off Double Barrel', type: 'weapon', aimBonus: 18, muscleBonus: 14, price: 850, desc: 'Devastating close-quarter firepower.' },
+      { id: 'tommy', name: 'Thompson Submachine Gun', type: 'weapon', aimBonus: 32, muscleBonus: 22, price: 2400, desc: 'The "Chicago Typewriter". Shreds ambushes.' },
+      { id: 'sedan', name: 'Armored V8 Coupe', type: 'vehicle', driveBonus: 28, stealthBonus: 12, price: 3200, desc: 'High-speed getaway transport with steel plates.' }
+    ];
+
+    const ORDERS_LIST = [
+      { id: 'idle', name: 'Rest / Keep Low', desc: 'Recovers wounded health and keeps personal heat minimal.' },
+      { id: 'extort', name: 'Extort Businesses', desc: 'Shake down shopkeepers for additional dirty cash (+Heat).' },
+      { id: 'patrol', name: 'Patrol Territory', desc: 'Defends owned plots and repels rival drive-by raids.' },
+      { id: 'bribe', name: 'Grease Beat Detectives', desc: 'Distributes cash to local cops to cool neighborhood heat.' },
+      { id: 'scout', name: 'Scout Rival Turfs', desc: 'Maps enemy compounds and discovers vulnerable speakeasies.' }
+    ];
+
+    /* ============================================================
+       3. DEFAULT INITIAL STATE
+       ============================================================ */
+    const defaultState = {
+      week: 1,
+      year: 1926,
+      dirtyCash: 15000,
+      cleanCash: 6000,
+      booze: 120,
+      heat: 15,
+      isInvincible: false,
+      activeDistrictTab: 'little_italy',
+      selectedHoodId: null,
+
+      // Politics & Legal Firm
+      policeBribes: {
+        beatCopPaid: 2,
+        commissionerWeeksRemaining: 0,
+        judgeOnPayroll: true
+      },
+      lawyerTier: 2, // 1: Alley Shyster, 2: Silver Tongue, 3: Supreme Counsel
+
+      // Districts Roster (5 districts x 5 plots each)
+      districts: {
+        downtown: [
+          { slot: 0, type: 'speakeasy', level: 1 },
+          { slot: 1, type: 'gambling', level: 1 },
+          { slot: 2, type: 'empty', level: 0 },
+          { slot: 3, type: 'empty', level: 0 },
+          { slot: 4, type: 'empty', level: 0 }
+        ],
+        little_italy: [
+          { slot: 0, type: 'protection', level: 1 },
+          { slot: 1, type: 'distillery', level: 1 },
+          { slot: 2, type: 'speakeasy', level: 1 },
+          { slot: 3, type: 'empty', level: 0 },
+          { slot: 4, type: 'empty', level: 0 }
+        ],
+        docks: [
+          { slot: 0, type: 'distillery', level: 1 },
+          { slot: 1, type: 'dry_cleaners', level: 1 },
+          { slot: 2, type: 'empty', level: 0 },
+          { slot: 3, type: 'empty', level: 0 },
+          { slot: 4, type: 'empty', level: 0 }
+        ],
+        north_shore: [
+          { slot: 0, type: 'florist', level: 1 },
+          { slot: 1, type: 'empty', level: 0 },
+          { slot: 2, type: 'empty', level: 0 },
+          { slot: 3, type: 'empty', level: 0 },
+          { slot: 4, type: 'empty', level: 0 }
+        ],
+        cicero: [
+          { slot: 0, type: 'protection', level: 1 },
+          { slot: 1, type: 'empty', level: 0 },
+          { slot: 2, type: 'empty', level: 0 },
+          { slot: 3, type: 'empty', level: 0 },
+          { slot: 4, type: 'empty', level: 0 }
+        ]
+      },
+
+      // Crew Soldiers
+      crew: [
+        { id: 'boss', name: 'Don Salvatore (You)', title: 'The Capo', muscle: 70, brains: 88, stealth: 65, shooting: 78, driving: 55, upkeep: 0, health: 100, status: 'Active', weapon: 'tommy', vehicle: 'sedan', order: 'patrol' },
+        { id: 'hood_1', name: 'Frankie "Two-Times"', title: 'Enforcer', muscle: 82, brains: 42, stealth: 58, shooting: 84, driving: 62, upkeep: 350, health: 100, status: 'Active', weapon: 'shotgun', vehicle: null, order: 'extort' },
+        { id: 'hood_2', name: 'Jimmy "The Needle" Vitucci', title: 'Mash Cook', muscle: 48, brains: 82, stealth: 72, shooting: 45, driving: 68, upkeep: 300, health: 100, status: 'Active', weapon: 'revolver', vehicle: null, order: 'idle' },
+        { id: 'hood_3', name: 'Johnny "Fast Hands" Ross', title: 'Wheelman', muscle: 54, brains: 58, stealth: 76, shooting: 62, driving: 94, upkeep: 320, health: 100, status: 'Active', weapon: 'revolver', vehicle: 'sedan', order: 'scout' },
+        { id: 'hood_4', name: 'Vincenzo "The Shadow" Borelli', title: 'Infiltrator', muscle: 52, brains: 68, stealth: 90, shooting: 70, driving: 58, upkeep: 380, health: 100, status: 'Active', weapon: 'revolver', vehicle: null, order: 'bribe' }
+      ],
+
+      // Armory Stash
+      stash: {
+        revolver: 2,
+        shotgun: 1,
+        tommy: 0,
+        sedan: 0
+      },
+
+      // Rivals
+      rivals: [
+        { id: 'moretti', name: 'The Moretti Family', boss: 'Don Carlo Moretti', territory: 'Little Italy & Loop', strength: 75, relation: -35, alive: true },
+        { id: 'northside', name: 'The North Side Mob', boss: 'Dean "Spike" Weiss', territory: 'North Shore & Docks', strength: 70, relation: -20, alive: true },
+        { id: 'odonnell', name: 'The O\'Donnell Clan', boss: 'Marcus "The Banker" Vance', territory: 'Cicero & South Side', strength: 65, relation: 15, alive: true }
+      ],
+
+      lastDispatches: [
+        'Bootleg stills in Little Italy bubbling steadily without disruption.',
+        'Cook County deputy pocketed grease money along the railroad yards.',
+        'Don Salvatore held a council establishing control over the Downtown Loop.'
+      ],
+      lastFinancials: {
+        income: 4200,
+        boozeRev: 2800,
+        salaries: 1350,
+        bribes: 600,
+        laundered: 1500,
+        net: 4050
+      }
+    };
+
+    let state = JSON.parse(localStorage.getItem('empire_1926_save') || 'null');
+    if (!state) {
+      state = JSON.parse(JSON.stringify(defaultState));
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('empire_1926_save', JSON.stringify(state));
+      } catch (e) {
+        console.warn('LocalStorage save failed:', e);
+      }
+    }
+
+    /* ============================================================
+       4. UI NAVIGATION
+       ============================================================ */
+    function switchTab(tabId) {
+      playSound('typewriter');
+      const tabs = ['ledger', 'crew', 'businesses', 'politics', 'war', 'manual', 'god'];
+      tabs.forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        const nav = document.getElementById('nav-' + t);
+        if (t === tabId) {
+          el.classList.remove('hidden');
+          if (nav) {
+            nav.classList.add('text-noir-100', 'font-bold');
+            nav.classList.remove('text-noir-500');
+          }
+        } else {
+          el.classList.add('hidden');
+          if (nav) {
+            nav.classList.remove('text-noir-100', 'font-bold');
+            nav.classList.add('text-noir-500');
+          }
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderUI();
+    }
+
+    function openModal(id) {
+      playSound('typewriter');
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      playSound('typewriter');
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function showAlert(title, body, stamp = 'CONFIDENTIAL NOTICE') {
+      document.getElementById('alert-stamp').textContent = stamp;
+      document.getElementById('alert-title').textContent = title;
+      document.getElementById('alert-body').textContent = body;
+      openModal('modal-alert');
+    }
+
+    /* ============================================================
+       5. CORE RENDERING PIPELINE
+       ============================================================ */
+    function renderUI() {
+      // Top status row
+      document.getElementById('stat-date').textContent = `Week ${state.week} - Oct ${state.year}`;
+      document.getElementById('news-date').textContent = `Chicago, Illinois • Week ${state.week}, ${state.year}`;
+      document.getElementById('stat-dirty').textContent = `$${state.dirtyCash.toLocaleString()}`;
+      document.getElementById('stat-clean').textContent = `$${state.cleanCash.toLocaleString()}`;
+      document.getElementById('stat-booze').textContent = `${state.booze} bbl`;
+      document.getElementById('stat-heat-num').textContent = `${state.heat}%`;
+
+      const heatBar = document.getElementById('stat-heat-bar');
+      heatBar.style.width = `${Math.min(100, state.heat)}%`;
+      if (state.heat > 70) {
+        heatBar.className = 'bg-noir-blood h-full pulse-heat';
+      } else if (state.heat > 40) {
+        heatBar.className = 'bg-noir-silver h-full';
+      } else {
+        heatBar.className = 'bg-noir-emerald h-full';
+      }
+
+      const activeMadeMen = state.crew.filter(c => c.status === 'Active').length;
+      document.getElementById('stat-crew-count').textContent = `${activeMadeMen} Hoods`;
+
+      let totalSlots = 25;
+      let ownedSlots = 0;
+      Object.keys(state.districts).forEach(d => {
+        ownedSlots += state.districts[d].filter(s => s.type !== 'empty').length;
+      });
+      const dominance = Math.round((ownedSlots / totalSlots) * 100);
+      document.getElementById('stat-control').textContent = `${dominance}%`;
+      document.getElementById('districts-slots-owned').textContent = ownedSlots;
+
+      // Render Active Tab Content
+      renderLedgerTab();
+      renderCrewTab();
+      renderBusinessesTab();
+      renderPoliticsTab();
+      renderWarTab();
+
+      // Invincibility Toggle state
+      const godBtn = document.getElementById('btn-god-invincible');
+      if (state.isInvincible) {
+        godBtn.textContent = 'ACTIVE (INVINCIBLE)';
+        godBtn.className = 'px-4 py-2 bg-noir-blood text-noir-100 font-bold text-xs rounded shadow';
+      } else {
+        godBtn.textContent = 'DISABLED';
+        godBtn.className = 'px-4 py-2 bg-noir-800 border border-noir-600 text-noir-300 font-bold text-xs rounded';
+      }
+    }
+
+    /* RENDER: TAB 1 (LEDGER) */
+    function renderLedgerTab() {
+      const dispatchesList = document.getElementById('weekly-dispatches');
+      dispatchesList.innerHTML = state.lastDispatches.map(d => `<li>${d}</li>`).join('');
+
+      document.getElementById('rep-income').textContent = `+$${state.lastFinancials.income.toLocaleString()}`;
+      document.getElementById('rep-booze-rev').textContent = `+$${state.lastFinancials.boozeRev.toLocaleString()}`;
+      document.getElementById('rep-salaries').textContent = `-$${state.lastFinancials.salaries.toLocaleString()}`;
+      document.getElementById('rep-bribes').textContent = `-$${state.lastFinancials.bribes.toLocaleString()}`;
+      document.getElementById('rep-laundered').textContent = `+$${state.lastFinancials.laundered.toLocaleString()}`;
+
+      const net = state.lastFinancials.net;
+      const netEl = document.getElementById('rep-net');
+      netEl.textContent = `${net >= 0 ? '+' : ''}$${net.toLocaleString()}`;
+      netEl.className = net >= 0 ? 'text-emerald-900 font-bold' : 'text-noir-blood font-bold';
+
+      const fbiBadge = document.getElementById('fbi-threat-level');
+      const fbiDesc = document.getElementById('fbi-threat-desc');
+      if (state.heat >= 75) {
+        fbiBadge.textContent = 'Federal Bureau Alert: RED CRACKDOWN';
+        fbiBadge.className = 'font-bold uppercase text-noir-blood pulse-heat';
+        fbiDesc.textContent = 'Treasury G-Men are raiding Cook County stills! Judicial retainers urgently required!';
+      } else if (state.heat >= 45) {
+        fbiBadge.textContent = 'Federal Bureau Alert: Active Surveillance';
+        fbiBadge.className = 'font-bold uppercase text-noir-300';
+        fbiDesc.textContent = 'Agents are logging truck shipments. Mute gun violence to avert padlocks.';
+      } else {
+        fbiBadge.textContent = 'Federal Bureau Alert: Routine Watch';
+        fbiBadge.className = 'font-bold uppercase text-emerald-900';
+        fbiDesc.textContent = 'Federal officials in Washington are distracted. Operations run unhindered.';
+      }
+
+      const ordersList = document.getElementById('quick-orders-list');
+      const assignedCount = state.crew.filter(c => c.order !== 'idle' && c.status === 'Active').length;
+      document.getElementById('orders-assigned-count').textContent = assignedCount;
+      document.getElementById('orders-total-count').textContent = state.crew.length;
+
+      ordersList.innerHTML = state.crew.map(hood => {
+        const orderObj = ORDERS_LIST.find(o => o.id === hood.order) || ORDERS_LIST[0];
+        let statusBadge = `<span class="text-noir-emerald font-bold">[${orderObj.name}]</span>`;
+        if (hood.status === 'Hospital') statusBadge = `<span class="text-noir-300 font-bold">[Hospitalized]</span>`;
+        if (hood.status === 'Jail') statusBadge = `<span class="text-noir-bloodlight font-bold">[Incarcerated]</span>`;
+
+        return `
+          <div class="flex items-center justify-between bg-noir-850 p-1.5 rounded border border-noir-800">
+            <div>
+              <span class="font-bold text-noir-100">${hood.name}</span>
+              <span class="text-[10px] text-noir-500"> (${hood.title})</span>
+            </div>
+            <div class="text-[10px]">${statusBadge}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Supply calculations
+      let distCount = 0;
+      let distProd = 0;
+      let speakCount = 0;
+      let speakDrain = 0;
+      let launderRate = 0;
+
+      Object.values(state.districts).forEach(slots => {
+        slots.forEach(s => {
+          const item = ALL_BUSINESS_TYPES[s.type];
+          if (!item) return;
+          const level = s.level || 1;
+          if (item.boozeYield > 0) { distCount++; distProd += (item.boozeYield * level); }
+          if (item.boozeCost > 0) { speakCount++; speakDrain += (item.boozeCost * level); }
+          if (item.launderLimit > 0) { launderRate += (item.launderLimit * level); }
+        });
+      });
+
+      document.getElementById('supply-dist-count').textContent = `${distCount} Production Stills`;
+      document.getElementById('supply-dist-prod').textContent = `+${distProd} bbl/wk`;
+      document.getElementById('supply-speak-count').textContent = `${speakCount} Speakeasies Open`;
+      document.getElementById('supply-speak-drain').textContent = `-${speakDrain} bbl/wk`;
+      document.getElementById('supply-front-count').textContent = `${launderRate > 0 ? (launderRate/2000).toFixed(1) : 0} Fronts Operating`;
+      document.getElementById('supply-launder-rate').textContent = `$${launderRate.toLocaleString()} capacity/wk`;
+    }
+
+    /* RENDER: TAB 2 (CREW) */
+    function renderCrewTab() {
+      const container = document.getElementById('crew-list');
+      container.innerHTML = state.crew.map(hood => {
+        const orderObj = ORDERS_LIST.find(o => o.id === hood.order) || ORDERS_LIST[0];
+        const weaponObj = ARMORY_ITEMS.find(a => a.id === hood.weapon);
+        const vehicleObj = ARMORY_ITEMS.find(a => a.id === hood.vehicle);
+
+        let statusClass = 'text-noir-emerald';
+        if (hood.status === 'Hospital') statusClass = 'text-noir-300';
+        if (hood.status === 'Jail') statusClass = 'text-noir-bloodlight';
+
+        return `
+          <div class="bg-noir-900 border border-noir-700 p-3 rounded shadow space-y-2 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start border-b border-noir-700 pb-1.5">
+                <div>
+                  <h3 class="font-bold text-noir-100 text-sm">${hood.name}</h3>
+                  <p class="text-[10px] text-noir-500">${hood.title} • Upkeep: $${hood.upkeep}/wk</p>
+                </div>
+                <span class="text-xs font-bold ${statusClass}">${hood.status}</span>
+              </div>
+
+              <!-- Stats Bar -->
+              <div class="grid grid-cols-5 gap-1 text-[10px] my-2 text-center font-mono">
+                <div class="bg-noir-850 p-1 rounded border border-noir-800">
+                  <span class="text-noir-500 block">Muscle</span>
+                  <span class="font-bold text-noir-100">${hood.muscle}</span>
+                </div>
+                <div class="bg-noir-850 p-1 rounded border border-noir-800">
+                  <span class="text-noir-500 block">Aim</span>
+                  <span class="font-bold text-noir-100">${hood.shooting}</span>
+                </div>
+                <div class="bg-noir-850 p-1 rounded border border-noir-800">
+                  <span class="text-noir-500 block">Stealth</span>
+                  <span class="font-bold text-noir-100">${hood.stealth}</span>
+                </div>
+                <div class="bg-noir-850 p-1 rounded border border-noir-800">
+                  <span class="text-noir-500 block">Brains</span>
+                  <span class="font-bold text-noir-100">${hood.brains}</span>
+                </div>
+                <div class="bg-noir-850 p-1 rounded border border-noir-800">
+                  <span class="text-noir-500 block">Driving</span>
+                  <span class="font-bold text-noir-100">${hood.driving}</span>
+                </div>
+              </div>
+
+              <!-- Loadout Info -->
+              <div class="text-[11px] space-y-0.5 text-noir-300 bg-noir-850 p-1.5 rounded border border-noir-800">
+                <div class="flex justify-between">
+                  <span>Hardware:</span>
+                  <span class="font-bold text-noir-100">${weaponObj ? weaponObj.name : 'Unarmed'}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Vehicle:</span>
+                  <span class="font-bold text-noir-300">${vehicleObj ? vehicleObj.name : 'On Foot'}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Vigor:</span>
+                  <span class="font-bold ${hood.health > 50 ? 'text-noir-emerald' : 'text-noir-bloodlight'}">${hood.health}%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-noir-700 flex gap-1.5 text-xs">
+              ${hood.status === 'Active' ? `
+                <button onclick="openOrderModal('${hood.id}')" class="flex-1 py-1.5 bg-noir-100 text-noir-ink font-bold rounded hover:bg-noir-aged transition">
+                  Order: ${orderObj.name}
+                </button>
+                <button onclick="openEquipModal('${hood.id}')" class="px-2.5 py-1.5 bg-noir-850 text-noir-100 border border-noir-600 rounded hover:text-white transition">
+                  Equip
+                </button>
+              ` : ''}
+
+              ${hood.status === 'Jail' ? `
+                <button onclick="bailHood('${hood.id}')" class="w-full py-1.5 bg-noir-blood text-noir-100 font-bold rounded hover:bg-noir-bloodlight transition">
+                  Post Bail ($1,200 Clean Cash)
+                </button>
+              ` : ''}
+
+              ${hood.status === 'Hospital' ? `
+                <button onclick="treatHood('${hood.id}')" class="w-full py-1.5 bg-noir-800 text-noir-100 border border-noir-600 font-bold rounded hover:bg-noir-700 transition">
+                  Discreet Mob Clinic ($800 Dirty Cash)
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* RENDER: TAB 3 (BUSINESSES, RACKETS & FRONTS) */
+    function renderBusinessesTab() {
+      const tabContainer = document.getElementById('district-tabs');
+      tabContainer.innerHTML = DISTRICTS_DATA.map(dist => {
+        const isActive = dist.id === state.activeDistrictTab;
+        return `
+          <button onclick="selectDistrict('${dist.id}')" class="px-3 py-1.5 text-xs whitespace-nowrap rounded-t font-serif font-bold transition ${
+            isActive ? 'bg-noir-newsprint text-noir-ink border-t-2 border-l-2 border-r-2 border-noir-ink' : 'bg-noir-900 text-noir-500 hover:text-noir-100 border border-noir-700'
+          }">
+            ${dist.name}
+          </button>
+        `;
+      }).join('');
+
+      const currentDist = DISTRICTS_DATA.find(d => d.id === state.activeDistrictTab) || DISTRICTS_DATA[0];
+      const slots = state.districts[currentDist.id] || [];
+
+      const detailContainer = document.getElementById('district-detail-container');
+      detailContainer.innerHTML = `
+        <div class="bg-noir-900 border border-noir-700 p-3 rounded space-y-1">
+          <div class="flex justify-between items-center">
+            <h3 class="font-title text-noir-100 text-base">${currentDist.name}</h3>
+            <span class="text-xs bg-noir-850 px-2 py-0.5 rounded border border-noir-800 text-noir-300">Revenue Multiplier: x${currentDist.multiplier}</span>
+          </div>
+          <p class="text-xs text-noir-500">${currentDist.description}</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+          ${slots.map((s, idx) => {
+            const biz = ALL_BUSINESS_TYPES[s.type] || RACKET_TYPES.empty;
+            const isEmpty = s.type === 'empty';
+            const isFront = biz.category === 'front';
+
+            return `
+              <div class="p-3 rounded border flex flex-col justify-between space-y-2 ${
+                isEmpty ? 'bg-noir-850/50 border-dashed border-noir-700' : isFront ? 'bg-noir-900 border-noir-emerald/60' : 'bg-noir-900 border-noir-600'
+              }">
+                <div>
+                  <div class="flex justify-between items-center text-xs">
+                    <span class="text-noir-500 font-bold">Plot #${idx + 1}</span>
+                    <span class="text-[10px] font-bold ${isEmpty ? 'text-noir-500' : isFront ? 'text-noir-emerald' : 'text-noir-100'}">
+                      ${isEmpty ? 'Unoccupied' : isFront ? 'Clean Front' : 'Illicit Racket'}
+                    </span>
+                  </div>
+                  <h4 class="font-bold text-sm text-noir-100 mt-1">${biz.name}</h4>
+                  <p class="text-[11px] text-noir-500 mt-0.5 leading-tight">${biz.desc || 'Available for construction.'}</p>
+                </div>
+
+                <div class="pt-2 border-t border-noir-800 text-xs">
+                  ${isEmpty ? `
+                    <button onclick="openBuildModal('${currentDist.id}', ${idx})" class="w-full py-1.5 bg-noir-100 text-noir-ink font-bold rounded hover:bg-noir-aged transition">
+                      + Establish Business
+                    </button>
+                  ` : `
+                    <div class="flex gap-1 text-[11px]">
+                      <button onclick="upgradeBusiness('${currentDist.id}', ${idx})" class="flex-1 py-1 bg-noir-850 text-noir-100 border border-noir-600 rounded hover:border-noir-300">
+                        Fortify (Lvl ${s.level || 1})
+                      </button>
+                      <button onclick="demolishBusiness('${currentDist.id}', ${idx})" class="px-2 py-1 bg-noir-950 text-noir-bloodlight border border-noir-blood rounded hover:bg-noir-blood hover:text-white">
+                        Shutter
+                      </button>
+                    </div>
+                  `}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function selectDistrict(id) {
+      state.activeDistrictTab = id;
+      playSound('typewriter');
+      renderBusinessesTab();
+    }
+
+    /* RENDER: TAB 4 (POLITICS & LAW) */
+    function renderPoliticsTab() {
+      document.getElementById('pol-cop-status').textContent = `${state.policeBribes.beatCopPaid} Precincts Greased`;
+      
+      const chiefEl = document.getElementById('pol-chief-status');
+      if (state.policeBribes.commissionerWeeksRemaining > 0) {
+        chiefEl.textContent = `On Retainer (${state.policeBribes.commissionerWeeksRemaining} Wks Remaining)`;
+        chiefEl.className = 'font-bold text-noir-emerald';
+      } else {
+        chiefEl.textContent = 'Hostile (0% Payoff)';
+        chiefEl.className = 'font-bold text-noir-bloodlight';
+      }
+
+      const judgeEl = document.getElementById('pol-judge-status');
+      if (state.policeBribes.judgeOnPayroll) {
+        judgeEl.textContent = 'Judge Callahan on Retainer (Active)';
+        judgeEl.className = 'font-bold text-noir-emerald';
+      } else {
+        judgeEl.textContent = 'Not Retained';
+        judgeEl.className = 'font-bold text-noir-500';
+      }
+
+      const lawyerTierEl = document.getElementById('lawyer-tier');
+      const lawyerRateEl = document.getElementById('lawyer-rate');
+      if (state.lawyerTier === 1) {
+        lawyerTierEl.textContent = 'Alleyway Shyster ($400/wk)';
+        lawyerRateEl.textContent = '40% Court Dismissal';
+      } else if (state.lawyerTier === 2) {
+        lawyerTierEl.textContent = 'Silver Tongue Retainer ($900/wk)';
+        lawyerRateEl.textContent = '70% Court Dismissal';
+      } else {
+        lawyerTierEl.textContent = 'Supreme Court Appellate Counsel ($1,800/wk)';
+        lawyerRateEl.textContent = '95% Immediate Dismissal';
+      }
+    }
+
+    /* RENDER: TAB 5 (MOB WARS & RIVALS) */
+    function renderWarTab() {
+      const container = document.getElementById('rivals-container');
+      container.innerHTML = state.rivals.map(rival => {
+        return `
+          <div class="bg-noir-900 border border-noir-700 p-3 rounded shadow space-y-2 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start border-b border-noir-700 pb-1.5">
+                <div>
+                  <h3 class="font-title text-sm ${rival.alive ? 'text-noir-100' : 'text-noir-600 line-through'}">${rival.name}</h3>
+                  <p class="text-[10px] text-noir-500">Capo: ${rival.boss}</p>
+                </div>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                  !rival.alive ? 'bg-noir-850 text-noir-600' : rival.relation < -25 ? 'bg-noir-950 text-noir-bloodlight border border-noir-blood' : 'bg-noir-850 text-noir-300'
+                }">
+                  ${!rival.alive ? 'EXTERMINATED' : rival.relation < -25 ? 'HOSTILE' : 'NEUTRAL'}
+                </span>
+              </div>
+
+              <div class="text-xs space-y-1.5 my-2">
+                <div class="flex justify-between text-noir-300">
+                  <span>Territory:</span>
+                  <span class="font-bold text-noir-100">${rival.territory}</span>
+                </div>
+                <div class="flex justify-between text-noir-300">
+                  <span>Combat Power:</span>
+                  <span class="font-bold ${rival.strength > 50 ? 'text-noir-bloodlight' : 'text-noir-300'}">${rival.strength}%</span>
+                </div>
+                <div class="flex justify-between text-noir-300">
+                  <span>Diplomacy:</span>
+                  <span class="font-bold ${rival.relation < 0 ? 'text-noir-bloodlight' : 'text-noir-emerald'}">${rival.relation}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-noir-700 flex gap-1 text-xs">
+              ${rival.alive ? `
+                <button onclick="offerTruce('${rival.id}')" class="flex-1 py-1.5 bg-noir-850 border border-noir-700 rounded text-noir-300 hover:text-white">
+                  Truce ($1.5k)
+                </button>
+                <button onclick="launchTurfRaid('${rival.id}')" class="flex-1 py-1.5 bg-noir-800 border border-noir-blood text-noir-100 font-bold rounded hover:bg-noir-blood">
+                  Raid Turf
+                </button>
+              ` : `
+                <div class="w-full text-center text-[10px] italic text-noir-600 py-1">Faction Dissolved</div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ============================================================
+       6. INTERACTIVE ACTIONS & MECHANICS
+       ============================================================ */
+
+    /* 6.1 Order Assignment Modal */
+    function openOrderModal(hoodId) {
+      state.selectedHoodId = hoodId;
+      const hood = state.crew.find(c => c.id === hoodId);
+      if (!hood) return;
+
+      document.getElementById('order-modal-title').textContent = `Orders: ${hood.name}`;
+      const container = document.getElementById('order-options-list');
+      container.innerHTML = ORDERS_LIST.map(order => {
+        const isCurrent = hood.order === order.id;
+        return `
+          <button onclick="assignOrder('${order.id}')" class="w-full p-2.5 rounded text-left border flex items-center justify-between transition ${
+            isCurrent ? 'bg-noir-ink text-noir-newsprint border-noir-ink font-bold' : 'bg-noir-newsprint/60 text-noir-ink border-noir-ink/30 hover:bg-noir-newsprint'
+          }">
+            <div>
+              <div class="font-bold text-xs uppercase">${order.name}</div>
+              <div class="text-[10px] opacity-80">${order.desc}</div>
+            </div>
+            ${isCurrent ? '<span class="text-xs">✓ ACTIVE</span>' : ''}
+          </button>
+        `;
+      }).join('');
+      openModal('modal-order');
+    }
+
+    function assignOrder(orderId) {
+      const hood = state.crew.find(c => c.id === state.selectedHoodId);
+      if (hood) {
+        hood.order = orderId;
+        playSound('stamp');
+        closeModal('modal-order');
+        saveState();
+        renderUI();
+      }
+    }
+
+    /* 6.2 Equipment Modal */
+    let equippingHoodId = null;
+    function openEquipModal(hoodId) {
+      equippingHoodId = hoodId;
+      const hood = state.crew.find(c => c.id === hoodId);
+      if (!hood) return;
+
+      const container = document.getElementById('armory-items-list');
+      container.innerHTML = `
+        <div class="bg-noir-ink/10 p-2 rounded mb-2">
+          <strong>Equipping: ${hood.name}</strong>
+          <div class="text-[11px]">Hardware: ${hood.weapon || 'None'} | Vehicle: ${hood.vehicle || 'None'}</div>
+        </div>
+        <div class="space-y-1.5">
+          <div class="font-bold text-xs uppercase text-noir-ink">Assign from Family Stash:</div>
+          ${ARMORY_ITEMS.map(item => {
+            const count = state.stash[item.id] || 0;
+            return `
+              <div class="flex justify-between items-center bg-noir-newsprint border border-noir-ink/40 p-2 rounded">
+                <div>
+                  <span class="font-bold">${item.name}</span>
+                  <span class="text-[10px] text-noir-ink/70"> (Stash: ${count})</span>
+                  <div class="text-[10px] text-noir-blood">${item.desc}</div>
+                </div>
+                <button onclick="equipItemToHood('${item.id}')" ${count === 0 ? 'disabled' : ''} class="px-3 py-1 bg-noir-ink text-noir-newsprint text-xs font-bold rounded disabled:opacity-40">
+                  Equip
+                </button>
+              </div>
+            `;
+          }).join('')}
+          <div class="pt-2">
+            <button onclick="unequipAll('${hood.id}')" class="w-full py-1.5 bg-noir-blood text-noir-100 text-xs font-bold rounded">
+              Strip Gear Back to Stash
+            </button>
+          </div>
+        </div>
+      `;
+      openModal('modal-armory');
+    }
+
+    function equipItemToHood(itemId) {
+      const hood = state.crew.find(c => c.id === equippingHoodId);
+      const item = ARMORY_ITEMS.find(a => a.id === itemId);
+      if (!hood || !item || !state.stash[itemId] || state.stash[itemId] <= 0) return;
+
+      if (item.type === 'weapon') {
+        if (hood.weapon) state.stash[hood.weapon] = (state.stash[hood.weapon] || 0) + 1;
+        hood.weapon = itemId;
+      } else if (item.type === 'vehicle') {
+        if (hood.vehicle) state.stash[hood.vehicle] = (state.stash[hood.vehicle] || 0) + 1;
+        hood.vehicle = itemId;
+      }
+      state.stash[itemId]--;
+      playSound('stamp');
+      closeModal('modal-armory');
+      saveState();
+      renderUI();
+    }
+
+    function unequipAll(hoodId) {
+      const hood = state.crew.find(c => c.id === hoodId);
+      if (!hood) return;
+      if (hood.weapon) { state.stash[hood.weapon] = (state.stash[hood.weapon] || 0) + 1; hood.weapon = null; }
+      if (hood.vehicle) { state.stash[hood.vehicle] = (state.stash[hood.vehicle] || 0) + 1; hood.vehicle = null; }
+      playSound('stamp');
+      closeModal('modal-armory');
+      saveState();
+      renderUI();
+    }
+
+    function openArmoryStoreModal() {
+      equippingHoodId = null;
+      const container = document.getElementById('armory-items-list');
+      container.innerHTML = `
+        <div class="font-bold text-xs uppercase text-noir-ink mb-2">Acquire Black Market Munitions (Dirty Cash):</div>
+        <div class="space-y-2">
+          ${ARMORY_ITEMS.map(item => {
+            const inStash = state.stash[item.id] || 0;
+            return `
+              <div class="flex justify-between items-center bg-noir-newsprint border border-noir-ink/40 p-2.5 rounded">
+                <div>
+                  <div class="font-bold text-sm">${item.name}</div>
+                  <div class="text-[10px] text-noir-blood">${item.desc}</div>
+                  <div class="text-[10px] text-noir-ink/70">In Stash: ${inStash}</div>
+                </div>
+                <button onclick="buyArmoryItem('${item.id}')" class="px-3 py-1.5 bg-noir-ink text-noir-newsprint text-xs font-bold rounded hover:opacity-90 transition">
+                  Buy $${item.price.toLocaleString()}
+                </button>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+      openModal('modal-armory');
+    }
+
+    function buyArmoryItem(itemId) {
+      const item = ARMORY_ITEMS.find(a => a.id === itemId);
+      if (!item) return;
+
+      if (state.dirtyCash < item.price) {
+        showAlert('Insufficient Dirty Cash', 'You lack the street cash required to purchase this black market hardware.', 'TRANSACTION HALTED');
+        return;
+      }
+
+      state.dirtyCash -= item.price;
+      state.stash[itemId] = (state.stash[itemId] || 0) + 1;
+      playSound('cash');
+      saveState();
+      renderUI();
+      openArmoryStoreModal();
+    }
+
+    /* 6.3 Recruiting Recruits Pool */
+    const RECRUITS_POOL = [
+      { name: 'Mickey "The Bull" Callahan', title: 'Heavy Enforcer', muscle: 85, brains: 38, stealth: 45, shooting: 72, driving: 55, upkeep: 420, cost: 1400 },
+      { name: 'Leo "Silk" Castiglione', title: 'Numbers Runner', muscle: 42, brains: 90, stealth: 78, shooting: 52, driving: 65, upkeep: 360, cost: 1600 },
+      { name: 'Red Malone', title: 'Getaway Driver', muscle: 58, brains: 62, stealth: 68, shooting: 64, driving: 92, upkeep: 390, cost: 1500 },
+      { name: 'Angelo "Ghost" Morena', title: 'Hitman', muscle: 64, brains: 72, stealth: 88, shooting: 86, driving: 62, upkeep: 520, cost: 2600 }
+    ];
+
+    function openRecruitModal() {
+      const container = document.getElementById('recruit-candidates-list');
+      container.innerHTML = RECRUITS_POOL.map((rec, idx) => {
+        return `
+          <div class="bg-noir-newsprint border border-noir-ink/40 p-3 rounded flex flex-col justify-between space-y-2">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-sm">${rec.name}</span>
+                <span class="text-xs font-bold text-emerald-900">Retainer: $${rec.cost}</span>
+              </div>
+              <div class="text-[10px] text-noir-ink/70">${rec.title} • Upkeep: $${rec.upkeep}/wk</div>
+
+              <div class="grid grid-cols-5 gap-1 text-[10px] text-center my-1.5 font-mono">
+                <div class="bg-noir-ink/10 p-1 rounded">Mus: <strong>${rec.muscle}</strong></div>
+                <div class="bg-noir-ink/10 p-1 rounded">Aim: <strong>${rec.shooting}</strong></div>
+                <div class="bg-noir-ink/10 p-1 rounded">Stl: <strong>${rec.stealth}</strong></div>
+                <div class="bg-noir-ink/10 p-1 rounded">Brn: <strong>${rec.brains}</strong></div>
+                <div class="bg-noir-ink/10 p-1 rounded">Drv: <strong>${rec.driving}</strong></div>
+              </div>
+            </div>
+
+            <button onclick="hireRecruit(${idx})" class="w-full py-1.5 bg-noir-ink text-noir-newsprint text-xs font-bold rounded hover:opacity-90">
+              Induct Soldier ($${rec.cost} Dirty Cash)
+            </button>
+          </div>
+        `;
+      }).join('');
+      openModal('modal-recruit');
+    }
+
+    function hireRecruit(index) {
+      const rec = RECRUITS_POOL[index];
+      if (!rec) return;
+
+      if (state.dirtyCash < rec.cost) {
+        showAlert('Insufficient Funds', 'You do not have enough street cash to pay this recruit upfront.', 'RECRUIT REFUSED');
+        return;
+      }
+
+      state.dirtyCash -= rec.cost;
+      state.crew.push({
+        id: 'hood_' + Date.now(),
+        name: rec.name,
+        title: rec.title,
+        muscle: rec.muscle,
+        brains: rec.brains,
+        stealth: rec.stealth,
+        shooting: rec.shooting,
+        driving: rec.driving,
+        upkeep: rec.upkeep,
+        health: 100,
+        status: 'Active',
+        weapon: 'revolver',
+        vehicle: null,
+        order: 'idle'
+      });
+
+      playSound('stamp');
+      closeModal('modal-recruit');
+      showAlert('Soldier Inducted', `${rec.name} has taken the oath of Omertà and joined your family ranks.`, 'OMERTÀ SWORN');
+      saveState();
+      renderUI();
+    }
+
+    /* 6.4 Hospital Treatment & Court Bail */
+    function bailHood(hoodId) {
+      const hood = state.crew.find(c => c.id === hoodId);
+      if (!hood) return;
+
+      const bailCost = 1200;
+      if (state.cleanCash < bailCost) {
+        showAlert('Clean Bank Funds Required', 'Court clerks accept only certified bank checks for bail releases.', 'BAIL REFUSED');
+        return;
+      }
+
+      state.cleanCash -= bailCost;
+      hood.status = 'Active';
+      hood.order = 'idle';
+      playSound('cash');
+      showAlert('Bail Posted', `${hood.name} has been released from Cook County Jail.`, 'DISCHARGE ORDER');
+      saveState();
+      renderUI();
+    }
+
+    function treatHood(hoodId) {
+      const hood = state.crew.find(c => c.id === hoodId);
+      if (!hood) return;
+
+      const medCost = 800;
+      if (state.dirtyCash < medCost) {
+        showAlert('Insufficient Cash', 'The mob physician demands $800 in dirty cash before extracting lead slugs.', 'CLINIC REFUSAL');
+        return;
+      }
+
+      state.dirtyCash -= medCost;
+      hood.status = 'Active';
+      hood.health = 100;
+      hood.order = 'idle';
+      playSound('stamp');
+      showAlert('Wounds Treated', `${hood.name} has been stitched up and discharged from the back-alley clinic.`, 'HEALTH RESTORED');
+      saveState();
+      renderUI();
+    }
+
+    /* 6.5 Building Businesses (Rackets & Fronts) */
+    let buildTarget = { districtId: null, slotIdx: null, activeTab: 'racket' };
+
+    function openBuildModal(distId, slotIdx) {
+      buildTarget.districtId = distId;
+      buildTarget.slotIdx = slotIdx;
+      const dist = DISTRICTS_DATA.find(d => d.id === distId);
+      document.getElementById('build-modal-subtitle').textContent = `Building in ${dist.name} (Plot #${slotIdx + 1})`;
+      renderBuildOptions('racket');
+      openModal('modal-build');
+    }
+
+    function renderBuildOptions(category) {
+      buildTarget.activeTab = category;
+      const btnRackets = document.getElementById('btn-toggle-rackets');
+      const btnFronts = document.getElementById('btn-toggle-fronts');
+
+      if (category === 'racket') {
+        btnRackets.className = 'flex-1 py-1.5 font-bold bg-noir-ink text-noir-newsprint transition';
+        btnFronts.className = 'flex-1 py-1.5 font-bold bg-noir-newsprint text-noir-ink transition';
+      } else {
+        btnRackets.className = 'flex-1 py-1.5 font-bold bg-noir-newsprint text-noir-ink transition';
+        btnFronts.className = 'flex-1 py-1.5 font-bold bg-noir-ink text-noir-newsprint transition';
+      }
+
+      const container = document.getElementById('build-options-container');
+      const keys = category === 'racket' 
+        ? ['protection', 'distillery', 'brewery', 'speakeasy', 'gambling', 'brothel', 'hijacking']
+        : ['dry_cleaners', 'florist', 'funeral_home', 'meat_packing', 'harbor_docks'];
+
+      container.innerHTML = keys.map(key => {
+        const item = ALL_BUSINESS_TYPES[key];
+        const costStr = item.costClean > 0 
+          ? `$${item.costDirty.toLocaleString()} Dirty + $${item.costClean.toLocaleString()} Clean`
+          : `$${item.costDirty.toLocaleString()} Dirty Cash`;
+
+        return `
+          <div class="bg-noir-newsprint border border-noir-ink/40 p-2.5 rounded flex flex-col justify-between space-y-1">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-sm text-noir-ink">${item.name}</span>
+                <span class="text-xs font-bold text-noir-blood">${costStr}</span>
+              </div>
+              <p class="text-[10px] text-noir-ink/80 leading-tight">${item.desc}</p>
+            </div>
+            <button onclick="confirmBuildBusiness('${key}')" class="w-full py-1.5 bg-noir-ink text-noir-newsprint text-xs font-bold rounded hover:opacity-90 transition mt-1">
+              Establish This Enterprise
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function confirmBuildBusiness(bizKey) {
+      const biz = ALL_BUSINESS_TYPES[bizKey];
+      if (!biz || !buildTarget.districtId) return;
+
+      if (state.dirtyCash < biz.costDirty) {
+        showAlert('Insufficient Dirty Cash', 'You lack the street funds to break ground on this enterprise.', 'FINANCE REFUSAL');
+        return;
+      }
+      if (state.cleanCash < biz.costClean) {
+        showAlert('Insufficient Clean Bank Funds', 'Commercial fronts require verified civic bank funds.', 'FINANCE REFUSAL');
+        return;
+      }
+
+      state.dirtyCash -= biz.costDirty;
+      state.cleanCash -= biz.costClean;
+
+      state.districts[buildTarget.districtId][buildTarget.slotIdx] = {
+        slot: buildTarget.slotIdx,
+        type: bizKey,
+        level: 1
+      };
+
+      playSound('stamp');
+      closeModal('modal-build');
+      showAlert('Business Established', `${biz.name} is now operating under your family banner.`, 'DEED RECORDED');
+      saveState();
+      renderUI();
+    }
+
+    function upgradeBusiness(distId, slotIdx) {
+      const slot = state.districts[distId][slotIdx];
+      if (!slot) return;
+      const upgradeCost = 2500;
+
+      if (state.dirtyCash < upgradeCost) {
+        showAlert('Insufficient Dirty Cash', 'Fortifying this enterprise requires $2,500 Dirty Cash.', 'EXPANSION HALTED');
+        return;
+      }
+
+      state.dirtyCash -= upgradeCost;
+      slot.level = (slot.level || 1) + 1;
+      playSound('cash');
+      showAlert('Fortifications Completed', `Upgraded to Tier ${slot.level}! Revenue capacity, bouncers, and defensive armor increased.`, 'FORTIFIED');
+      saveState();
+      renderUI();
+    }
+
+    function demolishBusiness(distId, slotIdx) {
+      state.districts[distId][slotIdx] = { slot: slotIdx, type: 'empty', level: 0 };
+      playSound('stamp');
+      showAlert('Premises Shuttered', 'The location has been stripped of assets and abandoned.', 'CLOSED');
+      saveState();
+      renderUI();
+    }
+
+    /* 6.6 Corruption & Law Mechanics */
+    function bribePolice(tier) {
+      if (tier === 'beat') {
+        const cost = 800;
+        if (state.cleanCash < cost) {
+          showAlert('Clean Cash Required', 'Precinct patrolmen demand clean bank drafts to look the other way.', 'BRIBE REFUSED');
+          return;
+        }
+        state.cleanCash -= cost;
+        state.heat = Math.max(0, state.heat - 15);
+        state.policeBribes.beatCopPaid++;
+        playSound('cash');
+        showAlert('Beat Patrols Greased', 'Precinct patrolmen instructed to ignore late-night delivery noise. Heat reduced by 15%.', 'PRECINCT PACT');
+      } 
+      else if (tier === 'chief') {
+        const cost = 3500;
+        if (state.cleanCash < cost) {
+          showAlert('Clean Cash Required', 'The Police Commissioner demands $3,500 in clean bank bonds.', 'BRIBE REFUSED');
+          return;
+        }
+        state.cleanCash -= cost;
+        state.heat = Math.max(0, state.heat - 40);
+        state.policeBribes.commissionerWeeksRemaining += 3;
+        playSound('cash');
+        showAlert('Commissioner Secured', 'Police Commissioner guarantees total immunity from squad raids for 3 weeks.', 'CITY HALL ACCORD');
+      }
+      else if (tier === 'judge') {
+        const cost = 5000;
+        if (state.cleanCash < cost) {
+          showAlert('Clean Cash Required', 'Judge Callahan requires a $5,000 clean escrow retainer.', 'BRIBE REFUSED');
+          return;
+        }
+        state.cleanCash -= cost;
+        state.policeBribes.judgeOnPayroll = true;
+        playSound('cash');
+        showAlert('Judge Retained', 'Cook County Magistrates will immediately dismiss future indictments.', 'BENCH ALLIANCE');
+      }
+      saveState();
+      renderUI();
+    }
+
+    function upgradeLawyer() {
+      const cost = 6000;
+      if (state.cleanCash < cost) {
+        showAlert('Clean Cash Required', 'Top-tier appellate defense partners demand $6,000 clean retainer.', 'LEGAL EXPENSES');
+        return;
+      }
+      if (state.lawyerTier >= 3) {
+        showAlert('Top Defense Retained', 'You already retain the most prestigious appellate firm in Illinois.', 'MAX COUNSEL');
+        return;
+      }
+      state.cleanCash -= cost;
+      state.lawyerTier++;
+      playSound('cash');
+      showAlert('Defense Counsel Upgraded', 'Your legal retainers will aggressively suppress federal indictments.', 'COUNSEL SECURED');
+      saveState();
+      renderUI();
+    }
+
+    /* 6.7 Rival Clashes & Combat */
+    function prepRivalAction(actionType) {
+      playSound('typewriter');
+      const living = state.rivals.filter(r => r.alive);
+      if (living.length === 0) {
+        showAlert('Total Monopoly', 'All rival factions in Chicago have been eradicated! You hold absolute supremacy.', 'SUPREME REIGN');
+        return;
+      }
+      const target = living[0];
+      if (actionType === 'driveby') launchTurfRaid(target.id);
+      if (actionType === 'raid_speakeasy') raidSpeakeasy(target.id);
+      if (actionType === 'assassinate') assassinateBoss(target.id);
+    }
+
+    function launchTurfRaid(rivalId) {
+      const rival = state.rivals.find(r => r.id === rivalId);
+      if (!rival || !rival.alive) return;
+
+      let totalAim = 0;
+      state.crew.filter(c => c.status === 'Active').forEach(c => {
+        totalAim += c.shooting;
+        if (c.weapon === 'tommy') totalAim += 30;
+      });
+
+      playSound('gun');
+
+      if (totalAim >= rival.strength * 1.4 || state.isInvincible) {
+        rival.strength = Math.max(0, rival.strength - 30);
+        rival.relation -= 30;
+        state.heat += 18;
+        if (rival.strength <= 0) {
+          rival.alive = false;
+          showAlert('Faction Crushed', `Your squad wiped out ${rival.name}'s enforcers! Their outfit has collapsed.`, 'TERRITORY WON');
+        } else {
+          showAlert('Drive-By Success', `You hammered ${rival.name}'s street corner. Rival combat strength dropped to ${rival.strength}%.`, 'GANG ATTACK');
+        }
+      } else {
+        state.heat += 25;
+        const soldier = state.crew.find(c => c.status === 'Active' && c.id !== 'boss');
+        if (soldier && !state.isInvincible) {
+          soldier.health = 25;
+          soldier.status = 'Hospital';
+          showAlert('Ambush Retaliation', `Rival gunners fired back from second-story windows! ${soldier.name} was hit and hospitalized.`, 'CASUALTY');
+        } else {
+          showAlert('Drive-By Repelled', 'Heavy rival return fire forced your getaway drivers to retreat.', 'ATTACK FOILED');
+        }
+      }
+      saveState();
+      renderUI();
+    }
+
+    function raidSpeakeasy(rivalId) {
+      const rival = state.rivals.find(r => r.id === rivalId);
+      if (!rival || !rival.alive) return;
+
+      playSound('gun');
+      const lootCash = 3200;
+      const lootBooze = 40;
+      state.dirtyCash += lootCash;
+      state.booze += lootBooze;
+      state.heat += 14;
+      rival.strength = Math.max(0, rival.strength - 15);
+      showAlert('Speakeasy Hijacked', `Your crew raided ${rival.name}'s lounge, seizing $${lootCash} in bar receipts and ${lootBooze} barrels of booze.`, 'HEIST SUCCESS');
+      saveState();
+      renderUI();
+    }
+
+    function assassinateBoss(rivalId) {
+      const rival = state.rivals.find(r => r.id === rivalId);
+      if (!rival || !rival.alive) return;
+
+      const topHitman = state.crew.find(c => c.status === 'Active' && (c.stealth > 70 || c.shooting > 75));
+      if (!topHitman && !state.isInvincible) {
+        showAlert('No Qualified Hitman', 'You need an active soldier with at least 70 Stealth or 75 Aim to execute a Boss contract.', 'HIT REFUSED');
+        return;
+      }
+
+      playSound('gun');
+      if (Math.random() < 0.65 || state.isInvincible) {
+        rival.alive = false;
+        rival.strength = 0;
+        state.heat += 30;
+        showAlert('Rival Boss Eliminated', `${rival.boss} was ambushed and gunned down. ${rival.name} has disintegrated!`, 'CONTRACT COMPLETE');
+      } else {
+        state.heat += 25;
+        if (topHitman && !state.isInvincible) {
+          topHitman.status = 'Jail';
+          showAlert('Hit Foiled', `Bodyguards shielded ${rival.boss}! ${topHitman.name} was trapped in the alley and arrested by detectives.`, 'HITMAN JAILED');
+        } else {
+          showAlert('Hit Foiled', `Bodyguards returned heavy fire and escorted ${rival.boss} to safety.`, 'TARGET ESCAPED');
+        }
+      }
+      saveState();
+      renderUI();
+    }
+
+    function offerTruce(rivalId) {
+      const rival = state.rivals.find(r => r.id === rivalId);
+      if (!rival) return;
+
+      const truceCost = 1500;
+      if (state.cleanCash < truceCost) {
+        showAlert('Clean Cash Required', 'Rival bosses accept only verified bank checks for diplomatic peace.', 'TRUCE REFUSED');
+        return;
+      }
+
+      state.cleanCash -= truceCost;
+      rival.relation = Math.min(100, rival.relation + 45);
+      playSound('cash');
+      showAlert('Ceasefire Ratified', `Envoys met at an upscale hotel. ${rival.name} signed a temporary non-aggression pact.`, 'PACT SIGNED');
+      saveState();
+      renderUI();
+    }
+
+    /* ============================================================
+       7. ADVANCE WEEK SIMULATION ENGINE
+       ============================================================ */
+    function advanceWeek() {
+      playSound('typewriter');
+      state.week++;
+      if (state.week > 52) {
+        state.week = 1;
+        state.year++;
+      }
+
+      let dispatches = [];
+      let weeklyGross = 0;
+      let weeklyBoozeRev = 0;
+      let weeklySalaries = 0;
+      let weeklyBribes = 0;
+      let weeklyLaundered = 0;
+
+      // 1. Process Distilleries & Booze Production
+      let boozeProduced = 0;
+      let boozeConsumed = 0;
+
+      Object.keys(state.districts).forEach(dId => {
+        const slots = state.districts[dId];
+        slots.forEach(slot => {
+          const item = ALL_BUSINESS_TYPES[slot.type];
+          if (!item) return;
+          const level = slot.level || 1;
+          if (item.boozeYield > 0) {
+            boozeProduced += (item.boozeYield * level);
+          }
+        });
+      });
+      state.booze += boozeProduced;
+
+      // 2. Process Speakeasies & Rackets
+      Object.keys(state.districts).forEach(dId => {
+        const dist = DISTRICTS_DATA.find(d => d.id === dId);
+        const mult = dist ? dist.multiplier : 1.0;
+        const slots = state.districts[dId];
+
+        slots.forEach(slot => {
+          const item = ALL_BUSINESS_TYPES[slot.type];
+          if (!item || slot.type === 'empty') return;
+          const level = slot.level || 1;
+
+          if (item.category === 'front') {
+            // Process Commercial Front Laundering
+            const capacity = item.launderLimit * level;
+            const toLaunder = Math.min(state.dirtyCash, capacity);
+            const cleanYield = Math.round(toLaunder * (item.efficiency || 0.75));
+            state.dirtyCash -= toLaunder;
+            state.cleanCash += cleanYield;
+            weeklyLaundered += cleanYield;
+          } 
+          else if (item.category === 'racket') {
+            // Speakeasies & Booze Rackets
+            if (item.boozeCost > 0) {
+              const needed = item.boozeCost * level;
+              if (state.booze >= needed) {
+                state.booze -= needed;
+                boozeConsumed += needed;
+                const rev = Math.round(item.dirtyYield * level * mult);
+                weeklyBoozeRev += rev;
+                state.dirtyCash += rev;
+              } else {
+                // Shortage penalty
+                const wateredRev = Math.round(item.dirtyYield * 0.35 * level * mult);
+                weeklyBoozeRev += wateredRev;
+                state.dirtyCash += wateredRev;
+                dispatches.push(`Speakeasy in ${dist.name} ran dry of booze! Patrons were served watered soda.`);
+              }
+            } else {
+              // Standard cash racket
+              const rev = Math.round(item.dirtyYield * level * mult);
+              weeklyGross += rev;
+              state.dirtyCash += rev;
+            }
+          }
+
+          // Natural heat generation
+          if (!state.isInvincible) {
+            state.heat += (item.heatGen || 0);
+          }
+        });
+      });
+
+      // 3. Process Crew Orders
+      state.crew.forEach(hood => {
+        if (hood.status !== 'Active') return;
+        weeklySalaries += hood.upkeep;
+        state.dirtyCash -= hood.upkeep;
+
+        if (hood.order === 'extort') {
+          const loot = Math.round(380 + (hood.muscle * 8));
+          state.dirtyCash += loot;
+          state.heat += 4;
+          dispatches.push(`${hood.name} shook down shopkeepers, bringing in $${loot} dirty cash.`);
+        } else if (hood.order === 'bribe') {
+          const drop = Math.round(8 + (hood.brains * 0.12));
+          state.heat = Math.max(0, state.heat - drop);
+          dispatches.push(`${hood.name} greased local precinct detectives, cooling heat by ${drop}%.`);
+        } else if (hood.order === 'scout') {
+          dispatches.push(`${hood.name} reconnoitered rival delivery hubs and mapped blind spots.`);
+        } else if (hood.order === 'idle') {
+          hood.health = Math.min(100, hood.health + 20);
+        }
+      });
+
+      // 4. Politics / Bribes Decay
+      if (state.policeBribes.commissionerWeeksRemaining > 0) {
+        state.policeBribes.commissionerWeeksRemaining--;
+        state.heat = Math.max(0, state.heat - 10);
+      }
+
+      const lawyerCost = state.lawyerTier === 1 ? 400 : state.lawyerTier === 2 ? 900 : 1800;
+      weeklyBribes += lawyerCost;
+      state.cleanCash -= lawyerCost;
+
+      // 5. Police Raid Checks
+      if (state.heat >= 65 && state.policeBribes.commissionerWeeksRemaining <= 0 && !state.isInvincible) {
+        playSound('gun');
+        const activeCrew = state.crew.filter(c => c.status === 'Active' && c.id !== 'boss');
+        if (activeCrew.length > 0) {
+          const victim = activeCrew[Math.floor(Math.random() * activeCrew.length)];
+          const roll = Math.random() * 100;
+          const dismissalThreshold = state.policeBribes.judgeOnPayroll ? 98 : (state.lawyerTier * 32);
+
+          if (roll < dismissalThreshold) {
+            dispatches.push(`POLICE RAID: Squad cars raided a speakeasy, but Defense Counsel quashed warrants!`);
+          } else {
+            victim.status = 'Jail';
+            dispatches.push(`POLICE ARREST: ${victim.name} was arrested and locked up in Cook County Jail.`);
+          }
+        }
+        state.heat = Math.max(20, state.heat - 20);
+      }
+
+      // 6. Rival Organization Incursions
+      state.rivals.forEach(rival => {
+        if (!rival.alive) return;
+        if (rival.relation < -25 && Math.random() < 0.35 && !state.isInvincible) {
+          const guard = state.crew.find(c => c.status === 'Active' && c.order === 'patrol');
+          if (guard) {
+            dispatches.push(`TERRITORY AMBUSH: ${rival.name} gunmen raided your block, but ${guard.name} repelled them!`);
+          } else {
+            const lost = Math.min(state.dirtyCash, 2000);
+            state.dirtyCash -= lost;
+            dispatches.push(`RIVAL RAID: ${rival.name} stormed an unprotected sector, looting $${lost} cash!`);
+          }
+        }
+      });
+
+      // Bounds Clamping
+      state.dirtyCash = Math.max(0, state.dirtyCash);
+      state.cleanCash = Math.max(0, state.cleanCash);
+      state.booze = Math.max(0, state.booze);
+      state.heat = Math.max(0, Math.min(100, state.heat));
+
+      if (dispatches.length === 0) {
+        dispatches.push('All Chicago sectors remained quiet under crisp autumn skies.');
+      }
+      state.lastDispatches = dispatches;
+
+      const netDelta = (weeklyGross + weeklyBoozeRev) - (weeklySalaries + weeklyBribes);
+      state.lastFinancials = {
+        income: weeklyGross,
+        boozeRev: weeklyBoozeRev,
+        salaries: weeklySalaries,
+        bribes: weeklyBribes,
+        laundered: weeklyLaundered,
+        net: netDelta
+      };
+
+      generateDynamicHeadline();
+      playSound('stamp');
+      saveState();
+      renderUI();
+      switchTab('ledger');
+    }
+
+    function generateDynamicHeadline() {
+      const headlines = [
+        "COOK COUNTY GRAND JURY CONVENES AS GANG WARFARE RUMORS MOUNT",
+        "MIDWEST BREWERY FLOWS: RECORD CARGO SHIPMENTS UNLOADED UNDER LAKE CLOUD",
+        "POLICE CHIEF VOWS MASSIVE CRACKDOWN ON CLANDESTINE DISTILLERS",
+        "LOOP JAZZ CLUBS PACKED TO CAPACITY AS WINTER NEARS ACROSS ILLINOIS",
+        "UNDERWORLD TRUCE STRAINED AFTER AUTOMOBILE AMBUSH ON MICHIGAN AVENUE",
+        "TREASURY DEPARTMENT DISPATCHES NEW BRIGADE OF PROHIBITION AGENTS"
+      ];
+      const stampList = ["SPECIAL DISPATCH", "COOK COUNTY CHRONICLE", "POLICE EXTRA", "UNDERWORLD WIRE"];
+      
+      const hl = headlines[Math.floor(Math.random() * headlines.length)];
+      const st = stampList[Math.floor(Math.random() * stampList.length)];
+
+      document.getElementById('news-headline').textContent = hl;
+      document.getElementById('news-stamp').textContent = st;
+      document.getElementById('news-body').textContent = 
+        `Investigators across Cook County are monitoring suspicious commercial cargo movements along Lake Michigan. ` +
+        `Precinct sergeants report tranquil streets, though night watchmen report armored delivery sedans rumbling past warehouses.`;
+    }
+
+    /* ============================================================
+       8. GOD MODE TESTING FUNCTIONS
+       ============================================================ */
+    function cheatAddCash(type, amount) {
+      playSound('cash');
+      if (type === 'dirty') state.dirtyCash += amount;
+      if (type === 'clean') state.cleanCash += amount;
+      saveState();
+      renderUI();
+      showAlert('God Mode Granted', `Injected $${amount.toLocaleString()} into your ${type} reserves.`, 'OMNIPOTENT AID');
+    }
+
+    function cheatAddBooze(crates) {
+      playSound('cash');
+      state.booze += crates;
+      saveState();
+      renderUI();
+      showAlert('God Mode Granted', `Added ${crates} barrels of booze to your warehouse stash.`, 'OMNIPOTENT AID');
+    }
+
+    function cheatZeroHeat() {
+      playSound('stamp');
+      state.heat = 0;
+      saveState();
+      renderUI();
+      showAlert('God Mode Granted', 'Police heat reset to 0%. All active warrants expunged.', 'OMNIPOTENT AID');
+    }
+
+    function cheatMaxCrew() {
+      playSound('cash');
+      state.crew.forEach(hood => {
+        hood.muscle = 99;
+        hood.shooting = 99;
+        hood.stealth = 99;
+        hood.brains = 99;
+        hood.driving = 99;
+        hood.health = 100;
+      });
+      saveState();
+      renderUI();
+      showAlert('God Mode Granted', 'All made men on your roster now possess maxed (99) RPG stats.', 'OMNIPOTENT AID');
+    }
+
+    function cheatArsenal() {
+      playSound('gun');
+      state.crew.forEach(hood => {
+        hood.weapon = 'tommy';
+        hood.vehicle = 'sedan';
+      });
+      state.stash.tommy = (state.stash.tommy || 0) + 5;
+      state.stash.sedan = (state.stash.sedan || 0) + 5;
+      saveState();
+      renderUI();
+      showAlert('God Mode Granted', 'All soldiers equipped with Tommy Guns and Armored Sedans.', 'OMNIPOTENT AID');
+    }
+
+    function cheatAnnexAll() {
+      playSound('stamp');
+      Object.keys(state.districts).forEach(dId => {
+        state.districts[dId] = [
+          { slot: 0, type: 'distillery', level: 3 },
+          { slot: 1, type: 'speakeasy', level: 3 },
+          { slot: 2, type: 'gambling', level: 3 },
+          { slot: 3, type: 'dry_cleaners', level: 3 },
+          { slot: 4, type: 'protection', level: 3 }
+        ];
+      });
+      saveState();
+      renderUI();
+      showAlert('God Mode Granted', 'Every plot across all 5 Chicago districts annexed and upgraded to Tier 3!', 'CITY DOMINANCE');
+    }
+
+    function cheatKillRivalBoss() {
+      const living = state.rivals.filter(r => r.alive);
+      if (living.length === 0) {
+        showAlert('No Targets Remaining', 'All rival organizations have already been eradicated.', 'NOTICE');
+        return;
+      }
+      playSound('gun');
+      const target = living[0];
+      target.alive = false;
+      target.strength = 0;
+      saveState();
+      renderUI();
+      showAlert('God Mode Granted', `Smote ${target.boss} of ${target.name}. Outfit dissolved instantly.`, 'DEATH CONTRACT');
+    }
+
+    function cheatBailAndHeal() {
+      playSound('cash');
+      state.crew.forEach(c => {
+        c.status = 'Active';
+        c.health = 100;
+      });
+      saveState();
+      renderUI();
+      showAlert('God Mode Granted', 'All incarcerated soldiers released and wounded treated to 100% health.', 'DISCHARGE');
+    }
+
+    function toggleInvincibility() {
+      state.isInvincible = !state.isInvincible;
+      playSound('cash');
+      saveState();
+      renderUI();
+    }
+
+    /* ============================================================
+       9. INITIALIZATION
+       ============================================================ */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderUI();
+      document.body.addEventListener('click', () => {
+        initAudio();
+      }, { once: true });
+    });
+  </script>
+</body>
+</html>
