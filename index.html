@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Empire of Chicago: 1926</title>
+  <title>Empire of Chicago: 1926 - Midnight Speed & Military Surplus</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Rye, Playfair Display & Courier Prime -->
@@ -17,19 +17,21 @@
         extend: {
           colors: {
             noir: {
-              950: '#0c0c0c',
+              950: '#0a0a0a',
               900: '#141414',
               850: '#1c1c1c',
               800: '#262626',
               700: '#383838',
               600: '#4e4e4e',
               500: '#6e6e6e',
-              300: '#a3a3a3',
+              400: '#8e8e8e',
+              300: '#b0b0b0',
+              200: '#d4d4d4',
               100: '#f5f5f5',
               newsprint: '#ede7d8',
-              aged: '#d8cfbe',
+              aged: '#dcd4c1',
               ink: '#111111',
-              blood: '#8f1d1d',
+              blood: '#8b1e1e',
               bloodlight: '#b91c1c',
               emerald: '#10b981',
               silver: '#c0c0c0'
@@ -46,7 +48,7 @@
   </script>
 
   <style>
-    /* iOS Viewport, Native Scroll & Safe Areas */
+    /* iOS Viewport & Native Smooth Scrolling */
     * {
       -webkit-tap-highlight-color: transparent;
       user-select: none;
@@ -56,7 +58,7 @@
       user-select: text;
     }
     html, body {
-      background-color: #0c0c0c;
+      background-color: #0a0a0a;
       color: #f5f5f5;
       font-family: 'Courier Prime', Courier, monospace;
       min-height: 100vh;
@@ -66,22 +68,22 @@
       padding: 0;
     }
 
-    /* Crisp Monochrome Vintage Newsprint Aesthetic */
+    /* Monochrome Vintage Newsprint Aesthetic (No Blue or Yellow) */
     .newsprint-panel {
       background-color: #ede7d8;
       color: #111111;
       border: 2px solid #262626;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.9), inset 0 0 35px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(0, 0, 0, 0.05);
     }
     .newsprint-card {
       background-color: #f4efe2;
       border: 1px solid #c5bb9f;
-      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
     }
     .stamp-badge {
-      border: 2px solid #8f1d1d;
-      color: #8f1d1d;
-      transform: rotate(-2deg);
+      border: 2px solid #8b1e1e;
+      color: #8b1e1e;
+      transform: rotate(-1.5deg);
       text-transform: uppercase;
       font-weight: 800;
       letter-spacing: 1.5px;
@@ -89,11 +91,11 @@
       padding: 2px 6px;
     }
 
-    /* iOS Native Touch Scrolling with generous bottom padding for bottom nav clearance */
+    /* Generous Bottom Padding to Guarantee Full Visibility Above iOS Nav */
     .ios-scroll-pane {
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding-bottom: calc(140px + env(safe-area-inset-bottom, 24px));
+      padding-bottom: calc(180px + env(safe-area-inset-bottom, 28px));
     }
     .safe-top {
       padding-top: max(8px, env(safe-area-inset-top));
@@ -102,7 +104,7 @@
       padding-bottom: max(12px, env(safe-area-inset-bottom));
     }
 
-    /* Scrollbars */
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -117,23 +119,33 @@
 
     @keyframes heat-flash {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; filter: drop-shadow(0 0 8px #b91c1c); }
+      50% { opacity: 0.45; filter: drop-shadow(0 0 8px #b91c1c); }
     }
     .pulse-heat {
-      animation: heat-flash 2.2s infinite ease-in-out;
+      animation: heat-flash 2s infinite ease-in-out;
+    }
+
+    /* Race flag animation */
+    @keyframes checkered-strip {
+      from { background-position: 0 0; }
+      to { background-position: 40px 0; }
+    }
+    .checkered-bar {
+      background: repeating-linear-gradient(45deg, #111 0, #111 10px, #f5f5f5 10px, #f5f5f5 20px);
     }
   </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-  <!-- TOP STATUS BAR: THE CAPO'S LEDGER & STATUS BAROMETER -->
+  <!-- ============================================================== -->
+  <!-- TOP LEDGER BAR: FINANCES, HOOCH, HEAT, FLEET & WAR VITAL STATS -->
+  <!-- ============================================================== -->
   <header class="sticky top-0 z-40 bg-noir-900 border-b border-noir-700 shadow-2xl px-3 py-2 safe-top">
     <div class="max-w-5xl mx-auto flex flex-col gap-1.5">
-      <!-- Title Bar & Fast Action Toggles -->
       <div class="flex items-center justify-between text-xs">
         <div class="flex items-center gap-2">
           <span class="font-title text-noir-100 text-sm sm:text-base tracking-widest uppercase">Empire of Chicago</span>
-          <span class="bg-noir-800 text-noir-300 px-2 py-0.5 rounded text-[11px] border border-noir-700" id="stat-date">Week 1 - Oct 1926</span>
+          <span class="bg-noir-850 text-noir-300 px-2 py-0.5 rounded text-[11px] border border-noir-700 font-mono" id="stat-date">Week 1 - Oct 1926</span>
         </div>
         <div class="flex items-center gap-2">
           <button id="btn-sound" onclick="toggleAudio()" class="px-2 py-0.5 bg-noir-850 border border-noir-700 rounded text-[10px] text-noir-300 hover:text-white transition">
@@ -152,15 +164,15 @@
           <span class="text-noir-500 text-[9px] uppercase tracking-wider">Dirty Cash</span>
           <span class="font-bold text-noir-100 font-mono text-xs" id="stat-dirty">$15,000</span>
         </div>
-        <!-- Clean Bank -->
+        <!-- Clean Bank Balance -->
         <div class="bg-noir-850 p-1.5 rounded border border-noir-700/80 flex flex-col">
           <span class="text-noir-500 text-[9px] uppercase tracking-wider">Clean Bank</span>
           <span class="font-bold text-noir-emerald font-mono text-xs" id="stat-clean">$6,000</span>
         </div>
-        <!-- Booze Barrels -->
+        <!-- Booze Stock -->
         <div class="bg-noir-850 p-1.5 rounded border border-noir-700/80 flex flex-col">
-          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Booze Barrels</span>
-          <span class="font-bold text-noir-300 font-mono text-xs" id="stat-booze">120 bbl</span>
+          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Hooch Barrels</span>
+          <span class="font-bold text-noir-200 font-mono text-xs" id="stat-booze">120 bbl</span>
         </div>
         <!-- Police Heat -->
         <div class="bg-noir-850 p-1.5 rounded border border-noir-700/80 flex flex-col">
@@ -172,12 +184,12 @@
             </div>
           </div>
         </div>
-        <!-- Mob Roster -->
+        <!-- Fleet Motor Power -->
         <div class="hidden sm:flex bg-noir-850 p-1.5 rounded border border-noir-700/80 flex-col">
-          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Made Men</span>
-          <span class="font-bold text-noir-100 font-mono text-xs" id="stat-crew-count">5 Hoods</span>
+          <span class="text-noir-500 text-[9px] uppercase tracking-wider">Motor Fleet</span>
+          <span class="font-bold text-noir-100 font-mono text-xs" id="stat-fleet-count">3 Vehicles</span>
         </div>
-        <!-- City Influence -->
+        <!-- City Dominance -->
         <div class="hidden sm:flex bg-noir-850 p-1.5 rounded border border-noir-700/80 flex-col">
           <span class="text-noir-500 text-[9px] uppercase tracking-wider">City Control</span>
           <span class="font-bold text-noir-100 font-mono text-xs" id="stat-control">24%</span>
@@ -186,18 +198,20 @@
     </div>
   </header>
 
-  <!-- MAIN SCROLLABLE VIEWPORT FOR ALL TABS -->
+  <!-- ============================================================== -->
+  <!-- MAIN SCROLLABLE VIEWPORT FOR ALL TABS (iOS OPTIMIZED PADDING)  -->
+  <!-- ============================================================== -->
   <main class="max-w-5xl w-full mx-auto p-3 flex-1 ios-scroll-pane">
 
     <!-- ============================================================== -->
-    <!-- TAB 1: GAZETTE & WEEKLY LEDGER                                  -->
+    <!-- TAB 1: THE GAZETTE & WEEKLY LEDGER                             -->
     <!-- ============================================================== -->
     <section id="tab-ledger" class="space-y-4">
       <!-- Big Advance Button -->
       <div class="bg-noir-900 border-2 border-noir-600 p-3 rounded shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
         <div class="text-center sm:text-left">
           <h2 class="font-title text-noir-100 text-base sm:text-lg tracking-wider">THE COOK COUNTY COMMAND COUNCIL</h2>
-          <p class="text-xs text-noir-500">Formulate weekly directives, balance the books, and advance the calendar.</p>
+          <p class="text-xs text-noir-500">Plan operations, dispatch hoods, tune vehicles, and advance the calendar.</p>
         </div>
         <button onclick="advanceWeek()" class="w-full sm:w-auto px-6 py-3 bg-noir-100 text-noir-ink font-title font-bold text-xs sm:text-sm tracking-widest rounded shadow-lg hover:bg-noir-aged active:scale-95 transition flex items-center justify-center gap-2 border border-noir-300">
           <span>ADVANCE WEEK (EXECUTE ORDERS)</span> ➔
@@ -210,27 +224,27 @@
           <div class="flex justify-between items-center text-[10px] sm:text-xs font-serif font-bold uppercase tracking-widest text-noir-ink border-b border-noir-ink mb-1 pb-0.5">
             <span id="news-date">Chicago, Illinois • Week 1, 1926</span>
             <span>PRICE: TWO CENTS</span>
-            <span class="hidden sm:inline">LATE FINAL EDITION</span>
+            <span class="hidden sm:inline">FINAL METROPOLITAN EDITION</span>
           </div>
           <h1 class="font-serif font-black text-2xl sm:text-4xl text-noir-ink tracking-tight uppercase">The Chicago Daily Gazette</h1>
-          <p class="text-[10px] sm:text-xs italic font-serif text-noir-ink">"Fearless Reporting on Cook County Underworld & Civic Affairs"</p>
+          <p class="text-[10px] sm:text-xs italic font-serif text-noir-ink">"Fearless Coverage of Cook County Rackets, Midnight Races & Civic Scandals"</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="md:col-span-2 space-y-2 border-b md:border-b-0 md:border-r border-noir-ink/40 pr-0 md:pr-4">
             <div class="stamp-badge text-[10px] mb-1" id="news-stamp">CRIME BEAT WIRE</div>
             <h3 class="font-serif font-bold text-lg sm:text-xl text-noir-ink leading-tight" id="news-headline">
-              PROHIBITION AGENTS STYMIED AS UNDERWORLD DISTILLERIES FEED LOOP SPEAKEASIES
+              MIDNIGHT SPEEDSTERS OUTRUN DETECTIVES AS B.A.R. MACHINE GUNS ROAR ALONG CALUMET HARBOR
             </h3>
             <p class="text-xs text-noir-ink/90 font-serif leading-relaxed text-justify" id="news-body">
-              Federal Treasury agents and Cook County deputies were met with stony silence along the South Side industrial docks late Tuesday night. While rumors of massive clandestine moonshine stills operating behind steam laundry facades persist, municipal authorities insist order reigns supreme. Rival mobs are quietly maneuvering for prime storefront corners.
+              Cook County deputies were outpaced along the Lake Shore early Tuesday morning by modified high-compression coupés ferrying illegal Canadian whisky. Meanwhile, dockside freight handlers whisper that foreign Great War surplus arms—including Browning automatic rifles and trench explosives—have surfaced along the South Side industrial docks.
             </p>
             <div class="bg-noir-ink/5 p-2.5 rounded border border-noir-ink/30 mt-2">
-              <span class="text-[10px] font-bold uppercase tracking-wider block text-noir-ink mb-1">Underworld Intelligence Dispatch:</span>
+              <span class="text-[10px] font-bold uppercase tracking-wider block text-noir-ink mb-1">Weekly Intelligence Wire:</span>
               <ul class="text-[11px] list-disc list-inside space-y-1 text-noir-ink/90" id="weekly-dispatches">
-                <li>Underground speakeasies report sold-out barrooms; booze inventory depleted.</li>
-                <li>Lieutenant detectives on the 4th Precinct beat pocketed protection gratuities.</li>
-                <li>The Moretti Family was sighted scouting empty storefronts in Little Italy.</li>
+                <li>Speakeasies in the Loop report record weekend attendance; hooch inventory depleted.</li>
+                <li>Lakeshore Motor Sales laundered dirty revenues through legitimate automotive sales.</li>
+                <li>The Moretti Family was sighted scouting vacant storefronts near Little Italy.</li>
               </ul>
             </div>
           </div>
@@ -252,7 +266,7 @@
                 <span class="font-bold text-noir-blood" id="rep-salaries">-$1,350</span>
               </div>
               <div class="flex justify-between">
-                <span>Legal Retainers / Bribes:</span>
+                <span>Legal Retainers & Bribes:</span>
                 <span class="font-bold text-noir-blood" id="rep-bribes">-$600</span>
               </div>
               <div class="flex justify-between">
@@ -269,7 +283,7 @@
               <div class="font-bold uppercase text-noir-blood flex items-center gap-1">
                 <span>⚠</span> <span id="fbi-threat-level">Federal Bureau Alert: Routine Watch</span>
               </div>
-              <p class="text-noir-ink/80 text-[10px]" id="fbi-threat-desc">Special agents in Washington are preoccupied. Keep your public gunfights muted to prevent federal indictments.</p>
+              <p class="text-noir-ink/80 text-[10px]" id="fbi-threat-desc">Special agents in Washington are preoccupied. Keep your public gunplay muted to prevent federal indictments.</p>
             </div>
           </div>
         </div>
@@ -285,7 +299,7 @@
           </div>
           <div id="quick-orders-list" class="space-y-1.5 max-h-48 overflow-y-auto text-xs pr-1"></div>
           <button onclick="switchTab('crew')" class="w-full py-1.5 bg-noir-850 text-noir-300 text-xs border border-noir-700 rounded hover:text-white transition">
-            Assign Directives & Equip Crew ➔
+            Assign Directives & Equip Soldiers ➔
           </button>
         </div>
 
@@ -312,49 +326,53 @@
             </div>
             <div class="flex items-center justify-between bg-noir-850 p-2 rounded border border-noir-800">
               <div>
-                <div class="font-bold text-noir-100">3. Commercial Fronts</div>
-                <div class="text-[10px] text-noir-500" id="supply-front-count">1 Dry Cleaner Active</div>
+                <div class="font-bold text-noir-100">3. Commercial Dealerships & Fronts</div>
+                <div class="text-[10px] text-noir-500" id="supply-front-count">1 Front Active</div>
               </div>
               <span class="text-noir-emerald font-bold" id="supply-launder-rate">$2,000 capacity/wk</span>
             </div>
           </div>
           <button onclick="switchTab('businesses')" class="w-full py-1.5 bg-noir-850 text-noir-300 text-xs border border-noir-700 rounded hover:text-white transition">
-            Expand Rackets & Clean Fronts ➔
+            Expand Rackets & Dealership Fronts ➔
           </button>
         </div>
       </div>
     </section>
 
     <!-- ============================================================== -->
-    <!-- TAB 2: CREW & ARMORY                                           -->
+    <!-- TAB 2: CREW ROSTER & GREAT WAR MILITARY SURPLUS ARSENAL         -->
     <!-- ============================================================== -->
     <section id="tab-crew" class="space-y-4 hidden">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-noir-900 p-3 rounded border border-noir-700">
         <div>
-          <h2 class="font-title text-noir-100 text-base sm:text-lg">ORGANIZATION ROSTER & MUSCLE</h2>
-          <p class="text-xs text-noir-500">Assign tactical orders, supply black market weaponry, and bail captured lieutenants.</p>
+          <h2 class="font-title text-noir-100 text-base sm:text-lg">ORGANIZATION ROSTER & COMBAT MUSCLE</h2>
+          <p class="text-xs text-noir-500">Equip soldiers with Great War trench armaments, allocate vehicles, and manage bail bonds.</p>
         </div>
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
           <button onclick="openRecruitModal()" class="px-3 py-1.5 bg-noir-100 text-noir-ink font-bold text-xs rounded hover:bg-noir-aged transition">
             + Recruit Soldiers
           </button>
+          <button onclick="openSurplusSmuggleModal()" class="px-3 py-1.5 bg-noir-800 border border-noir-blood text-noir-bloodlight font-bold text-xs rounded hover:bg-noir-blood hover:text-white transition">
+            🎖️ Smuggle WWI Surplus
+          </button>
           <button onclick="openArmoryStoreModal()" class="px-3 py-1.5 bg-noir-850 border border-noir-600 text-noir-100 font-bold text-xs rounded hover:border-noir-300 transition">
-            🔫 Black Market Armory
+            🔫 Armory Depot
           </button>
         </div>
       </div>
 
+      <!-- Active Crew Cards -->
       <div id="crew-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
     </section>
 
     <!-- ============================================================== -->
-    <!-- TAB 3: BUSINESSES, RACKETS & CLEAN FRONTS                     -->
+    <!-- TAB 3: CITY DISTRICTS, RACKETS & CAR DEALERSHIP FRONTS          -->
     <!-- ============================================================== -->
     <section id="tab-businesses" class="space-y-4 hidden">
       <div class="bg-noir-900 p-3 rounded border border-noir-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <div>
           <h2 class="font-title text-noir-100 text-base sm:text-lg">CHICAGO DISTRICTS: RACKETS & COMMERCIAL FRONTS</h2>
-          <p class="text-xs text-noir-500">Acquire city plots, construct illicit rackets, open clean laundering fronts, and fortify defenses.</p>
+          <p class="text-xs text-noir-500">Control 5 city sectors, establish illicit distilleries, and open prestige Motor Dealerships.</p>
         </div>
         <div class="text-xs bg-noir-850 px-3 py-1.5 rounded border border-noir-700">
           Plots Controlled: <span class="font-bold text-noir-100" id="districts-slots-owned">6</span> / 25
@@ -369,12 +387,173 @@
     </section>
 
     <!-- ============================================================== -->
-    <!-- TAB 4: POLITICS, CORRUPTION & JUDICIARY                        -->
+    <!-- TAB 4: MIDNIGHT RUNS & MOTOR RACING CIRCUIT (NEW EXPANSION)    -->
+    <!-- ============================================================== -->
+    <section id="tab-racing" class="space-y-4 hidden">
+      <div class="bg-noir-900 p-3.5 rounded border border-noir-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🏁</span>
+            <h2 class="font-title text-noir-100 text-base sm:text-lg uppercase">MIDNIGHT RACING CIRCUIT & DIRT DERBIES</h2>
+          </div>
+          <p class="text-xs text-noir-500">Test your drivers' nerve and modified engines against underground hot-rodders for dirty cash wagers.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs bg-noir-850 px-3 py-1.5 rounded border border-noir-700">
+          <span>Speedway Reputation:</span>
+          <span class="font-bold text-noir-100 font-mono" id="race-rep-display">Veteran Racer</span>
+        </div>
+      </div>
+
+      <!-- Race Setup Board -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <!-- Race Track Selection -->
+        <div class="bg-noir-900 border border-noir-700 p-3 rounded space-y-2">
+          <h3 class="font-title text-noir-100 text-xs sm:text-sm border-b border-noir-700 pb-1.5">1. SELECT CIRCUIT DERBY</h3>
+          <div class="space-y-1.5 text-xs font-mono" id="race-circuit-options">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- Driver & Machine Selection -->
+        <div class="bg-noir-900 border border-noir-700 p-3 rounded space-y-2">
+          <h3 class="font-title text-noir-100 text-xs sm:text-sm border-b border-noir-700 pb-1.5">2. SELECT CREW PILOT & MACHINE</h3>
+          <div class="space-y-2 text-xs">
+            <div>
+              <label class="text-[10px] text-noir-500 uppercase block mb-1">Assigned Driver:</label>
+              <select id="race-driver-select" onchange="updateRaceOddsPreview()" class="w-full bg-noir-850 border border-noir-700 p-2 rounded text-noir-100 text-xs font-mono outline-none">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] text-noir-500 uppercase block mb-1">Race Vehicle:</label>
+              <select id="race-vehicle-select" onchange="updateRaceOddsPreview()" class="w-full bg-noir-850 border border-noir-700 p-2 rounded text-noir-100 text-xs font-mono outline-none">
+                <!-- Injected by JS -->
+              </select>
+            </div>
+            <div class="bg-noir-850 p-2 rounded border border-noir-800 text-[11px] space-y-0.5" id="race-stats-preview">
+              <!-- Driver Skill + Machine Modifiers -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Wager & Launch Box -->
+        <div class="bg-noir-900 border border-noir-700 p-3 rounded space-y-2 flex flex-col justify-between">
+          <div>
+            <h3 class="font-title text-noir-100 text-xs sm:text-sm border-b border-noir-700 pb-1.5">3. PLACE ILLEGAL SIDE BET</h3>
+            <div class="space-y-2 my-2 text-xs font-mono">
+              <div class="flex justify-between items-center text-noir-300">
+                <span>Calculated Win Odds:</span>
+                <span class="font-bold text-noir-100 text-sm" id="race-odds-tag">3 to 1</span>
+              </div>
+              <div>
+                <label class="text-[10px] text-noir-500 uppercase block mb-1">Wager Amount (Dirty Cash):</label>
+                <div class="grid grid-cols-3 gap-1">
+                  <button onclick="setRaceWager(500)" class="py-1 bg-noir-850 border border-noir-700 rounded text-noir-300 hover:text-white">$500</button>
+                  <button onclick="setRaceWager(2000)" class="py-1 bg-noir-850 border border-noir-700 rounded text-noir-300 hover:text-white">$2,000</button>
+                  <button onclick="setRaceWager(5000)" class="py-1 bg-noir-850 border border-noir-700 rounded text-noir-300 hover:text-white">$5,000</button>
+                </div>
+                <input type="number" id="race-wager-input" value="1000" min="100" max="10000" class="w-full mt-1.5 bg-noir-850 border border-noir-700 p-1.5 rounded text-noir-100 font-bold outline-none">
+              </div>
+              <div class="text-[11px] text-noir-emerald flex justify-between">
+                <span>Potential Payout:</span>
+                <span class="font-bold" id="race-potential-payout">$3,000</span>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="startMidnightRace()" id="btn-start-race" class="w-full py-3 bg-noir-100 text-noir-ink font-title font-bold text-xs tracking-widest rounded hover:bg-noir-aged active:scale-95 transition shadow-lg border border-noir-300 flex items-center justify-center gap-2">
+            <span>🏁 DROP THE GREEN FLAG</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Race Narration Teletype Log -->
+      <div class="newsprint-panel p-4 rounded space-y-2">
+        <div class="flex justify-between items-center border-b border-noir-ink pb-1.5">
+          <div class="flex items-center gap-2">
+            <span class="stamp-badge text-[9px]">LIVE TELETYPE WIRE</span>
+            <span class="font-serif font-black text-sm uppercase text-noir-ink">Cook County Speedway Play-By-Play</span>
+          </div>
+          <span class="text-[10px] font-mono text-noir-ink/70" id="race-status-tag">Ready for Ignition</span>
+        </div>
+        <div id="race-log-box" class="h-44 overflow-y-auto bg-noir-newsprint border border-noir-ink/30 p-2.5 rounded text-xs font-mono space-y-1.5 text-noir-ink leading-relaxed">
+          <div class="italic text-noir-ink/60">Select your driver, tuned vehicle, and derby circuit above, then drop the green flag to start the run.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 5: AUTOMOTIVE FLEET, CHOP SHOP & SPEED GARAGE              -->
+    <!-- ============================================================== -->
+    <section id="tab-garage" class="space-y-4 hidden">
+      <div class="bg-noir-900 p-3.5 rounded border border-noir-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🚗</span>
+            <h2 class="font-title text-noir-100 text-base sm:text-lg uppercase">FLEET GARAGE, MOTOR SALES & CHOP SHOP</h2>
+          </div>
+          <p class="text-xs text-noir-500">Maintain gang vehicles, strip stolen automobiles for parts, and install high-performance speed upgrades.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="openBuyVehicleModal()" class="px-3 py-1.5 bg-noir-100 text-noir-ink font-bold text-xs rounded hover:bg-noir-aged transition">
+            + Purchase Motor Machine
+          </button>
+          <button onclick="stealRandomVehicle()" class="px-3 py-1.5 bg-noir-850 border border-noir-blood text-noir-bloodlight font-bold text-xs rounded hover:bg-noir-blood hover:text-white transition">
+            🕵️ Hijack Luxury Automobile
+          </button>
+        </div>
+      </div>
+
+      <!-- Garage Vehicles Roster -->
+      <div class="space-y-3">
+        <h3 class="font-title text-noir-100 text-sm border-b border-noir-700 pb-1">MOB MOTOR FLEET</h3>
+        <div id="garage-vehicles-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <!-- Chop Shop & Salvage Operations -->
+      <div class="bg-noir-900 border border-noir-700 p-4 rounded space-y-3">
+        <div class="flex justify-between items-center border-b border-noir-700 pb-2">
+          <h3 class="font-title text-noir-100 text-sm">UNDERGROUND SPEED GARAGE & CUSTOM UPGRADES</h3>
+          <span class="text-xs text-noir-300 font-mono">Mechanical Upgrades</span>
+        </div>
+        <p class="text-xs text-noir-400">
+          Select a vehicle from your fleet to install custom bootlegger enhancements. High-Bore V8s win races, hidden floor tanks expand liquor smuggling, and heavy armor plates safeguard crew during deadly drive-bys.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs font-mono">
+          <div class="bg-noir-850 p-2.5 rounded border border-noir-800 space-y-1">
+            <div class="font-bold text-noir-100">1. High-Bore V8 Engine</div>
+            <div class="text-[10px] text-noir-500">+35 Speed / +25% Getaway</div>
+            <div class="text-[11px] text-noir-emerald font-bold">$1,800 Dirty</div>
+          </div>
+          <div class="bg-noir-850 p-2.5 rounded border border-noir-800 space-y-1">
+            <div class="font-bold text-noir-100">2. Hidden Floor Tanks</div>
+            <div class="text-[10px] text-noir-500">+50% Booze Cargo Capacity</div>
+            <div class="text-[11px] text-noir-emerald font-bold">$1,200 Dirty</div>
+          </div>
+          <div class="bg-noir-850 p-2.5 rounded border border-noir-800 space-y-1">
+            <div class="font-bold text-noir-100">3. Heavy Steel Armor</div>
+            <div class="text-[10px] text-noir-500">Deflects Tommy Gun Slugs</div>
+            <div class="text-[11px] text-noir-emerald font-bold">$2,200 Dirty</div>
+          </div>
+          <div class="bg-noir-850 p-2.5 rounded border border-noir-800 space-y-1">
+            <div class="font-bold text-noir-100">4. Heavy Ramming Grille</div>
+            <div class="text-[10px] text-noir-500">Breaches Roadblocks & Cars</div>
+            <div class="text-[11px] text-noir-emerald font-bold">$950 Dirty</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 6: POLITICS, CORRUPTION & CLAN WARS                        -->
     <!-- ============================================================== -->
     <section id="tab-politics" class="space-y-4 hidden">
       <div class="bg-noir-900 p-3 rounded border border-noir-700">
-        <h2 class="font-title text-noir-100 text-base sm:text-lg">CITY HALL, POLICE CORRUPTION & THE COURTS</h2>
-        <p class="text-xs text-noir-500">A capo without a judge is like a gunman without bullets. Grease police precincts and retain defense attorneys using clean bank funds.</p>
+        <h2 class="font-title text-noir-100 text-base sm:text-lg">CITY HALL, CORRUPTION & GANG WAR CLASHES</h2>
+        <p class="text-xs text-noir-500">Grease police precincts, retain Cook County judges with clean bank funds, and orchestrate strikes against rival families.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -403,7 +582,7 @@
           <div class="space-y-2 pt-2 border-t border-noir-700">
             <div class="flex items-center justify-between gap-2 bg-noir-850 p-2 rounded border border-noir-800">
               <div>
-                <div class="font-bold text-xs text-noir-100">Bribe Street Beat Cops</div>
+                <div class="font-bold text-xs text-noir-100">Bribe Beat Patrolmen</div>
                 <div class="text-[10px] text-noir-500">-15% Police Heat immediately</div>
               </div>
               <button onclick="bribePolice('beat')" class="px-3 py-1 bg-noir-100 text-noir-ink font-bold text-xs rounded hover:bg-noir-aged transition">
@@ -433,15 +612,15 @@
           </div>
         </div>
 
-        <!-- Federal Bureau of Investigation & Legal Defense -->
+        <!-- Federal Untouchables & Legal Retainers -->
         <div class="bg-noir-900 border border-noir-700 p-4 rounded space-y-3 flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center border-b border-noir-700 pb-2">
-              <h3 class="font-title text-noir-bloodlight text-xs sm:text-sm">FEDERAL CRACKDOWN & IRS AUDIT</h3>
-              <span class="text-[10px] bg-noir-950 text-noir-bloodlight px-1.5 py-0.5 rounded border border-noir-blood">PROHIBITION BUREAU</span>
+              <h3 class="font-title text-noir-bloodlight text-xs sm:text-sm">FEDERAL UNTOUCHABLES CRACKDOWN</h3>
+              <span class="text-[10px] bg-noir-950 text-noir-bloodlight px-1.5 py-0.5 rounded border border-noir-blood">TREASURY TASK FORCE</span>
             </div>
             <p class="text-xs text-noir-300 mt-2 leading-relaxed">
-              When Police Heat tops <strong class="text-noir-bloodlight">70%</strong>, or unlaundered Dirty Cash exceeds your clean capacity, Federal Special Agents and IRS investigators stage sweeping padlock raids. Federal warrants cannot be bought off with pocket change—only high-priced legal defense teams can dismiss grand jury indictments.
+              When Police Heat reaches <strong class="text-noir-bloodlight">70%</strong>, federal agents stage raids on stills and speakeasies. G-Men cannot be bribed on the street; only prestigious defense attorneys can invalidate indictments.
             </p>
             
             <div class="mt-4 bg-noir-850 p-3 rounded border border-noir-800 space-y-2 text-xs">
@@ -463,255 +642,222 @@
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- ============================================================== -->
-    <!-- TAB 5: MOB WARS & RIVALRY                                      -->
-    <!-- ============================================================== -->
-    <section id="tab-war" class="space-y-4 hidden">
-      <div class="bg-noir-900 p-3 rounded border border-noir-700">
-        <h2 class="font-title text-noir-100 text-base sm:text-lg">RIVAL FACTIONS & TERRITORIAL CLASHES</h2>
-        <p class="text-xs text-noir-500">Three rival organizations contest Cook County. Monitor their combat power, broker fragile truces, or dispatch hit squads to crush their leadership.</p>
+      <!-- Rival Families Board -->
+      <div class="space-y-3 pt-2">
+        <h3 class="font-title text-noir-100 text-sm">RIVAL MOB FAMILIES & GANG WAR</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="rivals-container"></div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="rivals-container"></div>
-
-      <!-- Tactical War Room Actions -->
+      <!-- Tactical Strike Operations -->
       <div class="bg-noir-900 border border-noir-700 p-4 rounded space-y-3">
-        <h3 class="font-title text-noir-100 text-xs sm:text-sm border-b border-noir-700 pb-2">UNDERWORLD TACTICAL WAR ROOM</h3>
-        <p class="text-xs text-noir-300">
-          Direct strategic strikes against rival organizations. Soldiers with high Aim and Muscle dominate gunfights.
-        </p>
+        <h3 class="font-title text-noir-100 text-xs sm:text-sm border-b border-noir-700 pb-2">TACTICAL GANG WAR OPERATIONS</h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
           <button onclick="prepRivalAction('driveby')" class="p-2.5 bg-noir-850 border border-noir-700 hover:border-noir-blood rounded text-left space-y-1 transition">
-            <div class="font-bold text-noir-bloodlight">🚗 Drive-By Ambush</div>
-            <div class="text-[10px] text-noir-500">Target rival street patrols to reduce their combat strength.</div>
+            <div class="font-bold text-noir-bloodlight">🚗 Motor Drive-By Ambush</div>
+            <div class="text-[10px] text-noir-500">Cull rival soldiers with high-speed Tommy gunfire.</div>
           </button>
           <button onclick="prepRivalAction('raid_speakeasy')" class="p-2.5 bg-noir-850 border border-noir-700 hover:border-noir-emerald rounded text-left space-y-1 transition">
             <div class="font-bold text-noir-emerald">💥 Raid Competitor Speakeasy</div>
-            <div class="text-[10px] text-noir-500">Heist up to $3,500 cash and hijack stockpiled booze barrels.</div>
+            <div class="text-[10px] text-noir-500">Heist $3,500+ cash and hijack stockpiled booze barrels.</div>
           </button>
           <button onclick="prepRivalAction('assassinate')" class="p-2.5 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left space-y-1 transition">
-            <div class="font-bold text-noir-100">🎯 Contract on Rival Boss</div>
-            <div class="text-[10px] text-noir-500">High-risk contract. Eliminating a boss collapses their entire outfit.</div>
+            <div class="font-bold text-noir-100">💣 Military Surplus Boss Hit</div>
+            <div class="text-[10px] text-noir-500">Use trench dynamite and B.A.R.s to obliterate a rival capo.</div>
           </button>
         </div>
       </div>
     </section>
 
     <!-- ============================================================== -->
-    <!-- TAB 6: THE CAPO'S COMPENDIUM & FIELD MANUAL                    -->
+    <!-- TAB 7: THE CAPO'S COMPREHENSIVE FIELD MANUAL (MASSIVE)          -->
     <!-- ============================================================== -->
     <section id="tab-manual" class="space-y-5 hidden">
       <div class="newsprint-panel p-4 sm:p-7 rounded shadow-2xl space-y-6">
         <!-- Title Banner -->
         <div class="border-b-4 border-noir-ink pb-3 text-center">
           <div class="stamp-badge text-xs mb-1">CLASSIFIED MOB STRATEGY MANUAL • 1926</div>
-          <h2 class="font-serif font-black text-2xl sm:text-3xl text-noir-ink uppercase tracking-tight">THE CAPO'S COMPREHENSIVE COMPENDIUM</h2>
-          <p class="text-xs italic font-serif text-noir-ink">Tactical Operations, Racket Mathematics, Commercial Laundering & Survival in Cook County</p>
+          <h2 class="font-serif font-black text-2xl sm:text-3xl text-noir-ink uppercase tracking-tight">THE CAPO'S EXPANDED FIELD MANUAL</h2>
+          <p class="text-xs italic font-serif text-noir-ink">Tactical Mechanics: Speed Derbies, Dealership Laundering, Great War Surplus & Bootleg Supply Chains</p>
         </div>
 
-        <!-- Section 1: Core Mechanics -->
+        <!-- Section 1: The Midnight Racing Engine -->
         <div class="space-y-2 border-b border-noir-ink/30 pb-4">
-          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">1. The Dual Currency Economy: Dirty Cash vs. Clean Bank Vault</h3>
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">1. Midnight Racing & Circuit Derbies</h3>
           <p class="text-xs text-noir-ink leading-relaxed text-justify">
-            In 1926 Chicago, money is split into two distinct tiers: <strong>Dirty Street Cash</strong> and <strong>Clean Bank Balance</strong>.
+            Illegal motor derbies are a lucrative avenue for converting dirty cash into cold hard bankrolls. Races are decided by two key components: <strong>Driver Attributes</strong> and <strong>Vehicle Tuning</strong>.
           </p>
           <ul class="list-disc list-inside text-xs text-noir-ink space-y-1 pl-1">
-            <li><strong>Dirty Street Cash:</strong> Yielded directly from underground rackets (Speakeasies, Gambling Dens, Brothels, Protection Shakedowns). Used for street soldiers' weekly upkeep, black-market Tommy Guns, alleyway mob surgeries, and constructing raw illicit operations.</li>
-            <li><strong>Clean Bank Balance:</strong> Deposited in legitimate civic banking institutions. Required for municipal bribes, retaining Cook County Judges, buying the Police Commissioner, retaining appellate defense lawyers, and purchasing legitimate commercial property fronts.</li>
-            <li><strong>The IRS Audit Hazard:</strong> If your Dirty Cash reserves skyrocket while your laundering network remains weak, the Federal Internal Revenue Bureau will flag your outfit, resulting in immediate confiscation warrants and coordinated padlocking of premises.</li>
+            <li><strong>Driver Formula:</strong> Driving attribute accounts for 55% of cornering capability, while Aim/Muscle acts as aggressive defensive blocking against competitors attempting to run your car off the embankment.</li>
+            <li><strong>High-Bore V8 Modification:</strong> Adds a flat +35 Speed bonus, vastly improving straightaway lead potential on the Lake Shore Drag Strip.</li>
+            <li><strong>Derby Risks:</strong> Intense dirt tracks (such as the Cook County Mud Derby) carry a 12% engine blowout hazard. If your car is damaged, the driver risks hospitalization unless equipped with heavy armor plating.</li>
           </ul>
         </div>
 
-        <!-- Section 2: Deep Dive into Illicit Rackets -->
+        <!-- Section 2: Automotive Empire, Dealerships & Chop Shops -->
         <div class="space-y-2 border-b border-noir-ink/30 pb-4">
-          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">2. Illicit Rackets Breakdown & Performance Data</h3>
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">2. Motor Dealerships & The Chop Shop Engine</h3>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-[11px] border border-noir-ink/40 font-mono">
               <thead class="bg-noir-ink text-noir-newsprint font-bold">
                 <tr>
-                  <th class="p-1.5 border border-noir-ink/30">Racket Type</th>
-                  <th class="p-1.5 border border-noir-ink/30">Cost (Dirty)</th>
-                  <th class="p-1.5 border border-noir-ink/30">Booze Consumed</th>
-                  <th class="p-1.5 border border-noir-ink/30">Booze Produced</th>
-                  <th class="p-1.5 border border-noir-ink/30">Weekly Gross</th>
-                  <th class="p-1.5 border border-noir-ink/30">Heat / Wk</th>
+                  <th class="p-1.5 border border-noir-ink/30">Vehicle Model</th>
+                  <th class="p-1.5 border border-noir-ink/30">Purchase Cost</th>
+                  <th class="p-1.5 border border-noir-ink/30">Base Speed</th>
+                  <th class="p-1.5 border border-noir-ink/30">Armor / Defense</th>
+                  <th class="p-1.5 border border-noir-ink/30">Booze Capacity</th>
+                  <th class="p-1.5 border border-noir-ink/30">Primary Role</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-noir-ink/20 text-noir-ink">
                 <tr>
-                  <td class="p-1.5 font-bold">Protection Shakedown</td>
-                  <td class="p-1.5">$1,500</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+$850</td>
-                  <td class="p-1.5 text-noir-blood font-bold">+3%</td>
+                  <td class="p-1.5 font-bold">Ford Model T Coupe</td>
+                  <td class="p-1.5">$650</td>
+                  <td class="p-1.5">38 mph</td>
+                  <td class="p-1.5">Light (Wood/Tin)</td>
+                  <td class="p-1.5">15 bbl</td>
+                  <td class="p-1.5">Inexpensive City Runabout</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold">Moonshine Still</td>
-                  <td class="p-1.5">$2,800</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+35 bbl</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+$250</td>
-                  <td class="p-1.5 text-noir-blood font-bold">+5%</td>
+                  <td class="p-1.5 font-bold">Modified Buick Six</td>
+                  <td class="p-1.5">$1,800</td>
+                  <td class="p-1.5">62 mph</td>
+                  <td class="p-1.5">Medium Steel</td>
+                  <td class="p-1.5">35 bbl</td>
+                  <td class="p-1.5">All-Around Bootlegger & Drag Racer</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold">Industrial Brewery</td>
-                  <td class="p-1.5">$5,500</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+80 bbl</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+$400</td>
-                  <td class="p-1.5 text-noir-blood font-bold">+9%</td>
+                  <td class="p-1.5 font-bold">Lincoln Model L Sedan</td>
+                  <td class="p-1.5">$3,400</td>
+                  <td class="p-1.5">70 mph</td>
+                  <td class="p-1.5">Heavy Chassis</td>
+                  <td class="p-1.5">40 bbl</td>
+                  <td class="p-1.5">Luxury Capo Cruiser & High-Speed Getaway</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold">Hidden Speakeasy</td>
-                  <td class="p-1.5">$4,200</td>
-                  <td class="p-1.5 text-noir-blood font-bold">25 bbl</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+$2,800</td>
-                  <td class="p-1.5 text-noir-blood font-bold">+7%</td>
+                  <td class="p-1.5 font-bold">Armored Cadillac 314</td>
+                  <td class="p-1.5">$5,200</td>
+                  <td class="p-1.5">58 mph</td>
+                  <td class="p-1.5 font-bold text-noir-blood">Reinforced Steel + Bulletproof Glass</td>
+                  <td class="p-1.5">30 bbl</td>
+                  <td class="p-1.5">Mobile Fortress for Gang War Drive-Bys</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold">Gambling Den</td>
-                  <td class="p-1.5">$7,500</td>
-                  <td class="p-1.5 text-noir-blood font-bold">12 bbl</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+$4,200</td>
-                  <td class="p-1.5 text-noir-blood font-bold">+11%</td>
-                </tr>
-                <tr>
-                  <td class="p-1.5 font-bold">Brothel & Dope Den</td>
-                  <td class="p-1.5">$6,000</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+$3,300</td>
-                  <td class="p-1.5 text-noir-blood font-bold">+12%</td>
-                </tr>
-                <tr>
-                  <td class="p-1.5 font-bold">Hijacking Ring</td>
+                  <td class="p-1.5 font-bold">Mack 3-Ton Freight Truck</td>
                   <td class="p-1.5">$3,800</td>
-                  <td class="p-1.5">0</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+15 bbl</td>
-                  <td class="p-1.5 text-emerald-900 font-bold">+$1,900</td>
-                  <td class="p-1.5 text-noir-blood font-bold">+10%</td>
+                  <td class="p-1.5">32 mph</td>
+                  <td class="p-1.5">Heavy Industrial</td>
+                  <td class="p-1.5 font-bold text-emerald-900">120 bbl</td>
+                  <td class="p-1.5">Mass Industrial Liquor Distribution</td>
+                </tr>
+                <tr>
+                  <td class="p-1.5 font-bold">WWI White Motor Scout Car</td>
+                  <td class="p-1.5 font-bold text-noir-blood">$8,500 Surplus</td>
+                  <td class="p-1.5">52 mph</td>
+                  <td class="p-1.5 font-bold text-noir-blood">Armored Gun Turret Plate</td>
+                  <td class="p-1.5">25 bbl</td>
+                  <td class="p-1.5">Total Domination in Gang Warfare</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <p class="text-[11px] text-noir-ink/80 italic mt-1">
-            Note: If a Speakeasy does not receive its required 25 barrels of booze each week, revenue plummets by 65% as thirsty patrons refuse watered cocktails.
+          <p class="text-[11px] text-noir-ink/80 italic mt-1.5">
+            <strong>The Chop Shop Rule:</strong> Stolen vehicles can be chopped down at the garage for immediate dirty cash scrap or integrated into your operational fleet after stripping registration tags.
           </p>
         </div>
 
-        <!-- Section 3: Commercial Clean Fronts & The Laundering Engine -->
+        <!-- Section 3: Great War Military Surplus Black Market -->
         <div class="space-y-2 border-b border-noir-ink/30 pb-4">
-          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">3. Commercial Fronts & Laundering Math</h3>
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">3. Great War Military Surplus Black Market</h3>
           <p class="text-xs text-noir-ink leading-relaxed text-justify">
-            Every clean front operates as a legitimate business that funnels dirty paper money through official invoices. However, laundering is subject to an operational haircut (the "Laundering Tax" of 20% to 30% overhead). 
+            Standard civilian sidearms pale in comparison to trench warfare hardware smuggled from returning European supply transports. Smuggling shipments via Lake Michigan requires bribing harbor quartermasters ($2,000 clean).
           </p>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-[11px] border border-noir-ink/40 font-mono">
               <thead class="bg-noir-ink text-noir-newsprint font-bold">
                 <tr>
-                  <th class="p-1.5 border border-noir-ink/30">Commercial Front</th>
-                  <th class="p-1.5 border border-noir-ink/30">Acquisition Cost</th>
-                  <th class="p-1.5 border border-noir-ink/30">Max Laundered / Wk</th>
-                  <th class="p-1.5 border border-noir-ink/30">Clean Efficiency</th>
-                  <th class="p-1.5 border border-noir-ink/30">Heat Suppression</th>
+                  <th class="p-1.5 border border-noir-ink/30">Surplus Weaponry</th>
+                  <th class="p-1.5 border border-noir-ink/30">Firepower / Aim</th>
+                  <th class="p-1.5 border border-noir-ink/30">Muscle / Intimidation</th>
+                  <th class="p-1.5 border border-noir-ink/30">Special Combat Trait</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-noir-ink/20 text-noir-ink">
                 <tr>
-                  <td class="p-1.5 font-bold">Steam Dry Cleaners</td>
-                  <td class="p-1.5">$2k Dirty + $3.5k Clean</td>
-                  <td class="p-1.5 font-bold">$2,000 / wk</td>
-                  <td class="p-1.5">75% ($1,500 Clean)</td>
-                  <td class="p-1.5 text-emerald-900">-2% Heat</td>
+                  <td class="p-1.5 font-bold">M1918 Browning Auto Rifle (B.A.R.)</td>
+                  <td class="p-1.5 font-bold text-emerald-900">+45 Aim</td>
+                  <td class="p-1.5">+28 Muscle</td>
+                  <td class="p-1.5">Suppresses rival hit squads; high chance to wipe enemy squads clean.</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold">Floral Boutique</td>
-                  <td class="p-1.5">$1.5k Dirty + $2.8k Clean</td>
-                  <td class="p-1.5 font-bold">$1,400 / wk</td>
-                  <td class="p-1.5">80% ($1,120 Clean)</td>
-                  <td class="p-1.5 text-emerald-900">-3% Heat</td>
+                  <td class="p-1.5 font-bold">Winchester 1897 "Trench Gun"</td>
+                  <td class="p-1.5">+26 Aim</td>
+                  <td class="p-1.5 font-bold text-emerald-900">+32 Muscle</td>
+                  <td class="p-1.5">Devastating slam-fire in close quarters; +40% extortion yields.</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold">Funeral Home & Mortuary</td>
-                  <td class="p-1.5">$3k Dirty + $5.5k Clean</td>
-                  <td class="p-1.5 font-bold">$3,800 / wk</td>
-                  <td class="p-1.5">82% ($3,116 Clean)</td>
-                  <td class="p-1.5 text-emerald-900">-4% Heat</td>
+                  <td class="p-1.5 font-bold">Mk II Pineapple Grenades</td>
+                  <td class="p-1.5">+35 Aim</td>
+                  <td class="p-1.5">+40 Muscle</td>
+                  <td class="p-1.5">Breaches reinforced rival speakeasy doors and blows up competitor stills.</td>
                 </tr>
                 <tr>
-                  <td class="p-1.5 font-bold">Meat Packing Plant</td>
-                  <td class="p-1.5">$4.5k Dirty + $8k Clean</td>
-                  <td class="p-1.5 font-bold">$6,000 / wk</td>
-                  <td class="p-1.5">78% ($4,680 Clean)</td>
-                  <td class="p-1.5 text-emerald-900">-2% Heat</td>
-                </tr>
-                <tr>
-                  <td class="p-1.5 font-bold">Import/Export Harbor Docks</td>
-                  <td class="p-1.5">$6k Dirty + $11k Clean</td>
-                  <td class="p-1.5 font-bold">$9,500 / wk</td>
-                  <td class="p-1.5">85% ($8,075 Clean)</td>
-                  <td class="p-1.5 text-emerald-900">-5% Heat</td>
+                  <td class="p-1.5 font-bold">M1917 Trench Gas Mask</td>
+                  <td class="p-1.5">Defense</td>
+                  <td class="p-1.5">+15 Muscle</td>
+                  <td class="p-1.5">Complete immunity to police tear gas raids and chemical mash leaks.</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <p class="text-[11px] text-noir-ink/80 leading-relaxed mt-1">
-            <strong>The Golden Rule of Laundering:</strong> Always maintain your weekly laundering capacity at least 120% higher than your crew salaries and judicial bribes, so your legitimate bank balance accumulates steady capital reserves.
-          </p>
         </div>
 
-        <!-- Section 4: Fortifications & Defense Upgrades -->
+        <!-- Section 4: Dual Currency & Commercial Laundering -->
         <div class="space-y-2 border-b border-noir-ink/30 pb-4">
-          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">4. Fortifications, Bouncers & Armed Guards</h3>
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">4. Bootleg Supply Chains & Commercial Laundering Fronts</h3>
           <p class="text-xs text-noir-ink leading-relaxed text-justify">
-            Unfortified rackets are sitting ducks for rival raids and rogue police precinct shakedowns. Upgrading a plot unlocks defensive tiers:
+            The bootlegging supply loop is straightforward:
+            <br>
+            <strong>Stills & Industrial Breweries</strong> cook corn mash into booze barrels $\rightarrow$ 
+            <strong>Speakeasies & High-Roller Gambling Dens</strong> serve thirsty patrons to generate dirty paper cash $\rightarrow$ 
+            <strong>Motor Sales Dealerships & Clean Fronts</strong> funnel dirty cash through legitimate commercial invoices, converting it into certified bank balances (75% to 85% clean recovery).
           </p>
-          <ul class="list-disc list-inside text-xs text-noir-ink space-y-1 pl-1">
-            <li><strong>Level 1 (Standard):</strong> Unreinforced doors. Standard vulnerability to raids and vandalism.</li>
-            <li><strong>Level 2 (Reinforced Steel Doors & Bouncers):</strong> Costs $2,500. Increases income/capacity by 40% and adds +35% defense against rival incursions.</li>
-            <li><strong>Level 3 (Armed Guard Bunker & Tripwire Alarms):</strong> Costs $4,500. Increases income/capacity by 80% and reduces police raid arrest probabilities by half.</li>
-          </ul>
         </div>
 
-        <!-- Section 5: Tactical Masterclasses -->
+        <!-- Section 5: Advanced Tactical Masterclasses -->
         <div class="space-y-3">
-          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">5. Tactical Masterclasses & Odds & Ends Strategies</h3>
+          <h3 class="font-serif font-bold text-base uppercase text-noir-blood">5. Advanced Capo Strategies & Odds & Ends</h3>
           
           <div class="bg-noir-ink/5 p-3 rounded border border-noir-ink/30 space-y-1">
-            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy A: The North Shore Bootleg Blitz</h4>
+            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy 1: The Mechanized Blitzkrieg</h4>
             <p class="text-[11px] text-noir-ink/90 leading-relaxed">
-              In the opening 4 weeks, refrain from initiating gang wars. Secure industrial slots in the Docks to build two Moonshine Stills, then establish two Speakeasies in Little Italy. This creates a sustainable $5,000+ weekly dirty revenue stream that funds arms purchases without raising police heat.
+              Equip two soldiers with Browning Automatic Rifles and mount them in an Armored Cadillac 314. Target rival syndicate compounds directly with Drive-By strikes. The combined firepower and ballistic deflection ensures victory while minimizing hospital casualties.
             </p>
           </div>
 
           <div class="bg-noir-ink/5 p-3 rounded border border-noir-ink/30 space-y-1">
-            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy B: The Judicial Umbrella Protocol</h4>
+            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy 2: The Midnight Purse Squeeze</h4>
             <p class="text-[11px] text-noir-ink/90 leading-relaxed">
-              Prioritize acquiring your first Dry Cleaner in Week 3. Accumulate $5,000 in clean bank balance and immediately place Judge Callahan on retainer. Once secured, any soldiers arrested during surprise police sweeps will have their indictments dismissed without costing bail money.
+              In early weeks, place Johnny "Fast Hands" Ross behind the wheel of a Modified Buick Six tuned with a High-Bore V8. Enter the Lake Shore Drag Strip repeatedly with $2,000 wagers. You can generate upwards of $6,000 dirty cash in minutes to bankroll distillery expansions.
             </p>
           </div>
 
           <div class="bg-noir-ink/5 p-3 rounded border border-noir-ink/30 space-y-1">
-            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy C: Decapitation Strike Over Turf Wars</h4>
+            <h4 class="font-bold text-xs uppercase text-noir-ink">Strategy 3: The Lakeshore Motor Monopoly</h4>
             <p class="text-[11px] text-noir-ink/90 leading-relaxed">
-              Do not waste time fighting rival outfits street-by-street. Equip two made men with Tommy Guns and Armored Sedans. Dispatch them on an assassination contract against the rival Boss. Eliminating the Boss dissolves their entire faction instantly, leaving all their unfortified rackets ripe for annexation.
+              Acquire "Lakeshore Motor Sales" in the North Shore as early as Week 4. It launders $3,800/week at 82% clean recovery while cooling 3% police heat automatically. This fuels clean payments to Judge Callahan and keeps federal investigators at bay.
             </p>
           </div>
         </div>
 
         <div class="text-center pt-2 border-t border-noir-ink text-[10px] uppercase font-bold text-noir-ink/60">
-          END OF DOCUMENT • KEEP SECURE UNDER OMERTÀ
+          END OF FIELD COMPENDIUM • FULL SCROLL CLEARANCE ACTIVE
         </div>
       </div>
     </section>
 
     <!-- ============================================================== -->
-    <!-- TAB 7: GOD MODE (OMNIPOTENT TESTING SUITE)                     -->
+    <!-- TAB 8: GOD MODE TESTING SUITE (MASSIVE TESTING SANDBOX)        -->
     <!-- ============================================================== -->
     <section id="tab-god" class="space-y-4 hidden">
       <div class="bg-noir-900 border-2 border-noir-blood p-4 rounded shadow-2xl">
@@ -723,22 +869,22 @@
           <span class="bg-noir-950 text-noir-bloodlight text-[10px] px-2 py-0.5 rounded border border-noir-blood font-bold uppercase">Dev Sandbox Active</span>
         </div>
         <p class="text-xs text-noir-300 mt-2">
-          Instant testing sandbox for verifying all game loops, economic models, combat formulas, and city-wide domination.
+          Instant testing controls to test all features: racing physics, WWI weapons, speed upgrades, fleet management, and total territory domination.
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 mt-4 text-xs font-mono">
           <button onclick="cheatAddCash('dirty', 100000)" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
             <div class="font-bold text-noir-100">+ $100,000 Dirty Cash</div>
-            <div class="text-[10px] text-noir-500">Inject black market cash reserves.</div>
+            <div class="text-[10px] text-noir-500">Inject illicit paper reserves.</div>
           </button>
 
           <button onclick="cheatAddCash('clean', 50000)" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-emerald rounded text-left transition">
             <div class="font-bold text-noir-emerald">+ $50,000 Clean Bank</div>
-            <div class="text-[10px] text-noir-500">Credit verified civic bank balance.</div>
+            <div class="text-[10px] text-noir-500">Credit verified civic bank vault.</div>
           </button>
 
           <button onclick="cheatAddBooze(500)" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-300 rounded text-left transition">
-            <div class="font-bold text-noir-300">+ 500 Booze Barrels</div>
+            <div class="font-bold text-noir-300">+ 500 Hooch Barrels</div>
             <div class="text-[10px] text-noir-500">Replenish moonshine inventory.</div>
           </button>
 
@@ -747,14 +893,19 @@
             <div class="text-[10px] text-noir-500">Purge police records and warrants.</div>
           </button>
 
-          <button onclick="cheatMaxCrew()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
-            <div class="font-bold text-noir-100">⭐ Max All Gangster Stats (99)</div>
-            <div class="text-[10px] text-noir-500">Muscle, Aim, Stealth, Brains = 99.</div>
+          <button onclick="cheatMilitaryDrop()" class="p-3 bg-noir-850 border border-noir-blood rounded text-left transition hover:bg-noir-blood/20">
+            <div class="font-bold text-noir-bloodlight">🎖️ WWI Military Surplus Drop</div>
+            <div class="text-[10px] text-noir-500">10 B.A.R.s, 10 Trench Guns, Grenades.</div>
           </button>
 
-          <button onclick="cheatArsenal()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-blood rounded text-left transition">
-            <div class="font-bold text-noir-bloodlight">🔫 Supply Tommy Guns & Sedans</div>
-            <div class="text-[10px] text-noir-500">Equip entire crew with heavy firepower.</div>
+          <button onclick="cheatFleetDrop()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
+            <div class="font-bold text-noir-100">🏎️ Unlock Tuned Super Fleet</div>
+            <div class="text-[10px] text-noir-500">Cadillac 314, Scout Car & Buick V8.</div>
+          </button>
+
+          <button onclick="cheatMaxCrew()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
+            <div class="font-bold text-noir-100">⭐ Max Gangster Stats (99)</div>
+            <div class="text-[10px] text-noir-500">Muscle, Aim, Stealth, Driving = 99.</div>
           </button>
 
           <button onclick="cheatAnnexAll()" class="p-3 bg-noir-850 border border-noir-700 hover:border-noir-100 rounded text-left transition">
@@ -824,8 +975,8 @@
     <div class="newsprint-panel w-full max-w-lg p-4 rounded max-h-[85vh] overflow-y-auto space-y-3">
       <div class="flex justify-between items-center border-b border-noir-ink pb-2">
         <div>
-          <h3 class="font-serif font-black text-lg text-noir-ink">Underground Munitions & Motor Depot</h3>
-          <p class="text-[11px] text-noir-ink/70">Equip your soldiers with firearms and getaway vehicles.</p>
+          <h3 class="font-serif font-black text-lg text-noir-ink">Underground Munitions & Armory</h3>
+          <p class="text-[11px] text-noir-ink/70">Equip your soldiers with firearms and trench hardware.</p>
         </div>
         <button onclick="closeModal('modal-armory')" class="text-noir-ink font-bold text-lg px-2">✕</button>
       </div>
@@ -833,7 +984,7 @@
     </div>
   </div>
 
-  <!-- Modal 4: Construct Business (Racket or Clean Front) -->
+  <!-- Modal 4: Construct Business (Racket or Front) -->
   <div id="modal-build" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
     <div class="newsprint-panel w-full max-w-md p-4 rounded max-h-[85vh] overflow-y-auto space-y-3">
       <div class="flex justify-between items-center border-b border-noir-ink pb-2">
@@ -858,10 +1009,52 @@
     </div>
   </div>
 
-  <!-- Modal 5: Notice Alert -->
+  <!-- Modal 5: Smuggle Military Surplus -->
+  <div id="modal-surplus" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
+    <div class="newsprint-panel w-full max-w-md p-4 rounded space-y-3">
+      <div class="flex justify-between items-center border-b border-noir-ink pb-2">
+        <div>
+          <h3 class="font-serif font-black text-lg text-noir-ink">Lake Michigan Surplus Smuggling Run</h3>
+          <p class="text-[11px] text-noir-ink/70">Bribe harbor quartermasters to unload WWI European crates.</p>
+        </div>
+        <button onclick="closeModal('modal-surplus')" class="text-noir-ink font-bold text-lg px-2">✕</button>
+      </div>
+      <div class="space-y-2 text-xs text-noir-ink">
+        <p>
+          Dockside contacts have intercepted an Allied Great War munitions transport berthed along Calumet Pier. Paying off inspectors delivers a military crate into your stash:
+        </p>
+        <div class="bg-noir-ink/10 p-2.5 rounded font-mono space-y-1">
+          <div>• 1x Browning Automatic Rifle (B.A.R.)</div>
+          <div>• 1x Winchester 1897 Trench Shotgun</div>
+          <div>• 2x Mk II Pineapple Grenades</div>
+          <div>• 1x M1917 Gas Mask</div>
+        </div>
+        <div class="text-noir-blood font-bold text-[11px]">Bribe Cost: $2,500 Clean Bank Funds</div>
+        <button onclick="executeSurplusSmuggle()" class="w-full py-2 bg-noir-ink text-noir-newsprint font-bold text-xs uppercase tracking-wider rounded hover:opacity-90">
+          Pay Harbor Master & Smuggle Crates
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Purchase Motor Machine -->
+  <div id="modal-buy-vehicle" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
+    <div class="newsprint-panel w-full max-w-md p-4 rounded max-h-[85vh] overflow-y-auto space-y-3">
+      <div class="flex justify-between items-center border-b border-noir-ink pb-2">
+        <div>
+          <h3 class="font-serif font-black text-lg text-noir-ink">Lakeshore Motor Showroom</h3>
+          <p class="text-[11px] text-noir-ink/70">Acquire factory-new automobiles and trucks.</p>
+        </div>
+        <button onclick="closeModal('modal-buy-vehicle')" class="text-noir-ink font-bold text-lg px-2">✕</button>
+      </div>
+      <div class="space-y-2 text-xs" id="showroom-vehicles-list"></div>
+    </div>
+  </div>
+
+  <!-- Modal 7: Generic Notice Dialog -->
   <div id="modal-alert" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 hidden">
     <div class="newsprint-panel w-full max-w-sm p-4 rounded space-y-3 border-2 border-noir-ink text-center">
-      <div class="stamp-badge text-xs" id="alert-stamp">UNDERWORLD NOTICE</div>
+      <div class="stamp-badge text-xs" id="alert-stamp">CONFIDENTIAL NOTICE</div>
       <h3 class="font-serif font-black text-lg text-noir-ink" id="alert-title">Notice</h3>
       <p class="text-xs text-noir-ink/90 font-serif leading-relaxed" id="alert-body">Message</p>
       <div class="pt-2">
@@ -872,54 +1065,61 @@
     </div>
   </div>
 
-  <!-- FIXED BOTTOM NAVIGATION BAR DESIGNED FOR IOS THUMB REACH -->
+  <!-- ============================================================== -->
+  <!-- FIXED BOTTOM NAVIGATION BAR FOR IOS THUMB REACH (8 TABS)        -->
+  <!-- ============================================================== -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-noir-950/95 backdrop-blur-md border-t border-noir-700 px-1 py-1 safe-bottom shadow-2xl">
-    <div class="max-w-5xl mx-auto flex justify-around items-center text-[10px] sm:text-xs">
+    <div class="max-w-5xl mx-auto grid grid-cols-8 text-center text-[9px] sm:text-[11px]">
       
-      <button onclick="switchTab('ledger')" id="nav-ledger" class="flex flex-col items-center py-1 px-2 rounded text-noir-100 font-bold transition">
+      <button onclick="switchTab('ledger')" id="nav-ledger" class="flex flex-col items-center py-1 px-1 rounded text-noir-100 font-bold transition">
         <span class="text-base sm:text-lg">📰</span>
-        <span>Gazette</span>
+        <span class="truncate">Ledger</span>
       </button>
 
-      <button onclick="switchTab('crew')" id="nav-crew" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+      <button onclick="switchTab('crew')" id="nav-crew" class="flex flex-col items-center py-1 px-1 rounded text-noir-500 hover:text-noir-300 transition">
         <span class="text-base sm:text-lg">👥</span>
-        <span>Crew</span>
+        <span class="truncate">Crew</span>
       </button>
 
-      <button onclick="switchTab('businesses')" id="nav-businesses" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+      <button onclick="switchTab('businesses')" id="nav-businesses" class="flex flex-col items-center py-1 px-1 rounded text-noir-500 hover:text-noir-300 transition">
         <span class="text-base sm:text-lg">🏢</span>
-        <span>Rackets</span>
+        <span class="truncate">Rackets</span>
       </button>
 
-      <button onclick="switchTab('politics')" id="nav-politics" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+      <button onclick="switchTab('racing')" id="nav-racing" class="flex flex-col items-center py-1 px-1 rounded text-noir-500 hover:text-noir-300 transition">
+        <span class="text-base sm:text-lg">🏁</span>
+        <span class="truncate">Racing</span>
+      </button>
+
+      <button onclick="switchTab('garage')" id="nav-garage" class="flex flex-col items-center py-1 px-1 rounded text-noir-500 hover:text-noir-300 transition">
+        <span class="text-base sm:text-lg">🚗</span>
+        <span class="truncate">Garage</span>
+      </button>
+
+      <button onclick="switchTab('politics')" id="nav-politics" class="flex flex-col items-center py-1 px-1 rounded text-noir-500 hover:text-noir-300 transition">
         <span class="text-base sm:text-lg">⚖️</span>
-        <span>Law</span>
+        <span class="truncate">Law/War</span>
       </button>
 
-      <button onclick="switchTab('war')" id="nav-war" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
-        <span class="text-base sm:text-lg">⚔️</span>
-        <span>Wars</span>
-      </button>
-
-      <button onclick="switchTab('manual')" id="nav-manual" class="flex flex-col items-center py-1 px-2 rounded text-noir-500 hover:text-noir-300 transition">
+      <button onclick="switchTab('manual')" id="nav-manual" class="flex flex-col items-center py-1 px-1 rounded text-noir-500 hover:text-noir-300 transition">
         <span class="text-base sm:text-lg">📖</span>
-        <span>Manual</span>
+        <span class="truncate">Manual</span>
       </button>
 
-      <button onclick="switchTab('god')" id="nav-god" class="flex flex-col items-center py-1 px-2 rounded text-noir-bloodlight hover:text-white transition font-bold">
+      <button onclick="switchTab('god')" id="nav-god" class="flex flex-col items-center py-1 px-1 rounded text-noir-bloodlight hover:text-white transition font-bold">
         <span class="text-base sm:text-lg">⚡</span>
-        <span>God</span>
+        <span class="truncate">God</span>
       </button>
 
     </div>
   </nav>
 
   <!-- ============================================================== -->
-  <!-- JAVASCRIPT: ENGINE, ECONOMIC LOGIC, SOUND & STATE               -->
+  <!-- JAVASCRIPT: ENGINE, RACING PHYSICS, SOUND & STATE               -->
   <!-- ============================================================== -->
   <script>
     /* ============================================================
-       1. SYNTHESIZED AUDIO (Web Audio API - No External Assets)
+       1. SYNTHESIZED WEB AUDIO (Pure Native Web Audio API)
        ============================================================ */
     let audioCtx = null;
     let audioEnabled = true;
@@ -992,6 +1192,61 @@
           osc.start(t);
           osc.stop(t + 0.06);
         }
+      } else if (type === 'bar') {
+        // Heavy, lower frequency chug for Browning Automatic Rifle
+        for (let i = 0; i < 5; i++) {
+          const t = now + (i * 0.1);
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(90, t);
+          osc.frequency.exponentialRampToValueAtTime(25, t + 0.08);
+          gain.gain.setValueAtTime(0.35, t);
+          gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t);
+          osc.stop(t + 0.09);
+        }
+      } else if (type === 'explosion') {
+        // Grenade or dynamite boom
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(80, now);
+        osc.frequency.exponentialRampToValueAtTime(15, now + 0.4);
+        gain.gain.setValueAtTime(0.5, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.46);
+      } else if (type === 'engine') {
+        // V8 acceleration roar
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(80, now);
+        osc.frequency.linearRampToValueAtTime(240, now + 0.35);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.42);
+      } else if (type === 'race_bell') {
+        // Race start or checkered chime
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1500, now);
+        osc.frequency.setValueAtTime(2000, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.65);
       } else if (type === 'stamp') {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
@@ -1008,53 +1263,74 @@
     }
 
     /* ============================================================
-       2. GAME DATA DICTIONARIES (Districts, Rackets, Fronts, Gear)
+       2. GAME DATA DICTIONARIES (Vehicles, Weapons, Tracks, Fronts)
        ============================================================ */
     const DISTRICTS_DATA = [
-      { id: 'downtown', name: 'Downtown Loop', description: 'Financial nerve center, high-rolling card dens, and premiere jazz speakeasies.', multiplier: 1.3, maxSlots: 5 },
-      { id: 'little_italy', name: 'Little Italy', description: 'Traditional enclave, loyal shopkeepers, and fortified neighborhood stills.', multiplier: 1.0, maxSlots: 5 },
-      { id: 'docks', name: 'South Side Docks', description: 'Lake Michigan freighter piers, industrial mash cookers, and cargo warehouses.', multiplier: 1.15, maxSlots: 5 },
-      { id: 'north_shore', name: 'North Shore', description: 'Affluent avenues, wealthy bootleg clientele, and sprawling commercial laundering fronts.', multiplier: 1.4, maxSlots: 5 },
-      { id: 'cicero', name: 'Cicero District', description: 'Industrial railroad town, secluded roadhouses, and heavy enforcement headquarters.', multiplier: 0.95, maxSlots: 5 }
+      { id: 'the_loop', name: 'The Loop', description: 'Metropolitan heart, luxury speakeasies, and high-stakes gambling dens.', multiplier: 1.35, maxSlots: 5 },
+      { id: 'near_north', name: 'Near North Side', description: 'Affluent boulevards, prestige car dealerships, and Lake Shore drag venues.', multiplier: 1.3, maxSlots: 5 },
+      { id: 'stockyards', name: 'South Side Stockyards', description: 'Packing plants, rail junctions, and high-capacity clandestine stills.', multiplier: 1.1, maxSlots: 5 },
+      { id: 'west_side', name: 'West Side Enclave', description: 'Traditional neighborhood tenements, protection rings, and enforcer clubhouses.', multiplier: 1.0, maxSlots: 5 },
+      { id: 'cicero', name: 'Cicero District', description: 'Industrial railroad town, secluded roadhouses, and heavy chop shop garages.', multiplier: 0.95, maxSlots: 5 }
+    ];
+
+    // Vehicles Catalog
+    const VEHICLES_CATALOG = {
+      model_t: { id: 'model_t', name: 'Ford Model T Coupe', price: 650, baseSpeed: 38, baseArmor: 10, boozeCap: 15, desc: 'Everyman utility runabout.' },
+      buick_six: { id: 'buick_six', name: 'Modified Buick Six', price: 1800, baseSpeed: 62, baseArmor: 25, boozeCap: 35, desc: 'Balanced roadster, popular with bootleg drivers.' },
+      lincoln_l: { id: 'lincoln_l', name: 'Lincoln Model L Sedan', price: 3400, baseSpeed: 70, baseArmor: 35, boozeCap: 40, desc: 'Prestige luxury motor with high-speed escape power.' },
+      caddy_314: { id: 'caddy_314', name: 'Armored Cadillac 314', price: 5200, baseSpeed: 58, baseArmor: 75, boozeCap: 30, desc: 'Bulletproof glass and steel-lined passenger doors.' },
+      mack_truck: { id: 'mack_truck', name: 'Mack 3-Ton Freight Truck', price: 3800, baseSpeed: 32, baseArmor: 50, boozeCap: 120, desc: 'Heavy transport capable of moving massive liquor volume.' },
+      white_scout: { id: 'white_scout', name: 'WWI Armored White Scout Car', price: 8500, baseSpeed: 52, baseArmor: 95, boozeCap: 25, desc: 'Military surplus war machine with revolving machine-gun shield.' }
+    };
+
+    // Racing Circuits
+    const RACING_CIRCUITS = [
+      { id: 'lakeshore_drag', name: 'Lake Shore Midnight Sprint', distance: '1/4 Mile Drag', risk: 'Low', copHazard: 10, baseOdds: 2.2, desc: 'Flat paved boulevard favoring raw V8 top speed.' },
+      { id: 'calumet_dirt', name: 'Calumet River Mud Derby', distance: '3-Lap Dirt Oval', risk: 'Medium', copHazard: 20, baseOdds: 3.5, desc: 'Gravel and rutted clay testing driver cornering and drift handling.' },
+      { id: 'cicero_cross', name: 'Cicero Industrial Cross-Town', distance: 'Point-to-Point City Run', risk: 'High', copHazard: 35, baseOdds: 5.0, desc: 'Railroad crossings, blind alleys, and heavy squad car patrols.' }
+    ];
+
+    // Great War Military Surplus & Standard Arsenal
+    const ARSENAL_ITEMS = [
+      { id: 'revolver', name: '.38 Police Special Revolver', type: 'weapon', aimBonus: 8, muscleBonus: 3, price: 250, desc: 'Reliable six-shot pocket iron.' },
+      { id: 'shotgun', name: 'Sawed-Off Double Barrel', type: 'weapon', aimBonus: 18, muscleBonus: 14, price: 850, desc: 'Devastating close-quarter firepower.' },
+      { id: 'tommy', name: 'Thompson M1921 Submachine Gun', type: 'weapon', aimBonus: 30, muscleBonus: 20, price: 2200, desc: 'The "Chicago Typewriter". Dominates street skirmishes.' },
+      { id: 'bar', name: 'M1918 Browning Auto Rifle (B.A.R.)', type: 'military', aimBonus: 45, muscleBonus: 28, price: 3500, desc: 'Allied Great War automatic weapon. Shreds rival vehicles.' },
+      { id: 'trench_gun', name: 'Winchester 1897 "Trench Gun"', type: 'military', aimBonus: 26, muscleBonus: 32, price: 1600, desc: 'Slam-fire 12-gauge with heat shield and bayonet lug.' },
+      { id: 'grenades', name: 'Mk II Pineapple Grenades', type: 'military', aimBonus: 35, muscleBonus: 40, price: 1800, desc: 'Fragmentation explosives to breach fortified compounds.' },
+      { id: 'gas_mask', name: 'M1917 Trench Gas Mask', type: 'gear', aimBonus: 5, muscleBonus: 15, price: 900, desc: 'Complete immunity against police tear gas squads.' }
     ];
 
     // Illicit Dirty Rackets
     const RACKET_TYPES = {
       empty: { name: 'Vacant Plot', category: 'none', costDirty: 0, costClean: 0, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 0, efficiency: 0, heatGen: 0, desc: 'Empty storefront ready for acquisition.' },
-      protection: { name: 'Protection Shakedown', category: 'racket', costDirty: 1500, costClean: 0, boozeCost: 0, boozeYield: 0, dirtyYield: 850, launderLimit: 0, efficiency: 0, heatGen: 3, desc: 'Collect mandatory weekly tribute from local shopkeepers and street corners.' },
-      distillery: { name: 'Moonshine Still', category: 'racket', costDirty: 2800, costClean: 0, boozeCost: 0, boozeYield: 35, dirtyYield: 250, launderLimit: 0, efficiency: 0, heatGen: 5, desc: 'Copper boilers distilling corn mash into illicit high-proof moonshine barrels.' },
-      brewery: { name: 'Industrial Brewery', category: 'racket', costDirty: 5500, costClean: 0, boozeCost: 0, boozeYield: 80, dirtyYield: 400, launderLimit: 0, efficiency: 0, heatGen: 9, desc: 'Full-scale industrial plant brewing massive batches of bootleg beer.' },
-      speakeasy: { name: 'Hidden Speakeasy', category: 'racket', costDirty: 4200, costClean: 0, boozeCost: 25, boozeYield: 0, dirtyYield: 2800, launderLimit: 0, efficiency: 0, heatGen: 7, desc: 'Underground cocktail bar serving thirsty patrons. Requires regular booze barrels.' },
-      gambling: { name: 'Underground Gambling Den', category: 'racket', costDirty: 7500, costClean: 0, boozeCost: 12, boozeYield: 0, dirtyYield: 4200, launderLimit: 0, efficiency: 0, heatGen: 11, desc: 'Craps, roulette tables, and illicit high-stakes poker matches for wealthy punters.' },
-      brothel: { name: 'Brothel & Dope Den', category: 'racket', costDirty: 6000, costClean: 0, boozeCost: 0, boozeYield: 0, dirtyYield: 3300, launderLimit: 0, efficiency: 0, heatGen: 12, desc: 'Discreet back-alley parlor operating lucrative vice services.' },
-      hijacking: { name: 'Freight Hijacking Ring', category: 'racket', costDirty: 3800, costClean: 0, boozeCost: 0, boozeYield: 15, dirtyYield: 1900, launderLimit: 0, efficiency: 0, heatGen: 10, desc: 'Squad intercepting rival delivery trucks and freight trains.' }
+      protection: { name: 'Protection Shakedown', category: 'racket', costDirty: 1500, costClean: 0, boozeCost: 0, boozeYield: 0, dirtyYield: 850, launderLimit: 0, efficiency: 0, heatGen: 3, desc: 'Collect tribute from shopkeepers and street vendors.' },
+      distillery: { name: 'Moonshine Still', category: 'racket', costDirty: 2800, costClean: 0, boozeCost: 0, boozeYield: 35, dirtyYield: 250, launderLimit: 0, efficiency: 0, heatGen: 5, desc: 'Boils corn mash into potent illicit booze barrels.' },
+      brewery: { name: 'Industrial Brewery', category: 'racket', costDirty: 5500, costClean: 0, boozeCost: 0, boozeYield: 80, dirtyYield: 400, launderLimit: 0, efficiency: 0, heatGen: 9, desc: 'Industrial facility brewing large batches of beer.' },
+      speakeasy: { name: 'Hidden Speakeasy', category: 'racket', costDirty: 4200, costClean: 0, boozeCost: 25, boozeYield: 0, dirtyYield: 2800, launderLimit: 0, efficiency: 0, heatGen: 7, desc: 'Underground cocktail jazz lounge. Consumes booze barrels.' },
+      gambling: { name: 'Underground Gambling Den', category: 'racket', costDirty: 7500, costClean: 0, boozeCost: 12, boozeYield: 0, dirtyYield: 4200, launderLimit: 0, efficiency: 0, heatGen: 11, desc: 'Craps, roulette tables, and high-stakes card games.' },
+      brothel: { name: 'Vice Parlor', category: 'racket', costDirty: 6000, costClean: 0, boozeCost: 0, boozeYield: 0, dirtyYield: 3300, launderLimit: 0, efficiency: 0, heatGen: 12, desc: 'Discreet back-room entertainment suites.' },
+      hijacking: { name: 'Cargo Hijacking Ring', category: 'racket', costDirty: 3800, costClean: 0, boozeCost: 0, boozeYield: 15, dirtyYield: 1900, launderLimit: 0, efficiency: 0, heatGen: 10, desc: 'Ambush rival freight trucks along highway arteries.' }
     };
 
     // Commercial Clean Fronts
     const FRONT_TYPES = {
-      dry_cleaners: { name: 'Steam Dry Cleaners', category: 'front', costDirty: 2000, costClean: 3500, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 2000, efficiency: 0.75, heatGen: -2, desc: 'Steam pressing parlor laundering cash invoices at 75% clean efficiency.' },
-      florist: { name: 'Floral Boutique', category: 'front', costDirty: 1500, costClean: 2800, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 1400, efficiency: 0.80, heatGen: -3, desc: 'Quaint flower shop handling clean corporate deliveries and funerals.' },
-      funeral_home: { name: 'Funeral Mortuary', category: 'front', costDirty: 3000, costClean: 5500, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 3800, efficiency: 0.82, heatGen: -4, desc: 'Somber mortuary providing flawless paper invoices and secret coffin transport.' },
-      meat_packing: { name: 'Meat Packing Plant', category: 'front', costDirty: 4500, costClean: 8000, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 6000, efficiency: 0.78, heatGen: -2, desc: 'Massive stockyard commercial front capable of masking large dirty cash volumes.' },
-      harbor_docks: { name: 'Import/Export Shipping Docks', category: 'front', costDirty: 6000, costClean: 11000, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 9500, efficiency: 0.85, heatGen: -5, desc: 'Premier shipping docks with international billings and unmatched 85% clean recovery.' }
+      dealership: { name: 'Lakeshore Motor Sales', category: 'front', costDirty: 4000, costClean: 6000, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 4500, efficiency: 0.82, heatGen: -3, desc: 'Premier auto showroom laundering cash through legitimate luxury sales.' },
+      dry_cleaners: { name: 'Steam Dry Cleaners', category: 'front', costDirty: 2000, costClean: 3500, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 2000, efficiency: 0.75, heatGen: -2, desc: 'Steam pressing plant laundering cash invoices at 75% efficiency.' },
+      funeral_home: { name: 'Funeral Mortuary', category: 'front', costDirty: 3000, costClean: 5500, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 3800, efficiency: 0.80, heatGen: -4, desc: 'Mortuary providing flawless paper invoices and secret coffin transports.' },
+      meat_packing: { name: 'Meat Packing Plant', category: 'front', costDirty: 4500, costClean: 8000, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 6000, efficiency: 0.78, heatGen: -2, desc: 'Large stockyard enterprise masking major paper money movements.' },
+      harbor_docks: { name: 'Import/Export Shipping Docks', category: 'front', costDirty: 6000, costClean: 11000, boozeCost: 0, boozeYield: 0, dirtyYield: 0, launderLimit: 9500, efficiency: 0.85, heatGen: -5, desc: 'Deep harbor docks handling international billings and military cargo.' }
     };
 
-    // Unified lookup
     const ALL_BUSINESS_TYPES = { ...RACKET_TYPES, ...FRONT_TYPES };
 
-    const ARMORY_ITEMS = [
-      { id: 'revolver', name: '.38 Police Special Revolver', type: 'weapon', aimBonus: 8, muscleBonus: 3, price: 250, desc: 'Reliable six-shot pocket iron.' },
-      { id: 'shotgun', name: 'Sawed-Off Double Barrel', type: 'weapon', aimBonus: 18, muscleBonus: 14, price: 850, desc: 'Devastating close-quarter firepower.' },
-      { id: 'tommy', name: 'Thompson Submachine Gun', type: 'weapon', aimBonus: 32, muscleBonus: 22, price: 2400, desc: 'The "Chicago Typewriter". Shreds ambushes.' },
-      { id: 'sedan', name: 'Armored V8 Coupe', type: 'vehicle', driveBonus: 28, stealthBonus: 12, price: 3200, desc: 'High-speed getaway transport with steel plates.' }
-    ];
-
     const ORDERS_LIST = [
-      { id: 'idle', name: 'Rest / Keep Low', desc: 'Recovers wounded health and keeps personal heat minimal.' },
+      { id: 'idle', name: 'Rest / Keep Low', desc: 'Recovers wounded health and minimizes personal heat.' },
       { id: 'extort', name: 'Extort Businesses', desc: 'Shake down shopkeepers for additional dirty cash (+Heat).' },
       { id: 'patrol', name: 'Patrol Territory', desc: 'Defends owned plots and repels rival drive-by raids.' },
       { id: 'bribe', name: 'Grease Beat Detectives', desc: 'Distributes cash to local cops to cool neighborhood heat.' },
-      { id: 'scout', name: 'Scout Rival Turfs', desc: 'Maps enemy compounds and discovers vulnerable speakeasies.' }
+      { id: 'scout', name: 'Scout Rival Turfs', desc: 'Maps enemy compounds and discovers vulnerable speakeasies.' },
+      { id: 'chop', name: 'Work Speed Garage', desc: 'Maintains vehicles and prepares engines for midnight runs.' }
     ];
 
     /* ============================================================
@@ -1068,10 +1344,14 @@
       booze: 120,
       heat: 15,
       isInvincible: false,
-      activeDistrictTab: 'little_italy',
+      activeDistrictTab: 'the_loop',
       selectedHoodId: null,
 
-      // Politics & Legal Firm
+      // Racing State
+      selectedRaceTrack: 'lakeshore_drag',
+      raceReputation: 'Veteran Racer',
+
+      // Politics & Law
       policeBribes: {
         beatCopPaid: 2,
         commissionerWeeksRemaining: 0,
@@ -1081,30 +1361,30 @@
 
       // Districts Roster (5 districts x 5 plots each)
       districts: {
-        downtown: [
+        the_loop: [
           { slot: 0, type: 'speakeasy', level: 1 },
           { slot: 1, type: 'gambling', level: 1 },
           { slot: 2, type: 'empty', level: 0 },
           { slot: 3, type: 'empty', level: 0 },
           { slot: 4, type: 'empty', level: 0 }
         ],
-        little_italy: [
-          { slot: 0, type: 'protection', level: 1 },
-          { slot: 1, type: 'distillery', level: 1 },
-          { slot: 2, type: 'speakeasy', level: 1 },
+        near_north: [
+          { slot: 0, type: 'dealership', level: 1 },
+          { slot: 1, type: 'empty', level: 0 },
+          { slot: 2, type: 'empty', level: 0 },
           { slot: 3, type: 'empty', level: 0 },
           { slot: 4, type: 'empty', level: 0 }
         ],
-        docks: [
+        stockyards: [
           { slot: 0, type: 'distillery', level: 1 },
           { slot: 1, type: 'dry_cleaners', level: 1 },
           { slot: 2, type: 'empty', level: 0 },
           { slot: 3, type: 'empty', level: 0 },
           { slot: 4, type: 'empty', level: 0 }
         ],
-        north_shore: [
-          { slot: 0, type: 'florist', level: 1 },
-          { slot: 1, type: 'empty', level: 0 },
+        west_side: [
+          { slot: 0, type: 'protection', level: 1 },
+          { slot: 1, type: 'distillery', level: 1 },
           { slot: 2, type: 'empty', level: 0 },
           { slot: 3, type: 'empty', level: 0 },
           { slot: 4, type: 'empty', level: 0 }
@@ -1118,13 +1398,20 @@
         ]
       },
 
-      // Crew Soldiers
+      // Crew Gangsters
       crew: [
-        { id: 'boss', name: 'Don Salvatore (You)', title: 'The Capo', muscle: 70, brains: 88, stealth: 65, shooting: 78, driving: 55, upkeep: 0, health: 100, status: 'Active', weapon: 'tommy', vehicle: 'sedan', order: 'patrol' },
-        { id: 'hood_1', name: 'Frankie "Two-Times"', title: 'Enforcer', muscle: 82, brains: 42, stealth: 58, shooting: 84, driving: 62, upkeep: 350, health: 100, status: 'Active', weapon: 'shotgun', vehicle: null, order: 'extort' },
-        { id: 'hood_2', name: 'Jimmy "The Needle" Vitucci', title: 'Mash Cook', muscle: 48, brains: 82, stealth: 72, shooting: 45, driving: 68, upkeep: 300, health: 100, status: 'Active', weapon: 'revolver', vehicle: null, order: 'idle' },
-        { id: 'hood_3', name: 'Johnny "Fast Hands" Ross', title: 'Wheelman', muscle: 54, brains: 58, stealth: 76, shooting: 62, driving: 94, upkeep: 320, health: 100, status: 'Active', weapon: 'revolver', vehicle: 'sedan', order: 'scout' },
-        { id: 'hood_4', name: 'Vincenzo "The Shadow" Borelli', title: 'Infiltrator', muscle: 52, brains: 68, stealth: 90, shooting: 70, driving: 58, upkeep: 380, health: 100, status: 'Active', weapon: 'revolver', vehicle: null, order: 'bribe' }
+        { id: 'boss', name: 'Don Salvatore (You)', title: 'The Capo', muscle: 70, brains: 88, stealth: 65, shooting: 78, driving: 65, upkeep: 0, health: 100, status: 'Active', weapon: 'tommy', assignedCarId: 'car_lincoln', order: 'patrol' },
+        { id: 'hood_1', name: 'Frankie "Two-Times"', title: 'Enforcer', muscle: 82, brains: 42, stealth: 58, shooting: 84, driving: 62, upkeep: 350, health: 100, status: 'Active', weapon: 'shotgun', assignedCarId: null, order: 'extort' },
+        { id: 'hood_2', name: 'Jimmy "The Needle" Vitucci', title: 'Mash Cook', muscle: 48, brains: 82, stealth: 72, shooting: 45, driving: 68, upkeep: 300, health: 100, status: 'Active', weapon: 'revolver', assignedCarId: null, order: 'idle' },
+        { id: 'hood_3', name: 'Johnny "Fast Hands" Ross', title: 'Top Wheelman', muscle: 56, brains: 60, stealth: 74, shooting: 64, driving: 95, upkeep: 350, health: 100, status: 'Active', weapon: 'revolver', assignedCarId: 'car_buick', order: 'scout' },
+        { id: 'hood_4', name: 'Vincenzo "The Shadow" Borelli', title: 'Infiltrator', muscle: 52, brains: 68, stealth: 90, shooting: 70, driving: 58, upkeep: 380, health: 100, status: 'Active', weapon: 'revolver', assignedCarId: null, order: 'bribe' }
+      ],
+
+      // Garage Fleet Inventory
+      fleet: [
+        { id: 'car_model_t', modelId: 'model_t', name: 'Black Model T Coupe', speedMod: 0, armorMod: 0, hoochMod: 0, hasRam: false, condition: 100 },
+        { id: 'car_buick', modelId: 'buick_six', name: 'Whispering Buick Six (Tuned)', speedMod: 20, armorMod: 10, hoochMod: 15, hasRam: true, condition: 100 },
+        { id: 'car_lincoln', modelId: 'lincoln_l', name: 'Capo Lincoln V8 Sedan', speedMod: 15, armorMod: 20, hoochMod: 10, hasRam: false, condition: 100 }
       ],
 
       // Armory Stash
@@ -1132,33 +1419,36 @@
         revolver: 2,
         shotgun: 1,
         tommy: 0,
-        sedan: 0
+        bar: 0,
+        trench_gun: 0,
+        grenades: 1,
+        gas_mask: 1
       },
 
-      // Rivals
+      // Rival Families
       rivals: [
-        { id: 'moretti', name: 'The Moretti Family', boss: 'Don Carlo Moretti', territory: 'Little Italy & Loop', strength: 75, relation: -35, alive: true },
-        { id: 'northside', name: 'The North Side Mob', boss: 'Dean "Spike" Weiss', territory: 'North Shore & Docks', strength: 70, relation: -20, alive: true },
-        { id: 'odonnell', name: 'The O\'Donnell Clan', boss: 'Marcus "The Banker" Vance', territory: 'Cicero & South Side', strength: 65, relation: 15, alive: true }
+        { id: 'moretti', name: 'The Moretti Family', boss: 'Don Carlo Moretti', territory: 'West Side & Loop', strength: 75, relation: -35, alive: true },
+        { id: 'northside', name: 'The North Side Mob', boss: 'Dean "Spike" Weiss', territory: 'Near North & Docks', strength: 70, relation: -20, alive: true },
+        { id: 'odonnell', name: 'The O\'Donnell Clan', boss: 'Marcus "The Banker" Vance', territory: 'Cicero & Stockyards', strength: 65, relation: 15, alive: true }
       ],
 
       lastDispatches: [
-        'Bootleg stills in Little Italy bubbling steadily without disruption.',
-        'Cook County deputy pocketed grease money along the railroad yards.',
-        'Don Salvatore held a council establishing control over the Downtown Loop.'
+        'Bootleg stills in the Stockyards bubbling smoothly without incident.',
+        'Lakeshore Motor Sales posted strong legitimate car sales figures.',
+        'Cook County deputies were bribed along the railroad freight lines.'
       ],
       lastFinancials: {
         income: 4200,
         boozeRev: 2800,
-        salaries: 1350,
+        salaries: 1380,
         bribes: 600,
-        laundered: 1500,
-        net: 4050
+        laundered: 1800,
+        net: 4020
       }
     };
 
     let state = JSON.parse(localStorage.getItem('empire_1926_save') || 'null');
-    if (!state) {
+    if (!state || !state.fleet) {
       state = JSON.parse(JSON.stringify(defaultState));
     }
 
@@ -1171,11 +1461,11 @@
     }
 
     /* ============================================================
-       4. UI NAVIGATION
+       4. NAVIGATION & TAB SWITCHER
        ============================================================ */
     function switchTab(tabId) {
       playSound('typewriter');
-      const tabs = ['ledger', 'crew', 'businesses', 'politics', 'war', 'manual', 'god'];
+      const tabs = ['ledger', 'crew', 'businesses', 'racing', 'garage', 'politics', 'manual', 'god'];
       tabs.forEach(t => {
         const el = document.getElementById('tab-' + t);
         const nav = document.getElementById('nav-' + t);
@@ -1218,13 +1508,14 @@
        5. CORE RENDERING PIPELINE
        ============================================================ */
     function renderUI() {
-      // Top status row
+      // Header status
       document.getElementById('stat-date').textContent = `Week ${state.week} - Oct ${state.year}`;
       document.getElementById('news-date').textContent = `Chicago, Illinois • Week ${state.week}, ${state.year}`;
       document.getElementById('stat-dirty').textContent = `$${state.dirtyCash.toLocaleString()}`;
       document.getElementById('stat-clean').textContent = `$${state.cleanCash.toLocaleString()}`;
       document.getElementById('stat-booze').textContent = `${state.booze} bbl`;
       document.getElementById('stat-heat-num').textContent = `${state.heat}%`;
+      document.getElementById('stat-fleet-count').textContent = `${state.fleet.length} Machines`;
 
       const heatBar = document.getElementById('stat-heat-bar');
       heatBar.style.width = `${Math.min(100, state.heat)}%`;
@@ -1235,9 +1526,6 @@
       } else {
         heatBar.className = 'bg-noir-emerald h-full';
       }
-
-      const activeMadeMen = state.crew.filter(c => c.status === 'Active').length;
-      document.getElementById('stat-crew-count').textContent = `${activeMadeMen} Hoods`;
 
       let totalSlots = 25;
       let ownedSlots = 0;
@@ -1252,10 +1540,11 @@
       renderLedgerTab();
       renderCrewTab();
       renderBusinessesTab();
+      renderRacingTab();
+      renderGarageTab();
       renderPoliticsTab();
-      renderWarTab();
 
-      // Invincibility Toggle state
+      // God Mode Button indicator
       const godBtn = document.getElementById('btn-god-invincible');
       if (state.isInvincible) {
         godBtn.textContent = 'ACTIVE (INVINCIBLE)';
@@ -1320,7 +1609,6 @@
         `;
       }).join('');
 
-      // Supply calculations
       let distCount = 0;
       let distProd = 0;
       let speakCount = 0;
@@ -1346,13 +1634,13 @@
       document.getElementById('supply-launder-rate').textContent = `$${launderRate.toLocaleString()} capacity/wk`;
     }
 
-    /* RENDER: TAB 2 (CREW) */
+    /* RENDER: TAB 2 (CREW & ARSENAL) */
     function renderCrewTab() {
       const container = document.getElementById('crew-list');
       container.innerHTML = state.crew.map(hood => {
         const orderObj = ORDERS_LIST.find(o => o.id === hood.order) || ORDERS_LIST[0];
-        const weaponObj = ARMORY_ITEMS.find(a => a.id === hood.weapon);
-        const vehicleObj = ARMORY_ITEMS.find(a => a.id === hood.vehicle);
+        const weaponObj = ARSENAL_ITEMS.find(a => a.id === hood.weapon);
+        const assignedCar = state.fleet.find(f => f.id === hood.assignedCarId);
 
         let statusClass = 'text-noir-emerald';
         if (hood.status === 'Hospital') statusClass = 'text-noir-300';
@@ -1389,19 +1677,19 @@
                 </div>
                 <div class="bg-noir-850 p-1 rounded border border-noir-800">
                   <span class="text-noir-500 block">Driving</span>
-                  <span class="font-bold text-noir-100">${hood.driving}</span>
+                  <span class="font-bold text-noir-emerald font-bold">${hood.driving}</span>
                 </div>
               </div>
 
-              <!-- Loadout Info -->
+              <!-- Hardware Loadout -->
               <div class="text-[11px] space-y-0.5 text-noir-300 bg-noir-850 p-1.5 rounded border border-noir-800">
                 <div class="flex justify-between">
                   <span>Hardware:</span>
-                  <span class="font-bold text-noir-100">${weaponObj ? weaponObj.name : 'Unarmed'}</span>
+                  <span class="font-bold ${weaponObj && weaponObj.type === 'military' ? 'text-noir-bloodlight' : 'text-noir-100'}">${weaponObj ? weaponObj.name : 'Unarmed'}</span>
                 </div>
                 <div class="flex justify-between">
-                  <span>Vehicle:</span>
-                  <span class="font-bold text-noir-300">${vehicleObj ? vehicleObj.name : 'On Foot'}</span>
+                  <span>Assigned Car:</span>
+                  <span class="font-bold text-noir-200">${assignedCar ? assignedCar.name : 'On Foot'}</span>
                 </div>
                 <div class="flex justify-between">
                   <span>Vigor:</span>
@@ -1410,25 +1698,25 @@
               </div>
             </div>
 
-            <div class="pt-2 border-t border-noir-700 flex gap-1.5 text-xs">
+            <div class="pt-2 border-t border-noir-700 flex flex-wrap gap-1.5 text-xs">
               ${hood.status === 'Active' ? `
                 <button onclick="openOrderModal('${hood.id}')" class="flex-1 py-1.5 bg-noir-100 text-noir-ink font-bold rounded hover:bg-noir-aged transition">
                   Order: ${orderObj.name}
                 </button>
                 <button onclick="openEquipModal('${hood.id}')" class="px-2.5 py-1.5 bg-noir-850 text-noir-100 border border-noir-600 rounded hover:text-white transition">
-                  Equip
+                  Equip Hardware
                 </button>
               ` : ''}
 
               ${hood.status === 'Jail' ? `
                 <button onclick="bailHood('${hood.id}')" class="w-full py-1.5 bg-noir-blood text-noir-100 font-bold rounded hover:bg-noir-bloodlight transition">
-                  Post Bail ($1,200 Clean Cash)
+                  Post Court Bail ($1,200 Clean)
                 </button>
               ` : ''}
 
               ${hood.status === 'Hospital' ? `
                 <button onclick="treatHood('${hood.id}')" class="w-full py-1.5 bg-noir-800 text-noir-100 border border-noir-600 font-bold rounded hover:bg-noir-700 transition">
-                  Discreet Mob Clinic ($800 Dirty Cash)
+                  Discreet Surgery Clinic ($800 Dirty)
                 </button>
               ` : ''}
             </div>
@@ -1437,7 +1725,7 @@
       }).join('');
     }
 
-    /* RENDER: TAB 3 (BUSINESSES, RACKETS & FRONTS) */
+    /* RENDER: TAB 3 (BUSINESSES & FRONTS) */
     function renderBusinessesTab() {
       const tabContainer = document.getElementById('district-tabs');
       tabContainer.innerHTML = DISTRICTS_DATA.map(dist => {
@@ -1493,7 +1781,7 @@
                   ` : `
                     <div class="flex gap-1 text-[11px]">
                       <button onclick="upgradeBusiness('${currentDist.id}', ${idx})" class="flex-1 py-1 bg-noir-850 text-noir-100 border border-noir-600 rounded hover:border-noir-300">
-                        Fortify (Lvl ${s.level || 1})
+                        Fortify (Tier ${s.level || 1})
                       </button>
                       <button onclick="demolishBusiness('${currentDist.id}', ${idx})" class="px-2 py-1 bg-noir-950 text-noir-bloodlight border border-noir-blood rounded hover:bg-noir-blood hover:text-white">
                         Shutter
@@ -1514,7 +1802,161 @@
       renderBusinessesTab();
     }
 
-    /* RENDER: TAB 4 (POLITICS & LAW) */
+    /* RENDER: TAB 4 (MIDNIGHT RACING CIRCUIT) */
+    function renderRacingTab() {
+      // Circuit Options
+      const circuitBox = document.getElementById('race-circuit-options');
+      circuitBox.innerHTML = RACING_CIRCUITS.map(circ => {
+        const isSel = state.selectedRaceTrack === circ.id;
+        return `
+          <button onclick="selectRaceCircuit('${circ.id}')" class="w-full p-2 rounded text-left border flex flex-col justify-between transition ${
+            isSel ? 'bg-noir-100 text-noir-ink border-noir-100 font-bold' : 'bg-noir-850 text-noir-300 border-noir-700 hover:border-noir-500'
+          }">
+            <div class="flex justify-between items-center text-xs">
+              <span>${circ.name}</span>
+              <span class="${isSel ? 'text-noir-blood' : 'text-noir-emerald'}">${circ.baseOdds}:1 Odds</span>
+            </div>
+            <div class="text-[10px] ${isSel ? 'text-noir-ink/70' : 'text-noir-500'} mt-0.5">${circ.distance} • Hazard: ${circ.copHazard}% Cop Watch</div>
+          </button>
+        `;
+      }).join('');
+
+      // Populate Driver dropdown
+      const driverSel = document.getElementById('race-driver-select');
+      const activeDrivers = state.crew.filter(c => c.status === 'Active');
+      driverSel.innerHTML = activeDrivers.map(c => {
+        return `<option value="${c.id}">${c.name} (Driving: ${c.driving})</option>`;
+      }).join('');
+
+      // Populate Vehicle dropdown
+      const vehicleSel = document.getElementById('race-vehicle-select');
+      vehicleSel.innerHTML = state.fleet.map(v => {
+        const cat = VEHICLES_CATALOG[v.modelId] || VEHICLES_CATALOG.model_t;
+        const totalSpd = cat.baseSpeed + v.speedMod;
+        return `<option value="${v.id}">${v.name} (${totalSpd} mph)</option>`;
+      }).join('');
+
+      updateRaceOddsPreview();
+    }
+
+    function selectRaceCircuit(circuitId) {
+      state.selectedRaceTrack = circuitId;
+      playSound('typewriter');
+      renderRacingTab();
+    }
+
+    function updateRaceOddsPreview() {
+      const driverSel = document.getElementById('race-driver-select');
+      const vehicleSel = document.getElementById('race-vehicle-select');
+      if (!driverSel || !vehicleSel) return;
+
+      const driver = state.crew.find(c => c.id === driverSel.value) || state.crew[0];
+      const vehicle = state.fleet.find(f => f.id === vehicleSel.value) || state.fleet[0];
+      const circuit = RACING_CIRCUITS.find(c => c.id === state.selectedRaceTrack) || RACING_CIRCUITS[0];
+
+      if (!driver || !vehicle || !circuit) return;
+
+      const cat = VEHICLES_CATALOG[vehicle.modelId] || VEHICLES_CATALOG.model_t;
+      const totalSpeed = cat.baseSpeed + vehicle.speedMod;
+
+      // Odds calculation
+      let calculatedOdds = circuit.baseOdds;
+      if (driver.driving > 80) calculatedOdds -= 0.6;
+      if (totalSpeed > 60) calculatedOdds -= 0.5;
+      calculatedOdds = Math.max(1.3, calculatedOdds);
+
+      document.getElementById('race-odds-tag').textContent = `${calculatedOdds.toFixed(1)} to 1`;
+      
+      const wager = parseInt(document.getElementById('race-wager-input').value) || 1000;
+      const payout = Math.round(wager * calculatedOdds);
+      document.getElementById('race-potential-payout').textContent = `$${payout.toLocaleString()}`;
+
+      document.getElementById('race-stats-preview').innerHTML = `
+        <div class="flex justify-between">
+          <span class="text-noir-500">Pilot Skill:</span>
+          <span class="font-bold text-noir-100">${driver.name} (Dr: ${driver.driving})</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-noir-500">Top Speed:</span>
+          <span class="font-bold text-noir-emerald">${totalSpeed} mph</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-noir-500">Durability / Ram:</span>
+          <span class="font-bold text-noir-300">${cat.baseArmor + vehicle.armorMod} Armor ${vehicle.hasRam ? '• Ramming Grille' : ''}</span>
+        </div>
+      `;
+    }
+
+    function setRaceWager(amount) {
+      document.getElementById('race-wager-input').value = amount;
+      playSound('cash');
+      updateRaceOddsPreview();
+    }
+
+    /* RENDER: TAB 5 (GARAGE & CHOP SHOP) */
+    function renderGarageTab() {
+      const container = document.getElementById('garage-vehicles-list');
+      container.innerHTML = state.fleet.map((veh, idx) => {
+        const cat = VEHICLES_CATALOG[veh.modelId] || VEHICLES_CATALOG.model_t;
+        const totalSpd = cat.baseSpeed + veh.speedMod;
+        const totalArmor = cat.baseArmor + veh.armorMod;
+        const totalHooch = cat.boozeCap + veh.hoochMod;
+
+        return `
+          <div class="bg-noir-900 border border-noir-700 p-3 rounded space-y-2 flex flex-col justify-between shadow">
+            <div>
+              <div class="flex justify-between items-start border-b border-noir-700 pb-1.5">
+                <div>
+                  <h4 class="font-bold text-sm text-noir-100">${veh.name}</h4>
+                  <p class="text-[10px] text-noir-500">${cat.desc}</p>
+                </div>
+                <span class="text-xs font-mono font-bold text-noir-emerald">${veh.condition}% Cond</span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-1 text-[11px] font-mono text-center my-2">
+                <div class="bg-noir-850 p-1.5 rounded border border-noir-800">
+                  <span class="text-noir-500 text-[10px] block">Top Speed</span>
+                  <span class="font-bold text-noir-100">${totalSpd} mph</span>
+                </div>
+                <div class="bg-noir-850 p-1.5 rounded border border-noir-800">
+                  <span class="text-noir-500 text-[10px] block">Armor Rating</span>
+                  <span class="font-bold text-noir-100">${totalArmor}</span>
+                </div>
+                <div class="bg-noir-850 p-1.5 rounded border border-noir-800">
+                  <span class="text-noir-500 text-[10px] block">Cargo Tanks</span>
+                  <span class="font-bold text-noir-100">${totalHooch} bbl</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tuning Upgrade Controls -->
+            <div class="space-y-1.5 pt-2 border-t border-noir-700">
+              <div class="flex gap-1 text-xs">
+                <button onclick="installVehicleMod(${idx}, 'speed')" class="flex-1 py-1 bg-noir-850 border border-noir-700 rounded text-noir-200 hover:text-white">
+                  + V8 Bore ($1.8k)
+                </button>
+                <button onclick="installVehicleMod(${idx}, 'tanks')" class="flex-1 py-1 bg-noir-850 border border-noir-700 rounded text-noir-200 hover:text-white">
+                  + Tanks ($1.2k)
+                </button>
+                <button onclick="installVehicleMod(${idx}, 'armor')" class="flex-1 py-1 bg-noir-850 border border-noir-700 rounded text-noir-200 hover:text-white">
+                  + Armor ($2.2k)
+                </button>
+              </div>
+              <div class="flex gap-1 text-xs">
+                <button onclick="installVehicleMod(${idx}, 'ram')" class="flex-1 py-1 bg-noir-850 border border-noir-700 rounded text-noir-200 hover:text-white">
+                  + Ram Grille ($950)
+                </button>
+                <button onclick="chopVehicle(${idx})" class="px-2.5 py-1 bg-noir-950 text-noir-bloodlight border border-noir-blood rounded hover:bg-noir-blood hover:text-white">
+                  Chop for Scrap
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* RENDER: TAB 6 (POLITICS & CLAN WARS) */
     function renderPoliticsTab() {
       document.getElementById('pol-cop-status').textContent = `${state.policeBribes.beatCopPaid} Precincts Greased`;
       
@@ -1548,10 +1990,8 @@
         lawyerTierEl.textContent = 'Supreme Court Appellate Counsel ($1,800/wk)';
         lawyerRateEl.textContent = '95% Immediate Dismissal';
       }
-    }
 
-    /* RENDER: TAB 5 (MOB WARS & RIVALS) */
-    function renderWarTab() {
+      // Render Rival Families
       const container = document.getElementById('rivals-container');
       container.innerHTML = state.rivals.map(rival => {
         return `
@@ -1559,7 +1999,7 @@
             <div>
               <div class="flex justify-between items-start border-b border-noir-700 pb-1.5">
                 <div>
-                  <h3 class="font-title text-sm ${rival.alive ? 'text-noir-100' : 'text-noir-600 line-through'}">${rival.name}</h3>
+                  <h4 class="font-title text-sm ${rival.alive ? 'text-noir-100' : 'text-noir-600 line-through'}">${rival.name}</h4>
                   <p class="text-[10px] text-noir-500">Capo: ${rival.boss}</p>
                 </div>
                 <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${
@@ -1578,10 +2018,6 @@
                   <span>Combat Power:</span>
                   <span class="font-bold ${rival.strength > 50 ? 'text-noir-bloodlight' : 'text-noir-300'}">${rival.strength}%</span>
                 </div>
-                <div class="flex justify-between text-noir-300">
-                  <span>Diplomacy:</span>
-                  <span class="font-bold ${rival.relation < 0 ? 'text-noir-bloodlight' : 'text-noir-emerald'}">${rival.relation}</span>
-                </div>
               </div>
             </div>
 
@@ -1594,7 +2030,7 @@
                   Raid Turf
                 </button>
               ` : `
-                <div class="w-full text-center text-[10px] italic text-noir-600 py-1">Faction Dissolved</div>
+                <div class="w-full text-center text-[10px] italic text-noir-600 py-1">Outfit Dissolved</div>
               `}
             </div>
           </div>
@@ -1603,10 +2039,604 @@
     }
 
     /* ============================================================
-       6. INTERACTIVE ACTIONS & MECHANICS
+       6. THE MIDNIGHT RACING SIMULATION ENGINE
        ============================================================ */
+    function startMidnightRace() {
+      const wager = parseInt(document.getElementById('race-wager-input').value) || 1000;
+      if (state.dirtyCash < wager) {
+        showAlert('Insufficient Dirty Cash', 'You do not have enough street cash to place this racing bet.', 'WAGER REJECTED');
+        return;
+      }
 
-    /* 6.1 Order Assignment Modal */
+      const driverSel = document.getElementById('race-driver-select');
+      const vehicleSel = document.getElementById('race-vehicle-select');
+      const driver = state.crew.find(c => c.id === driverSel.value) || state.crew[0];
+      const vehicle = state.fleet.find(f => f.id === vehicleSel.value) || state.fleet[0];
+      const circuit = RACING_CIRCUITS.find(c => c.id === state.selectedRaceTrack) || RACING_CIRCUITS[0];
+
+      state.dirtyCash -= wager;
+      playSound('engine');
+      playSound('race_bell');
+
+      const logBox = document.getElementById('race-log-box');
+      logBox.innerHTML = '';
+
+      function addLog(msg, colorClass = 'text-noir-ink') {
+        const row = document.createElement('div');
+        row.className = colorClass;
+        row.textContent = msg;
+        logBox.appendChild(row);
+        logBox.scrollTop = logBox.scrollHeight;
+      }
+
+      addLog(`[START] Flag drops at ${circuit.name}! ${driver.name} revs the ${vehicle.name}.`, 'font-bold text-noir-ink');
+
+      const cat = VEHICLES_CATALOG[vehicle.modelId] || VEHICLES_CATALOG.model_t;
+      const totalSpeed = cat.baseSpeed + vehicle.speedMod;
+      const totalArmor = cat.baseArmor + vehicle.armorMod;
+
+      let playerLead = 50; // 0 to 100
+
+      setTimeout(() => {
+        // Stage 1: Off the Line
+        playSound('engine');
+        if (driver.driving > 75 || Math.random() < 0.6) {
+          playerLead += 15;
+          addLog(`[LAP 1] Clean launch! ${driver.name} grips the clutch and seizes the outside lane.`, 'text-emerald-900 font-bold');
+        } else {
+          playerLead -= 10;
+          addLog(`[LAP 1] Wheelspin off the line! Competitor hot-rods surge ahead into turn one.`, 'text-noir-blood font-bold');
+        }
+
+        setTimeout(() => {
+          // Stage 2: Track Hazard or Mid-Race Incident
+          const copRoll = Math.random() * 100;
+          if (copRoll < circuit.copHazard && !state.isInvincible) {
+            playSound('gun');
+            addLog(`[INCIDENT] Squad cars emerge from an alley with sirens wailing!`, 'text-noir-blood font-bold');
+            if (vehicle.hasRam) {
+              addLog(`[ACTION] ${driver.name} slams the heavy ramming grille into the squad car barrier and pushes through!`, 'text-emerald-900');
+              playerLead += 10;
+            } else {
+              playerLead -= 20;
+              addLog(`[ACTION] Swerving around the cruiser slows your momentum! Lead is slipping.`, 'text-noir-blood');
+            }
+          } else {
+            playSound('engine');
+            addLog(`[LAP 2] High-speed straightaway! The ${vehicle.name} pushes ${totalSpeed} mph.`, 'text-noir-ink');
+          }
+
+          setTimeout(() => {
+            // Stage 3: The Checkered Finish
+            const winRoll = Math.random() * 100;
+            const winChance = state.isInvincible ? 100 : (playerLead + (driver.driving * 0.3) + (totalSpeed * 0.2));
+
+            if (winRoll < winChance) {
+              playSound('race_bell');
+              playSound('cash');
+              let calculatedOdds = circuit.baseOdds;
+              if (driver.driving > 80) calculatedOdds -= 0.6;
+              if (totalSpeed > 60) calculatedOdds -= 0.5;
+              calculatedOdds = Math.max(1.3, calculatedOdds);
+
+              const payout = Math.round(wager * calculatedOdds);
+              state.dirtyCash += payout;
+              driver.driving = Math.min(99, driver.driving + 1);
+              state.heat += 4;
+
+              addLog(`[CHECKERED FLAG] VICTORY! ${driver.name} crosses the finish line first!`, 'font-black text-emerald-900 text-sm');
+              addLog(`[PAYOUT] Payout collected: $${payout.toLocaleString()} dirty cash (+1 Driver Skill).`, 'text-emerald-900 font-bold');
+            } else {
+              playSound('stamp');
+              state.heat += 6;
+              addLog(`[CHECKERED FLAG] DEFEAT! Duesenberg Phantom edges ahead by half a car length.`, 'font-black text-noir-blood text-sm');
+              addLog(`[LOSS] Lost wager: $${wager.toLocaleString()} dirty cash.`, 'text-noir-blood font-bold');
+            }
+
+            saveState();
+            renderUI();
+          }, 1200);
+        }, 1200);
+      }, 1000);
+    }
+
+    /* ============================================================
+       7. VEHICLE GARAGE & SPEED MODS
+       ============================================================ */
+    function installVehicleMod(vehIdx, modType) {
+      const veh = state.fleet[vehIdx];
+      if (!veh) return;
+
+      const costs = { speed: 1800, tanks: 1200, armor: 2200, ram: 950 };
+      const cost = costs[modType];
+
+      if (state.dirtyCash < cost) {
+        showAlert('Insufficient Dirty Cash', `You need $${cost.toLocaleString()} dirty cash to install this performance modification.`, 'CHOP SHOP REFUSAL');
+        return;
+      }
+
+      state.dirtyCash -= cost;
+
+      if (modType === 'speed') {
+        veh.speedMod += 15;
+        showAlert('High-Bore V8 Installed', `${veh.name} gained +15 Top Speed for racing and getaway chases.`, 'SPEED TUNED');
+      } else if (modType === 'tanks') {
+        veh.hoochMod += 20;
+        showAlert('Floor Tanks Welded', `${veh.name} can now smuggle an additional +20 barrels of booze.`, 'CARGO EXPANDED');
+      } else if (modType === 'armor') {
+        veh.armorMod += 25;
+        showAlert('Armor Plates Bolted', `${veh.name} reinforced with heavy steel ballistic plating.`, 'DEFENSE UPGRADED');
+      } else if (modType === 'ram') {
+        veh.hasRam = true;
+        showAlert('Ramming Grille Welded', `${veh.name} equipped with a heavy reinforced steel ram.`, 'RAM INSTALLED');
+      }
+
+      playSound('cash');
+      saveState();
+      renderUI();
+    }
+
+    function chopVehicle(vehIdx) {
+      if (state.fleet.length <= 1) {
+        showAlert('Cannot Chop', 'You must maintain at least one vehicle in your mob fleet.', 'GARAGE NOTICE');
+        return;
+      }
+      const veh = state.fleet[vehIdx];
+      const scrapValue = 1200;
+      state.dirtyCash += scrapValue;
+      state.fleet.splice(vehIdx, 1);
+      playSound('cash');
+      showAlert('Automobile Chopped', `The ${veh.name} was torched down to parts, yielding $${scrapValue.toLocaleString()} dirty cash scrap.`, 'CHOPPED');
+      saveState();
+      renderUI();
+    }
+
+    function stealRandomVehicle() {
+      if (state.dirtyCash < 500) {
+        showAlert('Funds Required', 'Dispatching a hijacking crew requires $500 in scouting cash.', 'OPERATION BLOCKED');
+        return;
+      }
+      state.dirtyCash -= 500;
+      state.heat += 8;
+
+      const keys = ['buick_six', 'lincoln_l', 'mack_truck'];
+      const pick = keys[Math.floor(Math.random() * keys.length)];
+      const cat = VEHICLES_CATALOG[pick];
+
+      state.fleet.push({
+        id: 'stolen_' + Date.now(),
+        modelId: pick,
+        name: `Hijacked ${cat.name}`,
+        speedMod: 5,
+        armorMod: 0,
+        hoochMod: 0,
+        hasRam: false,
+        condition: 85
+      });
+
+      playSound('stamp');
+      showAlert('Grand Theft Automobile', `Your wheelmen hijacked a ${cat.name} from an upscale hotel valet and drove it into the speed garage.`, 'VEHICLE HIJACKED');
+      saveState();
+      renderUI();
+    }
+
+    function openBuyVehicleModal() {
+      const container = document.getElementById('showroom-vehicles-list');
+      container.innerHTML = Object.values(VEHICLES_CATALOG).map(cat => {
+        return `
+          <div class="bg-noir-newsprint border border-noir-ink/40 p-2.5 rounded flex justify-between items-center">
+            <div>
+              <div class="font-bold text-sm">${cat.name}</div>
+              <div class="text-[10px] text-noir-ink/70">${cat.desc}</div>
+              <div class="text-[10px] font-mono mt-0.5">Speed: ${cat.baseSpeed} mph • Booze: ${cat.boozeCap} bbl</div>
+            </div>
+            <button onclick="buyVehicle('${cat.id}')" class="px-3 py-1.5 bg-noir-ink text-noir-newsprint font-bold text-xs rounded hover:opacity-90">
+              Buy $${cat.price.toLocaleString()}
+            </button>
+          </div>
+        `;
+      }).join('');
+      openModal('modal-buy-vehicle');
+    }
+
+    function buyVehicle(modelId) {
+      const cat = VEHICLES_CATALOG[modelId];
+      if (!cat) return;
+
+      if (state.cleanCash < cat.price) {
+        showAlert('Clean Bank Funds Required', 'Commercial dealership showrooms accept only verified cashier checks.', 'SHOWROOM REFUSAL');
+        return;
+      }
+
+      state.cleanCash -= cat.price;
+      state.fleet.push({
+        id: 'fleet_' + Date.now(),
+        modelId: modelId,
+        name: `Showroom ${cat.name}`,
+        speedMod: 0,
+        armorMod: 0,
+        hoochMod: 0,
+        hasRam: false,
+        condition: 100
+      });
+
+      playSound('cash');
+      closeModal('modal-buy-vehicle');
+      showAlert('Automobile Acquired', `The ${cat.name} was delivered from the showroom to your fleet garage.`, 'DELIVERY CONFIRMED');
+      saveState();
+      renderUI();
+    }
+
+    /* ============================================================
+       8. GREAT WAR MILITARY SURPLUS BLACK MARKET
+       ============================================================ */
+    function openSurplusSmuggleModal() {
+      openModal('modal-surplus');
+    }
+
+    function executeSurplusSmuggle() {
+      const bribeCost = 2500;
+      if (state.cleanCash < bribeCost) {
+        showAlert('Clean Funds Required', 'Harbor masters demand clean bank drafts to turn a blind eye to military crates.', 'BRIBE REFUSED');
+        return;
+      }
+
+      state.cleanCash -= bribeCost;
+      state.stash.bar = (state.stash.bar || 0) + 1;
+      state.stash.trench_gun = (state.stash.trench_gun || 0) + 1;
+      state.stash.grenades = (state.stash.grenades || 0) + 2;
+      state.stash.gas_mask = (state.stash.gas_mask || 0) + 1;
+
+      playSound('bar');
+      closeModal('modal-surplus');
+      showAlert('Surplus Crates Smuggled', 'A crate containing a B.A.R., Trench Gun, Pineapple Grenades, and Gas Mask has been transferred to your armory.', 'CRATES UNLOADED');
+      saveState();
+      renderUI();
+    }
+
+    function openArmoryStoreModal() {
+      const container = document.getElementById('armory-items-list');
+      container.innerHTML = `
+        <div class="font-bold text-xs uppercase text-noir-ink mb-2">Purchase Munitions for Family Stash (Dirty Cash):</div>
+        <div class="space-y-2">
+          ${ARSENAL_ITEMS.map(item => {
+            const inStash = state.stash[item.id] || 0;
+            return `
+              <div class="flex justify-between items-center bg-noir-newsprint border border-noir-ink/40 p-2.5 rounded">
+                <div>
+                  <div class="font-bold text-sm ${item.type === 'military' ? 'text-noir-blood' : 'text-noir-ink'}">${item.name}</div>
+                  <div class="text-[10px] text-noir-ink/70">${item.desc}</div>
+                  <div class="text-[10px] font-mono">In Stash: ${inStash}</div>
+                </div>
+                <button onclick="buyArmoryItem('${item.id}')" class="px-3 py-1.5 bg-noir-ink text-noir-newsprint text-xs font-bold rounded hover:opacity-90 transition">
+                  Buy $${item.price.toLocaleString()}
+                </button>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+      openModal('modal-armory');
+    }
+
+    function buyArmoryItem(itemId) {
+      const item = ARSENAL_ITEMS.find(a => a.id === itemId);
+      if (!item) return;
+
+      if (state.dirtyCash < item.price) {
+        showAlert('Insufficient Dirty Cash', 'You lack the street cash required to purchase this hardware.', 'BLACK MARKET REFUSAL');
+        return;
+      }
+
+      state.dirtyCash -= item.price;
+      state.stash[itemId] = (state.stash[itemId] || 0) + 1;
+      if (item.id === 'bar') playSound('bar');
+      else playSound('cash');
+
+      saveState();
+      renderUI();
+      openArmoryStoreModal();
+    }
+
+    /* Equip Modal */
+    let equippingHoodId = null;
+    function openEquipModal(hoodId) {
+      equippingHoodId = hoodId;
+      const hood = state.crew.find(c => c.id === hoodId);
+      if (!hood) return;
+
+      const container = document.getElementById('armory-items-list');
+      container.innerHTML = `
+        <div class="bg-noir-ink/10 p-2 rounded mb-2">
+          <strong>Equipping: ${hood.name}</strong>
+          <div class="text-[11px]">Hardware: ${hood.weapon || 'None'} | Assigned Machine: ${hood.assignedCarId || 'None'}</div>
+        </div>
+        <div class="space-y-2">
+          <div class="font-bold text-xs uppercase text-noir-ink">Assign Hardware from Stash:</div>
+          ${ARSENAL_ITEMS.map(item => {
+            const count = state.stash[item.id] || 0;
+            return `
+              <div class="flex justify-between items-center bg-noir-newsprint border border-noir-ink/40 p-2 rounded">
+                <div>
+                  <span class="font-bold ${item.type === 'military' ? 'text-noir-blood' : ''}">${item.name}</span>
+                  <span class="text-[10px] text-noir-ink/70"> (Stash: ${count})</span>
+                </div>
+                <button onclick="equipItemToHood('${item.id}')" ${count === 0 ? 'disabled' : ''} class="px-3 py-1 bg-noir-ink text-noir-newsprint text-xs font-bold rounded disabled:opacity-40">
+                  Equip
+                </button>
+              </div>
+            `;
+          }).join('')}
+
+          <div class="font-bold text-xs uppercase text-noir-ink pt-2 border-t border-noir-ink">Assign Motor Machine from Fleet:</div>
+          ${state.fleet.map(veh => {
+            const isAssigned = hood.assignedCarId === veh.id;
+            return `
+              <div class="flex justify-between items-center bg-noir-newsprint border border-noir-ink/40 p-2 rounded">
+                <div>
+                  <span class="font-bold">${veh.name}</span>
+                  <span class="text-[10px] text-noir-ink/70">(${VEHICLES_CATALOG[veh.modelId]?.baseSpeed + veh.speedMod} mph)</span>
+                </div>
+                <button onclick="assignCarToHood('${veh.id}')" class="px-3 py-1 ${isAssigned ? 'bg-noir-blood text-white' : 'bg-noir-ink text-noir-newsprint'} text-xs font-bold rounded">
+                  ${isAssigned ? 'Assigned' : 'Assign'}
+                </button>
+              </div>
+            `;
+          }).join('')}
+
+          <div class="pt-2">
+            <button onclick="unequipAll('${hood.id}')" class="w-full py-1.5 bg-noir-blood text-white text-xs font-bold rounded">
+              Strip Hardware to Stash
+            </button>
+          </div>
+        </div>
+      `;
+      openModal('modal-armory');
+    }
+
+    function equipItemToHood(itemId) {
+      const hood = state.crew.find(c => c.id === equippingHoodId);
+      const item = ARSENAL_ITEMS.find(a => a.id === itemId);
+      if (!hood || !item || !state.stash[itemId] || state.stash[itemId] <= 0) return;
+
+      if (hood.weapon) {
+        state.stash[hood.weapon] = (state.stash[hood.weapon] || 0) + 1;
+      }
+      hood.weapon = itemId;
+      state.stash[itemId]--;
+
+      playSound('stamp');
+      closeModal('modal-armory');
+      saveState();
+      renderUI();
+    }
+
+    function assignCarToHood(carId) {
+      const hood = state.crew.find(c => c.id === equippingHoodId);
+      if (!hood) return;
+      hood.assignedCarId = carId;
+      playSound('engine');
+      closeModal('modal-armory');
+      saveState();
+      renderUI();
+    }
+
+    function unequipAll(hoodId) {
+      const hood = state.crew.find(c => c.id === hoodId);
+      if (!hood) return;
+      if (hood.weapon) {
+        state.stash[hood.weapon] = (state.stash[hood.weapon] || 0) + 1;
+        hood.weapon = null;
+      }
+      hood.assignedCarId = null;
+      playSound('stamp');
+      closeModal('modal-armory');
+      saveState();
+      renderUI();
+    }
+
+    /* ============================================================
+       9. ADVANCE WEEK (THE CORE WORLD SIMULATION)
+       ============================================================ */
+    function advanceWeek() {
+      playSound('typewriter');
+      state.week++;
+      if (state.week > 52) {
+        state.week = 1;
+        state.year++;
+      }
+
+      let dispatches = [];
+      let weeklyGross = 0;
+      let weeklyBoozeRev = 0;
+      let weeklySalaries = 0;
+      let weeklyBribes = 0;
+      let weeklyLaundered = 0;
+
+      // 1. Process Distilleries & Booze Production
+      let boozeProduced = 0;
+      let boozeConsumed = 0;
+
+      Object.keys(state.districts).forEach(dId => {
+        const slots = state.districts[dId];
+        slots.forEach(slot => {
+          const item = ALL_BUSINESS_TYPES[slot.type];
+          if (!item) return;
+          const level = slot.level || 1;
+          if (item.boozeYield > 0) {
+            boozeProduced += (item.boozeYield * level);
+          }
+        });
+      });
+      state.booze += boozeProduced;
+
+      // 2. Process Speakeasies, Fronts & Dealerships
+      Object.keys(state.districts).forEach(dId => {
+        const dist = DISTRICTS_DATA.find(d => d.id === dId);
+        const mult = dist ? dist.multiplier : 1.0;
+        const slots = state.districts[dId];
+
+        slots.forEach(slot => {
+          const item = ALL_BUSINESS_TYPES[slot.type];
+          if (!item || slot.type === 'empty') return;
+          const level = slot.level || 1;
+
+          if (item.category === 'front') {
+            const capacity = item.launderLimit * level;
+            const toLaunder = Math.min(state.dirtyCash, capacity);
+            const cleanYield = Math.round(toLaunder * (item.efficiency || 0.75));
+            state.dirtyCash -= toLaunder;
+            state.cleanCash += cleanYield;
+            weeklyLaundered += cleanYield;
+          } else if (item.category === 'racket') {
+            if (item.boozeCost > 0) {
+              const needed = item.boozeCost * level;
+              if (state.booze >= needed) {
+                state.booze -= needed;
+                boozeConsumed += needed;
+                const rev = Math.round(item.dirtyYield * level * mult);
+                weeklyBoozeRev += rev;
+                state.dirtyCash += rev;
+              } else {
+                const wateredRev = Math.round(item.dirtyYield * 0.35 * level * mult);
+                weeklyBoozeRev += wateredRev;
+                state.dirtyCash += wateredRev;
+                dispatches.push(`Speakeasy in ${dist.name} ran dry of booze! Served watered soda.`);
+              }
+            } else {
+              const rev = Math.round(item.dirtyYield * level * mult);
+              weeklyGross += rev;
+              state.dirtyCash += rev;
+            }
+          }
+
+          if (!state.isInvincible) {
+            state.heat += (item.heatGen || 0);
+          }
+        });
+      });
+
+      // 3. Crew Orders
+      state.crew.forEach(hood => {
+        if (hood.status !== 'Active') return;
+        weeklySalaries += hood.upkeep;
+        state.dirtyCash -= hood.upkeep;
+
+        if (hood.order === 'extort') {
+          const loot = Math.round(400 + (hood.muscle * 8.5));
+          state.dirtyCash += loot;
+          state.heat += 4;
+          dispatches.push(`${hood.name} shook down retail merchants, yielding $${loot} dirty cash.`);
+        } else if (hood.order === 'bribe') {
+          const drop = Math.round(8 + (hood.brains * 0.12));
+          state.heat = Math.max(0, state.heat - drop);
+          dispatches.push(`${hood.name} greased precinct captains, cooling heat by ${drop}%.`);
+        } else if (hood.order === 'scout') {
+          dispatches.push(`${hood.name} reconnoitered rival delivery hubs and mapped unpatrolled alleys.`);
+        } else if (hood.order === 'chop') {
+          state.dirtyCash += 350;
+          dispatches.push(`${hood.name} overhauled fleet engines in the speed garage, generating $350.`);
+        } else if (hood.order === 'idle') {
+          hood.health = Math.min(100, hood.health + 20);
+        }
+      });
+
+      // 4. Politics / Bribes Decay
+      if (state.policeBribes.commissionerWeeksRemaining > 0) {
+        state.policeBribes.commissionerWeeksRemaining--;
+        state.heat = Math.max(0, state.heat - 10);
+      }
+
+      const lawyerCost = state.lawyerTier === 1 ? 400 : state.lawyerTier === 2 ? 900 : 1800;
+      weeklyBribes += lawyerCost;
+      state.cleanCash -= lawyerCost;
+
+      // 5. Police Raid Checks
+      if (state.heat >= 65 && state.policeBribes.commissionerWeeksRemaining <= 0 && !state.isInvincible) {
+        playSound('gun');
+        const activeCrew = state.crew.filter(c => c.status === 'Active' && c.id !== 'boss');
+        if (activeCrew.length > 0) {
+          const victim = activeCrew[Math.floor(Math.random() * activeCrew.length)];
+          const roll = Math.random() * 100;
+          const passChance = state.policeBribes.judgeOnPayroll ? 98 : (state.lawyerTier * 32);
+
+          if (roll < passChance) {
+            dispatches.push(`POLICE SWEEP: Squads raided a speakeasy, but Counsel quashed all warrants!`);
+          } else {
+            victim.status = 'Jail';
+            dispatches.push(`POLICE ARREST: ${victim.name} was arrested and locked in Cook County Jail.`);
+          }
+        }
+        state.heat = Math.max(20, state.heat - 20);
+      }
+
+      // 6. Rival Mob Raids
+      state.rivals.forEach(rival => {
+        if (!rival.alive) return;
+        if (rival.relation < -25 && Math.random() < 0.35 && !state.isInvincible) {
+          const guard = state.crew.find(c => c.status === 'Active' && c.order === 'patrol');
+          if (guard) {
+            dispatches.push(`TERRITORY CLASH: ${rival.name} gunmen raided your block, but ${guard.name} repelled them!`);
+          } else {
+            const lost = Math.min(state.dirtyCash, 2000);
+            state.dirtyCash -= lost;
+            dispatches.push(`RIVAL ATTACK: ${rival.name} stormed an unpatrolled block, looting $${lost}!`);
+          }
+        }
+      });
+
+      // Bounds Clamping
+      state.dirtyCash = Math.max(0, state.dirtyCash);
+      state.cleanCash = Math.max(0, state.cleanCash);
+      state.booze = Math.max(0, state.booze);
+      state.heat = Math.max(0, Math.min(100, state.heat));
+
+      if (dispatches.length === 0) {
+        dispatches.push('All Chicago sectors remained quiet under crisp autumn skies.');
+      }
+      state.lastDispatches = dispatches;
+
+      const netDelta = (weeklyGross + weeklyBoozeRev) - (weeklySalaries + weeklyBribes);
+      state.lastFinancials = {
+        income: weeklyGross,
+        boozeRev: weeklyBoozeRev,
+        salaries: weeklySalaries,
+        bribes: weeklyBribes,
+        laundered: weeklyLaundered,
+        net: netDelta
+      };
+
+      generateDynamicHeadline();
+      playSound('stamp');
+      saveState();
+      renderUI();
+      switchTab('ledger');
+    }
+
+    function generateDynamicHeadline() {
+      const headlines = [
+        "COOK COUNTY GRAND JURY CONVENES AS GANG WARFARE RUMORS MOUNT",
+        "MIDWEST MOTOR SALES SURGE: CAR DEALERSHIPS PROSPER IN LOOP",
+        "POLICE COMMISSIONER VOWS MASSIVE CRACKDOWN ON STILLS & SPEEDSTERS",
+        "MIDNIGHT DRAG RACING ALONG LAKE SHORE DRAWS THOUSANDS OF SPECTATORS",
+        "SURPLUS MILITARY AUTOMATIC RIFLES RECOVERED NEAR CALUMET HARBOR",
+        "TREASURY DEPARTMENT DISPATCHES NEW BRIGADE OF AGENTS TO ILLINOIS"
+      ];
+      const stampList = ["SPECIAL DISPATCH", "COOK COUNTY CHRONICLE", "POLICE EXTRA", "UNDERWORLD WIRE"];
+      
+      const hl = headlines[Math.floor(Math.random() * headlines.length)];
+      const st = stampList[Math.floor(Math.random() * stampList.length)];
+
+      document.getElementById('news-headline').textContent = hl;
+      document.getElementById('news-stamp').textContent = st;
+      document.getElementById('news-body').textContent = 
+        `Authorities across Cook County are monitoring suspicious commercial cargo movements along Lake Michigan. ` +
+        `Precinct sergeants report high motor activity, while night watchmen report roaring V8 engines speeding down Michigan Avenue.`;
+    }
+
+    /* ============================================================
+       10. ORDERS, RECRUITS & CLAN WAR ACTIONS
+       ============================================================ */
     function openOrderModal(hoodId) {
       state.selectedHoodId = hoodId;
       const hood = state.crew.find(c => c.id === hoodId);
@@ -1642,124 +2672,10 @@
       }
     }
 
-    /* 6.2 Equipment Modal */
-    let equippingHoodId = null;
-    function openEquipModal(hoodId) {
-      equippingHoodId = hoodId;
-      const hood = state.crew.find(c => c.id === hoodId);
-      if (!hood) return;
-
-      const container = document.getElementById('armory-items-list');
-      container.innerHTML = `
-        <div class="bg-noir-ink/10 p-2 rounded mb-2">
-          <strong>Equipping: ${hood.name}</strong>
-          <div class="text-[11px]">Hardware: ${hood.weapon || 'None'} | Vehicle: ${hood.vehicle || 'None'}</div>
-        </div>
-        <div class="space-y-1.5">
-          <div class="font-bold text-xs uppercase text-noir-ink">Assign from Family Stash:</div>
-          ${ARMORY_ITEMS.map(item => {
-            const count = state.stash[item.id] || 0;
-            return `
-              <div class="flex justify-between items-center bg-noir-newsprint border border-noir-ink/40 p-2 rounded">
-                <div>
-                  <span class="font-bold">${item.name}</span>
-                  <span class="text-[10px] text-noir-ink/70"> (Stash: ${count})</span>
-                  <div class="text-[10px] text-noir-blood">${item.desc}</div>
-                </div>
-                <button onclick="equipItemToHood('${item.id}')" ${count === 0 ? 'disabled' : ''} class="px-3 py-1 bg-noir-ink text-noir-newsprint text-xs font-bold rounded disabled:opacity-40">
-                  Equip
-                </button>
-              </div>
-            `;
-          }).join('')}
-          <div class="pt-2">
-            <button onclick="unequipAll('${hood.id}')" class="w-full py-1.5 bg-noir-blood text-noir-100 text-xs font-bold rounded">
-              Strip Gear Back to Stash
-            </button>
-          </div>
-        </div>
-      `;
-      openModal('modal-armory');
-    }
-
-    function equipItemToHood(itemId) {
-      const hood = state.crew.find(c => c.id === equippingHoodId);
-      const item = ARMORY_ITEMS.find(a => a.id === itemId);
-      if (!hood || !item || !state.stash[itemId] || state.stash[itemId] <= 0) return;
-
-      if (item.type === 'weapon') {
-        if (hood.weapon) state.stash[hood.weapon] = (state.stash[hood.weapon] || 0) + 1;
-        hood.weapon = itemId;
-      } else if (item.type === 'vehicle') {
-        if (hood.vehicle) state.stash[hood.vehicle] = (state.stash[hood.vehicle] || 0) + 1;
-        hood.vehicle = itemId;
-      }
-      state.stash[itemId]--;
-      playSound('stamp');
-      closeModal('modal-armory');
-      saveState();
-      renderUI();
-    }
-
-    function unequipAll(hoodId) {
-      const hood = state.crew.find(c => c.id === hoodId);
-      if (!hood) return;
-      if (hood.weapon) { state.stash[hood.weapon] = (state.stash[hood.weapon] || 0) + 1; hood.weapon = null; }
-      if (hood.vehicle) { state.stash[hood.vehicle] = (state.stash[hood.vehicle] || 0) + 1; hood.vehicle = null; }
-      playSound('stamp');
-      closeModal('modal-armory');
-      saveState();
-      renderUI();
-    }
-
-    function openArmoryStoreModal() {
-      equippingHoodId = null;
-      const container = document.getElementById('armory-items-list');
-      container.innerHTML = `
-        <div class="font-bold text-xs uppercase text-noir-ink mb-2">Acquire Black Market Munitions (Dirty Cash):</div>
-        <div class="space-y-2">
-          ${ARMORY_ITEMS.map(item => {
-            const inStash = state.stash[item.id] || 0;
-            return `
-              <div class="flex justify-between items-center bg-noir-newsprint border border-noir-ink/40 p-2.5 rounded">
-                <div>
-                  <div class="font-bold text-sm">${item.name}</div>
-                  <div class="text-[10px] text-noir-blood">${item.desc}</div>
-                  <div class="text-[10px] text-noir-ink/70">In Stash: ${inStash}</div>
-                </div>
-                <button onclick="buyArmoryItem('${item.id}')" class="px-3 py-1.5 bg-noir-ink text-noir-newsprint text-xs font-bold rounded hover:opacity-90 transition">
-                  Buy $${item.price.toLocaleString()}
-                </button>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      `;
-      openModal('modal-armory');
-    }
-
-    function buyArmoryItem(itemId) {
-      const item = ARMORY_ITEMS.find(a => a.id === itemId);
-      if (!item) return;
-
-      if (state.dirtyCash < item.price) {
-        showAlert('Insufficient Dirty Cash', 'You lack the street cash required to purchase this black market hardware.', 'TRANSACTION HALTED');
-        return;
-      }
-
-      state.dirtyCash -= item.price;
-      state.stash[itemId] = (state.stash[itemId] || 0) + 1;
-      playSound('cash');
-      saveState();
-      renderUI();
-      openArmoryStoreModal();
-    }
-
-    /* 6.3 Recruiting Recruits Pool */
     const RECRUITS_POOL = [
-      { name: 'Mickey "The Bull" Callahan', title: 'Heavy Enforcer', muscle: 85, brains: 38, stealth: 45, shooting: 72, driving: 55, upkeep: 420, cost: 1400 },
+      { name: 'Mickey "The Bull" Callahan', title: 'Heavy Enforcer', muscle: 85, brains: 38, stealth: 45, shooting: 72, driving: 60, upkeep: 420, cost: 1400 },
       { name: 'Leo "Silk" Castiglione', title: 'Numbers Runner', muscle: 42, brains: 90, stealth: 78, shooting: 52, driving: 65, upkeep: 360, cost: 1600 },
-      { name: 'Red Malone', title: 'Getaway Driver', muscle: 58, brains: 62, stealth: 68, shooting: 64, driving: 92, upkeep: 390, cost: 1500 },
+      { name: 'Red Malone', title: 'Ace Getaway Driver', muscle: 58, brains: 62, stealth: 68, shooting: 64, driving: 94, upkeep: 400, cost: 1500 },
       { name: 'Angelo "Ghost" Morena', title: 'Hitman', muscle: 64, brains: 72, stealth: 88, shooting: 86, driving: 62, upkeep: 520, cost: 2600 }
     ];
 
@@ -1816,18 +2732,17 @@
         health: 100,
         status: 'Active',
         weapon: 'revolver',
-        vehicle: null,
+        assignedCarId: null,
         order: 'idle'
       });
 
       playSound('stamp');
       closeModal('modal-recruit');
-      showAlert('Soldier Inducted', `${rec.name} has taken the oath of Omertà and joined your family ranks.`, 'OMERTÀ SWORN');
+      showAlert('Soldier Inducted', `${rec.name} has sworn Omertà and joined your family.`, 'OMERTÀ SWORN');
       saveState();
       renderUI();
     }
 
-    /* 6.4 Hospital Treatment & Court Bail */
     function bailHood(hoodId) {
       const hood = state.crew.find(c => c.id === hoodId);
       if (!hood) return;
@@ -1867,7 +2782,7 @@
       renderUI();
     }
 
-    /* 6.5 Building Businesses (Rackets & Fronts) */
+    /* Rackets & Fronts Building */
     let buildTarget = { districtId: null, slotIdx: null, activeTab: 'racket' };
 
     function openBuildModal(distId, slotIdx) {
@@ -1895,7 +2810,7 @@
       const container = document.getElementById('build-options-container');
       const keys = category === 'racket' 
         ? ['protection', 'distillery', 'brewery', 'speakeasy', 'gambling', 'brothel', 'hijacking']
-        : ['dry_cleaners', 'florist', 'funeral_home', 'meat_packing', 'harbor_docks'];
+        : ['dealership', 'dry_cleaners', 'funeral_home', 'meat_packing', 'harbor_docks'];
 
       container.innerHTML = keys.map(key => {
         const item = ALL_BUSINESS_TYPES[key];
@@ -1962,7 +2877,7 @@
       state.dirtyCash -= upgradeCost;
       slot.level = (slot.level || 1) + 1;
       playSound('cash');
-      showAlert('Fortifications Completed', `Upgraded to Tier ${slot.level}! Revenue capacity, bouncers, and defensive armor increased.`, 'FORTIFIED');
+      showAlert('Fortifications Completed', `Upgraded to Tier ${slot.level}! Revenue capacity, bouncers, and armor increased.`, 'FORTIFIED');
       saveState();
       renderUI();
     }
@@ -1975,12 +2890,12 @@
       renderUI();
     }
 
-    /* 6.6 Corruption & Law Mechanics */
+    /* Corruption & Law Bribes */
     function bribePolice(tier) {
       if (tier === 'beat') {
         const cost = 800;
         if (state.cleanCash < cost) {
-          showAlert('Clean Cash Required', 'Precinct patrolmen demand clean bank drafts to look the other way.', 'BRIBE REFUSED');
+          showAlert('Clean Cash Required', 'Precinct patrolmen demand clean bank drafts.', 'BRIBE REFUSED');
           return;
         }
         state.cleanCash -= cost;
@@ -1988,8 +2903,7 @@
         state.policeBribes.beatCopPaid++;
         playSound('cash');
         showAlert('Beat Patrols Greased', 'Precinct patrolmen instructed to ignore late-night delivery noise. Heat reduced by 15%.', 'PRECINCT PACT');
-      } 
-      else if (tier === 'chief') {
+      } else if (tier === 'chief') {
         const cost = 3500;
         if (state.cleanCash < cost) {
           showAlert('Clean Cash Required', 'The Police Commissioner demands $3,500 in clean bank bonds.', 'BRIBE REFUSED');
@@ -2000,8 +2914,7 @@
         state.policeBribes.commissionerWeeksRemaining += 3;
         playSound('cash');
         showAlert('Commissioner Secured', 'Police Commissioner guarantees total immunity from squad raids for 3 weeks.', 'CITY HALL ACCORD');
-      }
-      else if (tier === 'judge') {
+      } else if (tier === 'judge') {
         const cost = 5000;
         if (state.cleanCash < cost) {
           showAlert('Clean Cash Required', 'Judge Callahan requires a $5,000 clean escrow retainer.', 'BRIBE REFUSED');
@@ -2034,12 +2947,12 @@
       renderUI();
     }
 
-    /* 6.7 Rival Clashes & Combat */
+    /* Clan War Strikes */
     function prepRivalAction(actionType) {
       playSound('typewriter');
       const living = state.rivals.filter(r => r.alive);
       if (living.length === 0) {
-        showAlert('Total Monopoly', 'All rival factions in Chicago have been eradicated! You hold absolute supremacy.', 'SUPREME REIGN');
+        showAlert('Total Monopoly', 'All rival mobs in Chicago have been eradicated! You hold absolute supremacy.', 'SUPREME REIGN');
         return;
       }
       const target = living[0];
@@ -2055,18 +2968,19 @@
       let totalAim = 0;
       state.crew.filter(c => c.status === 'Active').forEach(c => {
         totalAim += c.shooting;
-        if (c.weapon === 'tommy') totalAim += 30;
+        if (c.weapon === 'tommy') totalAim += 25;
+        if (c.weapon === 'bar') totalAim += 40;
       });
 
-      playSound('gun');
+      playSound('bar');
 
-      if (totalAim >= rival.strength * 1.4 || state.isInvincible) {
+      if (totalAim >= rival.strength * 1.3 || state.isInvincible) {
         rival.strength = Math.max(0, rival.strength - 30);
         rival.relation -= 30;
         state.heat += 18;
         if (rival.strength <= 0) {
           rival.alive = false;
-          showAlert('Faction Crushed', `Your squad wiped out ${rival.name}'s enforcers! Their outfit has collapsed.`, 'TERRITORY WON');
+          showAlert('Family Crushed', `Your squad wiped out ${rival.name}'s enforcers! Their outfit has collapsed.`, 'TERRITORY WON');
         } else {
           showAlert('Drive-By Success', `You hammered ${rival.name}'s street corner. Rival combat strength dropped to ${rival.strength}%.`, 'GANG ATTACK');
         }
@@ -2090,8 +3004,8 @@
       if (!rival || !rival.alive) return;
 
       playSound('gun');
-      const lootCash = 3200;
-      const lootBooze = 40;
+      const lootCash = 3500;
+      const lootBooze = 45;
       state.dirtyCash += lootCash;
       state.booze += lootBooze;
       state.heat += 14;
@@ -2105,23 +3019,25 @@
       const rival = state.rivals.find(r => r.id === rivalId);
       if (!rival || !rival.alive) return;
 
-      const topHitman = state.crew.find(c => c.status === 'Active' && (c.stealth > 70 || c.shooting > 75));
+      const topHitman = state.crew.find(c => c.status === 'Active' && (c.stealth > 65 || c.shooting > 70));
       if (!topHitman && !state.isInvincible) {
-        showAlert('No Qualified Hitman', 'You need an active soldier with at least 70 Stealth or 75 Aim to execute a Boss contract.', 'HIT REFUSED');
+        showAlert('No Qualified Hitman', 'You need an active soldier with at least 65 Stealth or 70 Aim to execute a Boss contract.', 'HIT REFUSED');
         return;
       }
 
-      playSound('gun');
-      if (Math.random() < 0.65 || state.isInvincible) {
+      playSound('explosion');
+      playSound('bar');
+
+      if (Math.random() < 0.70 || state.isInvincible) {
         rival.alive = false;
         rival.strength = 0;
         state.heat += 30;
-        showAlert('Rival Boss Eliminated', `${rival.boss} was ambushed and gunned down. ${rival.name} has disintegrated!`, 'CONTRACT COMPLETE');
+        showAlert('Rival Boss Eliminated', `${rival.boss} was ambushed with trench dynamite and B.A.R. fire. ${rival.name} has disintegrated!`, 'CONTRACT COMPLETE');
       } else {
         state.heat += 25;
         if (topHitman && !state.isInvincible) {
           topHitman.status = 'Jail';
-          showAlert('Hit Foiled', `Bodyguards shielded ${rival.boss}! ${topHitman.name} was trapped in the alley and arrested by detectives.`, 'HITMAN JAILED');
+          showAlert('Hit Foiled', `Bodyguards shielded ${rival.boss}! ${topHitman.name} was trapped and arrested by detectives.`, 'HITMAN JAILED');
         } else {
           showAlert('Hit Foiled', `Bodyguards returned heavy fire and escorted ${rival.boss} to safety.`, 'TARGET ESCAPED');
         }
@@ -2149,209 +3065,7 @@
     }
 
     /* ============================================================
-       7. ADVANCE WEEK SIMULATION ENGINE
-       ============================================================ */
-    function advanceWeek() {
-      playSound('typewriter');
-      state.week++;
-      if (state.week > 52) {
-        state.week = 1;
-        state.year++;
-      }
-
-      let dispatches = [];
-      let weeklyGross = 0;
-      let weeklyBoozeRev = 0;
-      let weeklySalaries = 0;
-      let weeklyBribes = 0;
-      let weeklyLaundered = 0;
-
-      // 1. Process Distilleries & Booze Production
-      let boozeProduced = 0;
-      let boozeConsumed = 0;
-
-      Object.keys(state.districts).forEach(dId => {
-        const slots = state.districts[dId];
-        slots.forEach(slot => {
-          const item = ALL_BUSINESS_TYPES[slot.type];
-          if (!item) return;
-          const level = slot.level || 1;
-          if (item.boozeYield > 0) {
-            boozeProduced += (item.boozeYield * level);
-          }
-        });
-      });
-      state.booze += boozeProduced;
-
-      // 2. Process Speakeasies & Rackets
-      Object.keys(state.districts).forEach(dId => {
-        const dist = DISTRICTS_DATA.find(d => d.id === dId);
-        const mult = dist ? dist.multiplier : 1.0;
-        const slots = state.districts[dId];
-
-        slots.forEach(slot => {
-          const item = ALL_BUSINESS_TYPES[slot.type];
-          if (!item || slot.type === 'empty') return;
-          const level = slot.level || 1;
-
-          if (item.category === 'front') {
-            // Process Commercial Front Laundering
-            const capacity = item.launderLimit * level;
-            const toLaunder = Math.min(state.dirtyCash, capacity);
-            const cleanYield = Math.round(toLaunder * (item.efficiency || 0.75));
-            state.dirtyCash -= toLaunder;
-            state.cleanCash += cleanYield;
-            weeklyLaundered += cleanYield;
-          } 
-          else if (item.category === 'racket') {
-            // Speakeasies & Booze Rackets
-            if (item.boozeCost > 0) {
-              const needed = item.boozeCost * level;
-              if (state.booze >= needed) {
-                state.booze -= needed;
-                boozeConsumed += needed;
-                const rev = Math.round(item.dirtyYield * level * mult);
-                weeklyBoozeRev += rev;
-                state.dirtyCash += rev;
-              } else {
-                // Shortage penalty
-                const wateredRev = Math.round(item.dirtyYield * 0.35 * level * mult);
-                weeklyBoozeRev += wateredRev;
-                state.dirtyCash += wateredRev;
-                dispatches.push(`Speakeasy in ${dist.name} ran dry of booze! Patrons were served watered soda.`);
-              }
-            } else {
-              // Standard cash racket
-              const rev = Math.round(item.dirtyYield * level * mult);
-              weeklyGross += rev;
-              state.dirtyCash += rev;
-            }
-          }
-
-          // Natural heat generation
-          if (!state.isInvincible) {
-            state.heat += (item.heatGen || 0);
-          }
-        });
-      });
-
-      // 3. Process Crew Orders
-      state.crew.forEach(hood => {
-        if (hood.status !== 'Active') return;
-        weeklySalaries += hood.upkeep;
-        state.dirtyCash -= hood.upkeep;
-
-        if (hood.order === 'extort') {
-          const loot = Math.round(380 + (hood.muscle * 8));
-          state.dirtyCash += loot;
-          state.heat += 4;
-          dispatches.push(`${hood.name} shook down shopkeepers, bringing in $${loot} dirty cash.`);
-        } else if (hood.order === 'bribe') {
-          const drop = Math.round(8 + (hood.brains * 0.12));
-          state.heat = Math.max(0, state.heat - drop);
-          dispatches.push(`${hood.name} greased local precinct detectives, cooling heat by ${drop}%.`);
-        } else if (hood.order === 'scout') {
-          dispatches.push(`${hood.name} reconnoitered rival delivery hubs and mapped blind spots.`);
-        } else if (hood.order === 'idle') {
-          hood.health = Math.min(100, hood.health + 20);
-        }
-      });
-
-      // 4. Politics / Bribes Decay
-      if (state.policeBribes.commissionerWeeksRemaining > 0) {
-        state.policeBribes.commissionerWeeksRemaining--;
-        state.heat = Math.max(0, state.heat - 10);
-      }
-
-      const lawyerCost = state.lawyerTier === 1 ? 400 : state.lawyerTier === 2 ? 900 : 1800;
-      weeklyBribes += lawyerCost;
-      state.cleanCash -= lawyerCost;
-
-      // 5. Police Raid Checks
-      if (state.heat >= 65 && state.policeBribes.commissionerWeeksRemaining <= 0 && !state.isInvincible) {
-        playSound('gun');
-        const activeCrew = state.crew.filter(c => c.status === 'Active' && c.id !== 'boss');
-        if (activeCrew.length > 0) {
-          const victim = activeCrew[Math.floor(Math.random() * activeCrew.length)];
-          const roll = Math.random() * 100;
-          const dismissalThreshold = state.policeBribes.judgeOnPayroll ? 98 : (state.lawyerTier * 32);
-
-          if (roll < dismissalThreshold) {
-            dispatches.push(`POLICE RAID: Squad cars raided a speakeasy, but Defense Counsel quashed warrants!`);
-          } else {
-            victim.status = 'Jail';
-            dispatches.push(`POLICE ARREST: ${victim.name} was arrested and locked up in Cook County Jail.`);
-          }
-        }
-        state.heat = Math.max(20, state.heat - 20);
-      }
-
-      // 6. Rival Organization Incursions
-      state.rivals.forEach(rival => {
-        if (!rival.alive) return;
-        if (rival.relation < -25 && Math.random() < 0.35 && !state.isInvincible) {
-          const guard = state.crew.find(c => c.status === 'Active' && c.order === 'patrol');
-          if (guard) {
-            dispatches.push(`TERRITORY AMBUSH: ${rival.name} gunmen raided your block, but ${guard.name} repelled them!`);
-          } else {
-            const lost = Math.min(state.dirtyCash, 2000);
-            state.dirtyCash -= lost;
-            dispatches.push(`RIVAL RAID: ${rival.name} stormed an unprotected sector, looting $${lost} cash!`);
-          }
-        }
-      });
-
-      // Bounds Clamping
-      state.dirtyCash = Math.max(0, state.dirtyCash);
-      state.cleanCash = Math.max(0, state.cleanCash);
-      state.booze = Math.max(0, state.booze);
-      state.heat = Math.max(0, Math.min(100, state.heat));
-
-      if (dispatches.length === 0) {
-        dispatches.push('All Chicago sectors remained quiet under crisp autumn skies.');
-      }
-      state.lastDispatches = dispatches;
-
-      const netDelta = (weeklyGross + weeklyBoozeRev) - (weeklySalaries + weeklyBribes);
-      state.lastFinancials = {
-        income: weeklyGross,
-        boozeRev: weeklyBoozeRev,
-        salaries: weeklySalaries,
-        bribes: weeklyBribes,
-        laundered: weeklyLaundered,
-        net: netDelta
-      };
-
-      generateDynamicHeadline();
-      playSound('stamp');
-      saveState();
-      renderUI();
-      switchTab('ledger');
-    }
-
-    function generateDynamicHeadline() {
-      const headlines = [
-        "COOK COUNTY GRAND JURY CONVENES AS GANG WARFARE RUMORS MOUNT",
-        "MIDWEST BREWERY FLOWS: RECORD CARGO SHIPMENTS UNLOADED UNDER LAKE CLOUD",
-        "POLICE CHIEF VOWS MASSIVE CRACKDOWN ON CLANDESTINE DISTILLERS",
-        "LOOP JAZZ CLUBS PACKED TO CAPACITY AS WINTER NEARS ACROSS ILLINOIS",
-        "UNDERWORLD TRUCE STRAINED AFTER AUTOMOBILE AMBUSH ON MICHIGAN AVENUE",
-        "TREASURY DEPARTMENT DISPATCHES NEW BRIGADE OF PROHIBITION AGENTS"
-      ];
-      const stampList = ["SPECIAL DISPATCH", "COOK COUNTY CHRONICLE", "POLICE EXTRA", "UNDERWORLD WIRE"];
-      
-      const hl = headlines[Math.floor(Math.random() * headlines.length)];
-      const st = stampList[Math.floor(Math.random() * stampList.length)];
-
-      document.getElementById('news-headline').textContent = hl;
-      document.getElementById('news-stamp').textContent = st;
-      document.getElementById('news-body').textContent = 
-        `Investigators across Cook County are monitoring suspicious commercial cargo movements along Lake Michigan. ` +
-        `Precinct sergeants report tranquil streets, though night watchmen report armored delivery sedans rumbling past warehouses.`;
-    }
-
-    /* ============================================================
-       8. GOD MODE TESTING FUNCTIONS
+       11. GOD MODE TESTING FUNCTIONS
        ============================================================ */
     function cheatAddCash(type, amount) {
       playSound('cash');
@@ -2367,7 +3081,7 @@
       state.booze += crates;
       saveState();
       renderUI();
-      showAlert('God Mode Granted', `Added ${crates} barrels of booze to your warehouse stash.`, 'OMNIPOTENT AID');
+      showAlert('God Mode Granted', `Added ${crates} barrels of hooch to your warehouse stash.`, 'OMNIPOTENT AID');
     }
 
     function cheatZeroHeat() {
@@ -2376,6 +3090,46 @@
       saveState();
       renderUI();
       showAlert('God Mode Granted', 'Police heat reset to 0%. All active warrants expunged.', 'OMNIPOTENT AID');
+    }
+
+    function cheatMilitaryDrop() {
+      playSound('bar');
+      playSound('explosion');
+      state.stash.bar = (state.stash.bar || 0) + 10;
+      state.stash.trench_gun = (state.stash.trench_gun || 0) + 10;
+      state.stash.grenades = (state.stash.grenades || 0) + 20;
+      state.stash.gas_mask = (state.stash.gas_mask || 0) + 10;
+      state.crew.forEach(c => c.weapon = 'bar');
+      saveState();
+      renderUI();
+      showAlert('WWI Surplus Drop', 'Injected 10 B.A.R.s, 10 Trench Guns, 20 Grenades, and 10 Gas Masks into your stash.', 'MILITARY DROP');
+    }
+
+    function cheatFleetDrop() {
+      playSound('engine');
+      state.fleet.push({
+        id: 'god_caddy_' + Date.now(),
+        modelId: 'caddy_314',
+        name: 'Super Armored Cadillac 314',
+        speedMod: 35,
+        armorMod: 50,
+        hoochMod: 50,
+        hasRam: true,
+        condition: 100
+      });
+      state.fleet.push({
+        id: 'god_scout_' + Date.now(),
+        modelId: 'white_scout',
+        name: 'WWI Armored Scout War Car',
+        speedMod: 30,
+        armorMod: 80,
+        hoochMod: 30,
+        hasRam: true,
+        condition: 100
+      });
+      saveState();
+      renderUI();
+      showAlert('Fleet Drop', 'Unlocked Super Armored Cadillac 314 and WWI Armored Scout Car in your garage.', 'FLEET EXPANDED');
     }
 
     function cheatMaxCrew() {
@@ -2393,19 +3147,6 @@
       showAlert('God Mode Granted', 'All made men on your roster now possess maxed (99) RPG stats.', 'OMNIPOTENT AID');
     }
 
-    function cheatArsenal() {
-      playSound('gun');
-      state.crew.forEach(hood => {
-        hood.weapon = 'tommy';
-        hood.vehicle = 'sedan';
-      });
-      state.stash.tommy = (state.stash.tommy || 0) + 5;
-      state.stash.sedan = (state.stash.sedan || 0) + 5;
-      saveState();
-      renderUI();
-      showAlert('God Mode Granted', 'All soldiers equipped with Tommy Guns and Armored Sedans.', 'OMNIPOTENT AID');
-    }
-
     function cheatAnnexAll() {
       playSound('stamp');
       Object.keys(state.districts).forEach(dId => {
@@ -2413,7 +3154,7 @@
           { slot: 0, type: 'distillery', level: 3 },
           { slot: 1, type: 'speakeasy', level: 3 },
           { slot: 2, type: 'gambling', level: 3 },
-          { slot: 3, type: 'dry_cleaners', level: 3 },
+          { slot: 3, type: 'dealership', level: 3 },
           { slot: 4, type: 'protection', level: 3 }
         ];
       });
@@ -2425,10 +3166,10 @@
     function cheatKillRivalBoss() {
       const living = state.rivals.filter(r => r.alive);
       if (living.length === 0) {
-        showAlert('No Targets Remaining', 'All rival organizations have already been eradicated.', 'NOTICE');
+        showAlert('No Targets Remaining', 'All rival mobs have already been eradicated.', 'NOTICE');
         return;
       }
-      playSound('gun');
+      playSound('explosion');
       const target = living[0];
       target.alive = false;
       target.strength = 0;
@@ -2456,7 +3197,7 @@
     }
 
     /* ============================================================
-       9. INITIALIZATION
+       12. INITIALIZATION
        ============================================================ */
     window.addEventListener('DOMContentLoaded', () => {
       renderUI();
